@@ -1,0 +1,47 @@
+
+段内移动与操作：/*{{{*/ 2015-08-08 16:39:41
+w:跳至下一个单词的第一个字母。
+w:跳过一串没有空白的字符串，光标停留在下一个字符串的第一个字符处。
+c2w：更改两个单词。
+e:和w类似，只是将光标停留在单词的最后一个字符上。
+b和ge:反向的跳转一个单词，与w他e反向。
+xp:交换两个字母，剪切当前字符，p将剪切板内的字符粘贴在光标之后。
+f和t:跳转到指定的符号处。
+0和^：跳转到段的起始，
+$跳转到段的结尾。
+%匹配括。
+H  L  M，
+X = dh
+D = d$
+. repeat a change ,find is not a change so we can not use . to repaet find .not a command line change .			
+	
+/*}}}*/
+
+书签：ma/*{{{*/
+返回标签处：'a 是跳转到标签所处打行打首位。`是跳转到定义标签处。
+
+vim的对象操作：vim打指令可以直接操作一个对象，对象可以是单词、可以是句子\
+				daw：表示delete a word vim会删除光标位置处打单词。
+				cis：change in sentence
+				vas：选定一个句子。/*}}}*/
+				
+vim列的操作：/*{{{*/
+复制一列块数据并将其粘贴于某一列之后，首先使用ctrl-v进入可视模式复制选定的块。再使用ctrl-v模式选定一列，注意这里是选定一列，然后使用p将刚复制打块粘贴在这个列之后。
+/*}}}*/
+
+nerdtree快捷键：/*{{{*/
+o:open the file and change cursor position  to the file
+go:open the file and stay cursor in nerdtree
+s:open the file in vsplit 
+gs:like g in go 
+u:Move the tree root up one directory
+U:Same as 'u' except the old root node is left open
+r:recursively refresh the current directory
+r:Recursively refresh the current root
+q:Close the NERDTree window
+A:Zoom (maximize/minimize) the NERDTree window|NERDTree-A|
+X:Recursively close all children of the current node|NERDTree-X|
+P:Jump to the root node|NERDTree-P|
+p:Jump to current nodes parent|NERDTree-p|
+
+/*}}}*/

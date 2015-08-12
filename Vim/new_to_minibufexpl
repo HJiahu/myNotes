@@ -1,0 +1,19 @@
+let g:miniBufExplMapWindowNavVim = 1 
+let g:miniBufExplMapWindowNavArrows = 1 
+let g:miniBufExplMapCTabSwitchBufs = 1 
+let g:miniBufExplModSelTarget = 1 
+
+在默认的情况下，vim 最上面的一个窗口就是minibuffexpl窗口。 其中列出了当前所有已经打开的buffer, 当你把光标置于这个窗口时, 有下面几个快捷键可以用:
+ <Tab>   向前循环切换到每个buffer名上
+ <S-Tab> 向后循环切换到每个buffer名上
+ <Enter> 在打开光标所在的buffer
+ d       删除光标所在的buffer
+
+在命令行模式下，可以使用下面的指令：
+：bn,进入下一个buff
+：bp,进入上一个buff
+：b 2,打开第2个buff,2是buff前面的标号，当然也可以是3,4 6...
+
+在centos下，C-TAB快捷键无法使用，此时可以在minibuffexpl.vim 中将快捷键更改。即将其中的C-TAB换成S-TAB,这样可以使用S-TAB 在buff之间进行切换。当然了要设置let：miniBufExplMapCTabSwitchBufs = 1
+
+是用指令：bd3 可以删除第标号为3 的buff.相当于buff delete 3.

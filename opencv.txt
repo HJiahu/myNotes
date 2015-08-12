@@ -1,0 +1,2 @@
+第二章：introduce opencv2.0
+opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv:imshow()

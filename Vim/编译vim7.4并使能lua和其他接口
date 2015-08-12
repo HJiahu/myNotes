@@ -1,0 +1,45 @@
+首先下载vim7.4的源代码：
+wget ftp://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2
+解压：tar -xvf vim-7.4.tar.bz2
+或者直接从github中下载最新版的vim。
+
+为了使能lua，需要在configure时使用下面的指令：
+./configure --prefix=/data/vim74 --with-features=huge --with-luajit --enable-luainterp=yes --enable-fail-if-missing\
+--enable-multibyte \
+--enable-rubyinterp \
+--enable-pythoninterp \
+--with-python-config-dir=/usr/lib/python2.7/config \
+
+./configure  --with-features=huge --with-luajit --enable-luainterp=yes --enable-fail-if-missing \
+--enable-multibyte \
+--enable-rubyinterp \
+--enable-pythoninterp \
+--with-python-config-dir=/usr/lib/python2.7/config \
+--enable-perlinterp \
+--enable-gui=gtk2 --enable-cscope --prefix=/usr
+
+./configure  --with-features=huge --with-luajit --enable-luainterp=yes --enable-fail-if-missing \
+--enable-multibyte \
+--enable-rubyinterp \
+--enable-pythoninterp \
+--with-python-config-dir=/usr/lib/python2.7/config \
+--enable-gui=gtk2 --enable-cscope --prefix=/usr
+
+
+此时如果报错，并且错位是因为系统中没有lua造成打，则应执行下面的指令：
+yum install lua lua-devel -y
+wget http://luajit.org/download/LuaJIT-2.0.4.tar.gz
+tar -xzvf LuaJIT-2.0.4.tar.gz
+cd LuaJIT-2.0.4
+// 使用默认安装路径
+make
+sudo make install
+
+再执行上面的configure指令就不会报错了。
+make
+make install 
+sudo ln -s /usr/local/lib/libluajit-5.1.so.2 /lib64/libluajit-5.1.so.2
+
+注意：此时安装的vim所在路径为：/data/vim74/
+将vim放入环境变量，然后就可以运行vim，最好删除系统自带的vim，否则会发生冲突。
+

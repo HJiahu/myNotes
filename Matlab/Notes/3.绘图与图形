@@ -1,0 +1,62 @@
+plot(x , y)            %其中x与y必须同维度。
+polar(theta,r,'r-.') %绘制极坐标图像，theta为角度，r为对应角度的极轴长度。
+loglog(t , f)          %绘制对数坐标
+bar(x , y)　　　　  %绘制柱状图      可以使用barh 命令产生水平的柱状图   使用bar3 或bar3h 显示奇特的三维图象  
+stem(t , m)          %绘制针状图   
+contour(x,y,z)       %绘制等高线，其中x，y，z为三维坐标系中的变量。x，y为自变量。
+quiver(x,y ,u,v)     %以(x,y)为起点画向量(u , v)，可以利用quiver()画坐标轴。更简单的绘制坐标轴的方式是是系统自带的功能   插入   箭头。
+
+
+hold on 
+xlabel('*')            %matlab中使用单引号表示字符串 
+ylabel('*') 
+title('*') 
+grid on                %添加网格 
+axis equal            %坐标轴的单位长度相同，坐标轴比例和间距都相同。例如x与y轴单位长度均为10个像素点。 
+axis square          %默认的形式，matlab画出的图的坐标是正方形，此时坐标轴的比例不同，x与y的单位长度不同。 
+axis ( [xmin xmax ymin ymax] ) %设置绘图范围 
+plot(x,y,'r',x,z,'b--')  %同时画多个图像，并为曲线设置属性，颜色， 
+legend('*','*')      %为对应的函数添加图例  ；legend 传奇，说明
+
+可以通过用下面的方式调用axis 命令： axis ( [xmin xmax ymin ymax] ) 设置绘图范围。
+
+ 
+
+  subplot(m , n , p) % 将整个绘图空间分为m行n列，并选定第p个窗格。从左到右依次计数。
+
+                             %第一次使用subplot()函数用于创建画图空间，余下再使用则是为了选定绘图的窗格。
+
+							   
+
+							   fplot('exp(-2*t)*sin(t)',[0, 4])    % 第一个字符串为函数体，不带等号，后一个区间为绘图区间。
+
+
+获得等高线：
+[x,y] = meshgrid(-5:0.1:5, -3:0.1:3);   %获得自变量
+z = x.^2 + y.^2; 
+contour(x,y,z) 
+
+ 颜色 说明符 
+ 白色 w             实线    '-' 
+ 黑色 k             虚线    '--'   减号
+ 蓝色 b             虚点线 '-.' 
+ 红色 r              点线    ':'
+ 青色 c 
+ 绿色 g 
+ 洋红 m 
+ 黄色 y
+
+[x,y] = meshgrid(-5:0.1:5, -3:0.1:3); 
+语法：
+[X,Y] = meshgrid(xgv,ygv)
+[X,Y,Z] = meshgrid(xgv,ygv,zgv)
+[X,Y] = meshgrid(gv)
+[X,Y,Z] = meshgrid(gv)
+
+我们要产生三维的等高线图。如果我们仅输入  contour3(x, y,  z, 30)
+
+三维图象 ：
+
+在MATLAB 中我们可以调用mesh(x, y, z)函数来产生三维图象。
+
+ 绘制表面带有渐变颜色的图象可以使用surf和surfc这两个函数。第二个函数和第一个函数相比，第二个函数会在对应的坐标平面留下映像。
