@@ -1,12 +1,13 @@
-一些快捷键：
+
+## 一些快捷键和指令：
 Ctrl-w  h j k l    在splits间切换
 zr  open all folds
 zm close all folds
 [z move to start of open fold.
 ]z move to end of open fold.
-
-
-段内移动与操作：/*{{{*/ 2015-08-08 16：39:41
+:MkdToHtml   
+##  
+段内移动与操作： 2015-08-08 16：39:41
 w：				   跳至下一个单词的第一个字母。
 w：				   跳过一串没有空白的字符串，光标停留在下一个字符串的第一个字符处。
 c2w：			   更改两个单词。
@@ -21,22 +22,20 @@ H  L  M，
 X = dh
 D = d$
 . repeat a change ,find is not a change so we can not use . to repaet find .not a command line change .			
-	
-/*}}}*/
 
-书签：ma/*{{{*/
-返回标签处：'a 是跳转到标签所处打行打首位。`是跳转到定义标签处。
+书签：ma
+返回标签处：'a 是跳转到标签所处打行打首位。\`是跳转到定义标签处。
 
 vim的对象操作：vim打指令可以直接操作一个对象，对象可以是单词、可以是句子\
 				daw：表示delete a word vim会删除光标位置处打单词。
 				cis：change in sentence
-				vas：选定一个句子。/*}}}*/
-				
-vim列的操作：/*{{{*/
+				vas：选定一个句子。
+## 				
+vim列的操作：
 复制一列块数据并将其粘贴于某一列之后，首先使用ctrl-v进入可视模式复制选定的块。再使用ctrl-v模式选定一列，注意这里是选定一列，然后使用p将刚复制打块粘贴在这个列之后。
-/*}}}*/
 
-vim tab 的操作：/*{{{*/
+## 
+vim tab 的操作：
 	在打开vim时使用指令-p可以将多个文档放在不同的标签中。vim -p txt1  txt2...
 一些指令：
 	：tabedit {file}   edit specified file in a new tab
@@ -57,9 +56,10 @@ vim tab 的操作：/*{{{*/
 	：tabfirst     go to first tab
 	：tablast      go to last tab
 	Ctrl-PgDn     go to next tab
-	Ctrl-PgUp     go to previous tab/*}}}*/
+	Ctrl-PgUp     go to previous tab
 
-nerdtree快捷键：/*{{{*/
+##
+nerdtree快捷键：
 o：open the file and change cursor position  to the file
 go：open the file and stay cursor in nerdtree
 s：open the file in vsplit 
@@ -74,10 +74,9 @@ X：Recursively close all children of the current node|NERDTree-X|
 P：Jump to the root node|NERDTree-P|
 p：Jump to current nodes parent|NERDTree-p|
 
-/*}}}*/
 
+##  
 shotcut for surrend
-
 ys takes a valid Vim motion or text object as the first object, and wraps
 it using the second argument as with |cs|. 
   Hello w*orld!             ysiw)       Hello (world)!
@@ -93,3 +92,7 @@ In visual mode, a simple "S" with an argument wraps the selection.
   if *x>3 {                 ysW(        if ( x>3 ) {
   my $str = *whee!;         vllllS'     my $str = 'whee!';
   Hello w*orld!             ysiw)       Hello (world)!
+  
+## 
+
+

@@ -1,7 +1,7 @@
 Notes for opencv .
 
 
-# 第二章：
+### 第二章：
 introduce opencv2.0
 opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv:imshow()
 `
@@ -19,7 +19,7 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv:imshow()
 		if( cv::waitKey(33) >= 0 ) break;
 	}
 `
-# 第三章：
+### 第三章：
 
 
 
@@ -30,8 +30,9 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv:imshow()
 
 
 
-# some functions structure etc for opencv 
-## functions 
+
+### some functions structure etc for opencv 
+#### functions 
 - Mat imread( const string &filename, int flags=1 );
 	> return a structure(cv::Mat) to handle images .
 	flags Specifies color type of the loaded image:
