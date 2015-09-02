@@ -117,4 +117,23 @@ ASP.NET的验证方式
 -	None验证
 
 Forms验证：
-> 表单验证（forms验证），通过Forms验证之后服务器会返回一个类似cookie形式的标记来作为用户的身份证明，这样就可以不用重复的输入密码。
+> 表单验证（forms验证），通过Forms验证之后服务器会返回一个类似cookie形式的标记来作为用户的身份证明，这样就可以不用重复的输入密码。此时要在web.config中配置相关的验证信息。
+
+```
+<configuration>
+
+    <system.web>
+      <authentication mode="Forms"/>    <!--启用form身份验证要添加这行-->
+      <compilation debug="true" targetFramework="4.0" />
+    </system.web>
+
+  <location path="accessableTest">  <!--需要进行权限管理的目录或文件位置-->
+    <system.web>   <!--这一行是必须的-->
+      <authorization>
+        <allow roles="admin"/>   <!--允许读取本文件夹或文件的用户-->
+        <deny roles="*"/>   <!--默认情况下所有人是可读取所有文件的，如果不加这一行，未登陆用户易可读取-->
+      </authorization>
+    </system.web>
+  </location>
+</configuration>``
+```
