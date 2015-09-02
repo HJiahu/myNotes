@@ -2,7 +2,7 @@
 安装c/c++的帮助文档：   
 yum install man-pages libstdc++-docs     
 - tips
-	-	应当将修饰符 *  和  ＆  紧靠变量名 ，因为修饰符优先和变量名结合  在 int *x, y; 中x是指针，y是整型变量。
+	-	应当将修饰符 \*  和  ＆  紧靠变量名 ，因为修饰符优先和变量名结合  在` int *x, y;` 中x是指针，y是整型变量。
 	-	静态变量加前缀 s_（表示 static）
 	-	如果不得已需要全局变量，则使全局变量加前缀 g_（表示 global ）。
 	-	类的数据成员加前缀 m\_（表示 member）或者在成员变量后加 \_，这样可以避免数据成员与成员函数的参数同名。
@@ -33,8 +33,9 @@ means
 `#include <iostream>`  
 `using namespace std; `
 
-	cout << "in octal: " << oct << 15 << endl;    
-	cout << "in hex: " << hex << 15 << endl; 
+八进制和十六进制：
+-	`cout << "in octal: " << oct << 15 << endl;  `
+-	`cout << "in hex: " << hex << 15 << endl; `
 
 容器 vector：  
 容器是模板，意味着它可以高效的应用于不同的类型。 
