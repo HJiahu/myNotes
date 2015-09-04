@@ -1,5 +1,5 @@
 
-## 一些快捷键和指令：
+# 一些快捷键和指令：
 Ctrl-w  h j k l    在splits间切换
 zr  open all folds
 zm close all folds
@@ -96,3 +96,15 @@ In visual mode, a simple "S" with an argument wraps the selection.
 ## 
 
 
+
+# 在windows下使用vim
+最主要的就是解决lua和clang的问题。
+1.	下载支持lua和其他扩展的[vim](https://tuxproject.de/projects/vim/)。
+2.	解决lua
+> 下载[lua53.dll](http://luabinaries.sourceforge.net/download.html)并将其放在与gvim.exe相同的文件夹下。
+
+3.	解决clang           
+下载[clang_for_windows](http://llvm.org/releases/download.html)。安装下载的软件，在_VIMRC中添加下面两行: ``let g:clang_use_library=1 let g:clang_library_path="C:\\Program Files\\LLVM\\bin`
+4.	解决GCC
+下载GCC，并将对应的文件夹写入环境变量。            
+复制一份mingw32-make.exe到相同的文件夹下，并且将其名称给位make.exe。
