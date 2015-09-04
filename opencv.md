@@ -1,10 +1,11 @@
-Notes for opencv .
 
+Notes for opencv .
+OpenCV2 cooking book
 
 ### 第二章：
 introduce opencv2.0
 opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv:imshow()
-`
+```
 	int main( int argc, char** argv ) 
 	{
 		cv::namedWindow( "Example3", cv::WINDOW_AUTOSIZE );
@@ -13,12 +14,20 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv:imshow()
 		cv::Mat frame;
 		while( 1 ) {
 		cap >> frame;
-		if( !frame.data ) break;
-		// Ran out of film
+		if( !frame.data ) break; // Ran out of film
 		cv::imshow( "Example3", frame );
 		if( cv::waitKey(33) >= 0 ) break;
 	}
-`
+```
+-	cv::Mat img :  Mat is a class 。
+>img.size().height  img.size.width            
+>***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确读取。
+
+-	cv::namedWindow("Original Image"); // define the window
+-	cv::imshow("Original Image", image); // show the image
+-	cv::imread      
+
+page 26
 ### 第三章：
 
 
