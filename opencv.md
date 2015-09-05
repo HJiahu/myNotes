@@ -19,13 +19,20 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv:imshow()
 		if( cv::waitKey(33) >= 0 ) break;
 	}
 ```
--	cv::Mat img :  Mat is a class 。
->img.size().height  img.size.width            
->***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确读取。
+-	cv::Mat img //  Mat is a class 。
+> Mat 使用了引用计数和浅复制，为了实现深复制，使用方法img.copyTo()             
+> img.size().height                
+> img.size().width             
+> ***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确读取。         
+> we can creat matrix data by Mat :         
+> `cv::Mat ima(240,320,CV_8U,cv::Scalar(100));`                   
 
 -	cv::namedWindow("Original Image"); // define the window
 -	cv::imshow("Original Image", image); // show the image
--	cv::imread      
+-	cv::imread()
+-	cv::imwritel(filename , Mat,...)
+-	cv::flip(Mat src ,Mat dst,int flipcode)    //if flipcode == 0 vertical if flipcode == 1 horizontal 
+-	cv::waitKey(int delay = 0) //default ,this fun will wait for ever if no key is pressed ,if delay is not 0... 
 
 page 26
 ### 第三章：
