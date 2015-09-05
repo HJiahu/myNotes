@@ -1,23 +1,26 @@
-
 Notes for opencv .
 OpenCV2 cooking book
 
-### 第二章：
+### 第一章：  2015-09-06 07:57:40
 introduce opencv2.0
-opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv:imshow()
+opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 ```
-	int main( int argc, char** argv ) 
-	{
-		cv::namedWindow( "Example3", cv::WINDOW_AUTOSIZE );
-		cv::VideoCapture cap;
-		cap.open( string(argv[1]) );
-		cv::Mat frame;
-		while( 1 ) {
-		cap >> frame;
-		if( !frame.data ) break; // Ran out of film
-		cv::imshow( "Example3", frame );
-		if( cv::waitKey(33) >= 0 ) break;
+int main( int argc, char** argv ) 
+{
+	cv::Mat img;
+	img = cv::imread("../Imags/lena.jpg",1);
+	//在opencv的C接口中使用下面这个函数来载入图像，Ipl表示一个intel的库名，P29
+	// IplImage* iplImage = cvLoadImage("c:\\img.jpg");     
+	//可以很方便的将iplImage指向的C 结构体转化为Mat类：
+	//cv::Mat image4(iplImage,false);
+	//cvReleaseImage(&iplImage);//必须使用明确的语句来清除IplImage结构
+	cv::namedWindow("Image_1",cv::WINDOW_AUTOSIZE);
+	while (1) {
+		cv::imshow("Image_1", img);  //显式窗口和保存图片的内存是相关联的。
+		cv::waitKey(0);
+		cv::flip(img, img, 1);
 	}
+}
 ```
 -	cv::Mat img //  Mat is a class 。
 > Mat 使用了引用计数和浅复制，为了实现深复制，使用方法img.copyTo()             
@@ -26,6 +29,15 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv:imshow()
 > ***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确读取。         
 > we can creat matrix data by Mat :         
 > `cv::Mat ima(240,320,CV_8U,cv::Scalar(100));`                   
+> 为了实现浅偶合，因为Mat类的浅复制问题，最好不要在类中返回一个Mat类，这样和多时侯会造成对像之间的一些影响，增加类代码的复杂度：
+> ```
+> class Test{
+> public:
+>	 Mat GetImg(){return img;}   //最好不要直接返回类中的Mat类，可以使用其他函数例如Mat.copyTo(Mat dst);
+> private:
+> 	Mat img;
+> }
+> ```
 
 -	cv::namedWindow("Original Image"); // define the window
 -	cv::imshow("Original Image", image); // show the image
@@ -33,6 +45,8 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv:imshow()
 -	cv::imwritel(filename , Mat,...)
 -	cv::flip(Mat src ,Mat dst,int flipcode)    //if flipcode == 0 vertical if flipcode == 1 horizontal 
 -	cv::waitKey(int delay = 0) //default ,this fun will wait for ever if no key is pressed ,if delay is not 0... 
+
+### 第二章
 
 page 26
 ### 第三章：
@@ -65,8 +79,8 @@ page 26
 	> winname is the name of new window and Future HighGUI calls that interact
 	with this window will refer to it by this name.
 	> flag can be 0(the default value) and cv::WINDOW_AUTOSIZE.
-		if 0:all images will display in the same size .
-		if auto differdnt pictures will show in different size .
+	if 0:all images will display in the same size .
+	if auto differdnt pictures will show in different size .
 
 - void imshow( const string& winname, const Mat& image );
 	> winname Name of the window.
@@ -78,23 +92,23 @@ page 26
 	key is pressed or wait time ivvs more than delay.
 	Returns the code of the pressed key or -1 if no key was pressed before the 
 	specified time had elapsed.
-*	Note: This function is the only method in HighGUI that can fetch and handle events, so it
+	*	Note: This function is the only method in HighGUI that can fetch and handle events, so it
 	needs to be called periodically for normal event processing, unless HighGUI is used within some
 	environment that takes care of event processing.
 
 - void DestroyWindow( const char* name );
-		> name is the window's name .
+	> name is the window's name .
 
 
 
 
-## structures && classes
+	## structures && classes
 
-### class :
+	### class :
 - cv::Mat:         opencv use this structure to handle all kinds of images .
 - cv::VideoCapture Class for video capturing from video files or cameras. 
 
-### structure :
+	### structure :
 
 
 
