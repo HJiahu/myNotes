@@ -6,7 +6,7 @@
 
 ***C#和C++的一个不同点：在C#中关键字new是用来调用类中的构造函数的，并返回一个对象。而在C++中new关键字将在堆中创建对象，并返回这个对象的地址。***这意味着在C#中构造函数不是系统自动调用的。
 
-？？？？？静态构造函数和静态类，与C++不同的概念。P167
+？？？？？静态构造函数和静态类，与C++不同的概念。C#中的虚函数似乎与C++也不太相同P167
 
 **OOP技术**
 1.	接口
@@ -136,7 +136,7 @@ internal/public interface IMyInterface : IMyBaseInterface, IMyBaseInterface2
 	-	字段：类似于C++中的变量的定义。
 	-	属性：在字段的基础之上，按照我的理解，属性是附加在字段上的一些操作。
 ```
-// Field used by property.
+ //Field used by property.
 private int myInt;  //这是字段
 // Property.
 public int MyIntProp  //这是属性，属性比字段多了两个访问器，get和set
@@ -163,6 +163,7 @@ protected set
 -	隐藏基类和重写基类成员是两种不同的动作，隐藏不具多态性，而重写具有多态性，重写只针对虚函数。
 -	对虚函数的重写需要使用关键字override。
 -	可以在派生类中使用base关键字来调用基类中的某些函数。类似的this关键字代表当前的类。
+-	***隐藏和重写是不同的，隐藏没有多态性，而重写有多态性，在C#中没有标记为virtual、abstract或override 的函数是不能被重写的***
 ***嵌套类型的定义与使用***            
 ```
 public class MyClass
@@ -178,6 +179,11 @@ public class MyClass
 ***接口的实现***              
 接口的定义与实现：
 实现接口的类必须包含该接口所有成员的实现代码，且必须匹配指定的签名(包括匹配指定的get 和 set 块)，并且必须是公共的。可以使用关键字 virtual 或 abstract 来实现接口成员，但不能使用 static 或 const。
+-	不允许使用访问修饰符(public、 private、 protected 或 internal)，所有的接口成员都是公共的。
+-	接口成员不能包含代码体。
+-	接口不能定义字段成员。
+-	接口成员不能用关键字 static、 virtual、 abstract 或 sealed 来定义。
+-	类型定义成员是禁止的。
 ```
 public interface IMyInterface //接口的定义
 {
@@ -208,3 +214,7 @@ public void DoSomethingElse()   //接口的隐式实现，可以使用类或接�
 ```
 
 
+### 第十八章 web编程
+-	将控件放在一个表格中是比较有效的(在菜单栏中有表的选项)。              
+-	从工具箱拖放到窗体设计器上的标准控件拥有以`<asp:`开头的元素`<asp:Label>`和`<asp:DropDownList>`。
+-	只有进行回送时，才在服务器上触发事件。文本框中的值改变时， TextChanged 事件不会立即触发， 只有单击 Submit 按钮，提交了窗体，并发送给服务器，才会触发 TextChanged 事件。 如果希望把更改事件立即传送给服务器(例如，改变了 DropDownList 的选项)，可以把 AutoPostback 属性设置为 true。但通信量会增加。
