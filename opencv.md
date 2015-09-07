@@ -41,12 +41,14 @@ int main( int argc, char** argv )
 
 -	cv::namedWindow("Original Image"); // define the window
 -	cv::imshow("Original Image", image); // show the image
--	cv::imread()
+-	Mat imread( const string& filename, int flags=1 ); 
 -	cv::imwritel(filename , Mat,...)
 -	cv::flip(Mat src ,Mat dst,int flipcode)    //if flipcode == 0 vertical if flipcode == 1 horizontal 
 -	cv::waitKey(int delay = 0) //default ,this fun will wait for ever if no key is pressed ,if delay is not 0... 
 
 ### 第二章
+-	对于一个灰度图而言，每一个元素代表一个像素的灰度值，其中0表示黑色，255表示白色。
+> 利用cv::Mat的构造函数，我们可以创建不同的构造函数来创建不同的的图像，如灰度头，彩色图...
 
 page 26
 ### 第三章：
