@@ -91,7 +91,8 @@ public class MyClass : MyBase         //继承类扩展了父类的作用域，�
 > 举个简单的例子，创建了一个新的类dog，其继承于animal，那么在实例化dog时，首先调用System.Object.Object(),然后调用animal的构造函数，再才是dog的构造函数。
 
 -	C#的构造函数初始化器，base() 和 this()  base按照其参数表的形式指定基类的构造函数，而this会依照参数表先调用指定的构造函数。例如：
-> public class MyDerivedClass : MyBaseClass              
+```
+public class MyDerivedClass : MyBaseClass              
 	{                     
 		public MyDerivedClass() : this(5, 6)                      
 		{                  
@@ -100,7 +101,8 @@ public class MyClass : MyBase         //继承类扩展了父类的作用域，�
 		public MyDerivedClass(int i, int j) : base(i)           
 		{               
 		}           
-	}               
+	} 
+```
 如果使用默认的构造函数，那么上面的代码的构造函数调用次序为：    
 	1.	执行 System.Object.Object 构造函数。
 	2.	执行 MyBaseClass.MyBaseClass(int i)构造函数。
@@ -125,7 +127,7 @@ internal/public interface IMyInterface : IMyBaseInterface, IMyBaseInterface2
 ### 第十章 定义类成员
 -	在C#中对于类中成员访问的限制，C#与C++是有区别的，C#中比C++多了一个internal关键字，这意味着对象中的成员只能在本项目中被调用。例如类库中的某些成员是组成类库的一部分，但在类库之外的项目中是无法调用这些成员的。
 -	在C#中定义的成员，每一个前面都要加上访问限定符，这与C++也有一定的区别。
--	C#类中比C++多了几种种限定符，一种是readonly（用于字段）， 还有一种是sealed（表明方法不能被重写），还有其他的。
+-	C#类中比C++多了几种限定符，一种是readonly（用于字段）， 还有一种是sealed（表明方法不能被重写），还有其他的。
 -	***如果在C#中定义了一个成员，并且使用static进行了修饰，那么在C#中这类成员就只能使用类名进行访问***，而在C++中使用对象也是可以访问这些成员的 。
 -	其他关键字：
 	-	virtual——方法可以重写。                  
@@ -134,24 +136,24 @@ internal/public interface IMyInterface : IMyBaseInterface, IMyBaseInterface2
 	-	extern——方法定义放在其他地方。                   
 -	***字段和属性：***
 	-	字段：类似于C++中的变量的定义。
-	-	属性：在字段的基础之上，按照我的理解，属性是附加在字段上的一些操作。
+	-	属性：在字段的基础之上，按照我的理解，属性是附加在字段上的一些操作，如get和set属性。
 ```
- //Field used by property.
-private int myInt;  //这是字段
-// Property.
-public int MyIntProp  //这是属性，属性比字段多了两个访问器，get和set
-{
-get
+	//Field used by property.
+	private int myInt;  //这是字段
+	// Property.
+	public int MyIntProp  //这是属性，属性比字段多了两个访问器，get和set
 	{
-		return myInt;
+	get
+		{
+			return myInt;
+		}
+	protected set
+		{
+			if (value >= 0 && value <= 10) myInt = value;
+			else
+			throw (new ArgumentOutOfRangeException("MyIntProp", value, "MyIntProp must be assigned a value between 0 and 10."));
+		}
 	}
-protected set
-	{
-		if (value >= 0 && value <= 10) myInt = value;
-		else
-		throw (new ArgumentOutOfRangeException("MyIntProp", value, "MyIntProp must be assigned a value between 0 and 10."));
-	}
-}
 ```               
 属性可以使用 virtual、 override 和 abstract 关键字，就像方法一样，但这几个关键字不能用于字段。
 
@@ -216,5 +218,13 @@ public void DoSomethingElse()   //接口的隐式实现，可以使用类或接�
 
 ### 第十八章 web编程
 -	将控件放在一个表格中是比较有效的(在菜单栏中有表的选项)。              
--	从工具箱拖放到窗体设计器上的标准控件拥有以`<asp:`开头的元素`<asp:Label>`和`<asp:DropDownList>`。
+-	从工具箱拖放到窗体设计器上的标准控件拥有以<asp: 开头的元素<asp:Label>和`<asp:DropDownList>`。
 -	只有进行回送时，才在服务器上触发事件。文本框中的值改变时， TextChanged 事件不会立即触发， 只有单击 Submit 按钮，提交了窗体，并发送给服务器，才会触发 TextChanged 事件。 如果希望把更改事件立即传送给服务器(例如，改变了 DropDownList 的选项)，可以把 AutoPostback 属性设置为 true。但通信量会增加。
+
+***ASP.NET AJAX回送***
+-	在一般的 ASP.NET 回送中，会请求整个页面。回送用户已经加载的同一个页面时，也会再次返回整个页面。为了减少网络上的传输量，可以使用 ASP.NET Ajax 回送。在 Ajax 回送中，只使用JavaScript 返回并刷新页面的一部分，使用 UpdatePanel 可以方便地做到这一点。
+-	在使用ajax时，一般需要添加ScripManager类，这个类也在ajax extention工具箱中。
+-	一般在ajax中的动作只会更新部分页面，而不再ajax中的动作会更新整个页面。
+-	在服务器上检查数据的正确与有效性是绝对必须的，因为客户端是永远都不能信任的。
+
+
