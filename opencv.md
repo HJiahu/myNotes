@@ -23,12 +23,12 @@ int main( int argc, char** argv )
 }
 ```
 -	cv::Mat img //  Mat is a class 。
-> Mat 使用了引用计数和浅复制，为了实现深复制，使用方法img.copyTo()             
+> Mat 使用了引用计数和浅复制，为了实现深复制，使用方法img.copyTo(cv::Mat img_1)             
 > img.size().height                
 > img.size().width             
-> ***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确读取。         
+> ***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确读取。          
 > we can creat matrix data by Mat :         
-> `cv::Mat ima(240,320,CV_8U,cv::Scalar(100));`                   
+> `cv::Mat img(240,320,CV_8U,cv::Scalar(100));`                   
 > 为了实现浅偶合，因为Mat类的浅复制问题，最好不要在类中返回一个Mat类，这样和多时侯会造成对像之间的一些影响，增加类代码的复杂度：
 > ```
 > class Test{
@@ -42,13 +42,49 @@ int main( int argc, char** argv )
 -	cv::namedWindow("Original Image"); // define the window
 -	cv::imshow("Original Image", image); // show the image
 -	Mat imread( const string& filename, int flags=1 ); 
--	cv::imwritel(filename , Mat,...)
+-	cv::imwrite(filename , Mat,...)
 -	cv::flip(Mat src ,Mat dst,int flipcode)    //if flipcode == 0 vertical if flipcode == 1 horizontal 
 -	cv::waitKey(int delay = 0) //default ,this fun will wait for ever if no key is pressed ,if delay is not 0... 
 
 ### 第二章
 -	对于一个灰度图而言，每一个元素代表一个像素的灰度值，其中0表示黑色，255表示白色。
 > 利用cv::Mat的构造函数，我们可以创建不同的构造函数来创建不同的的图像，如灰度头，彩色图...
+```
+	#include <iostream>
+	#include <cstdlib>
+	#include <ctime>
+	#include <opencv2/highgui/highgui.hpp>
+	void salt_image(cv::Mat  &img , int n)
+	{
+		srand(time(NULL));
+		for (int i = 0; i < n ; i++) {
+			int row_num = rand()%img.rows ; 
+			int col_num = rand()%img.cols ; 
+			if (img.channels() == 1) {
+				img.at<uchar>(row_num , col_num) = 255;
+				//cv::Mat_ img_2 = img ; //shallow copy 
+				//img(row_num , col_num) = 255;
+			}
+			else {
+				if(img.channels() == 3){
+					img.at<cv::Vec3b>(row_num , col_num)[0] = 255;
+					img.at<cv::Vec3b>(row_num , col_num)[1] = 255;
+					img.at<cv::Vec3b>(row_num , col_num)[2] = 255;
+				}
+			}
+		}		
+	}
+```
+
+-	cv::Mat::at<typename>(int i , int j) can over load 
+> 使用CV::Mat_<typename >类可以简化某些操作，例如在Mat_中重载了运算符 () ：cv::Mat_::operator()(int i , int j);与cv::Mat::at()有相同意思。
+
+
+
+
+
+
+
 
 page 26
 ### 第三章：
