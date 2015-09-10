@@ -79,6 +79,9 @@ int main( int argc, char** argv )
 -	cv::Mat::at<typename>(int i , int j) can over load 
 > 使用CV::Mat_<typename >类可以简化某些操作，例如在Mat_中重载了运算符 () ：cv::Mat_::operator()(int i , int j);与cv::Mat::at()有相同意思。
 
+-	在opencv中，彩色的三通道图片的像素中三个通道的顺序是：BGR，blue蓝色在第一个字节。
+-	***因为到效率问题，图片在内存中存储时其行的像素数可能与图像的实际行的像素数不同，一般在内存中数据对其会增加数据的传输速度。所以我们不能认为图像的存储是连续的。***
+> 在Mat类中，rows属性给出图像的真实行数，cols给出真实列数，那么在cols中是不包含系统为了效率额外添加的像素。step变量给出每行的字节数，elemSize给出每个像素的字节数。total()给出图片的像素总数。
 
 
 
