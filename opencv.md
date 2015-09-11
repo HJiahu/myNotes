@@ -23,10 +23,10 @@ int main( int argc, char** argv )
 }
 ```
 -	cv::Mat img //  Mat is a class 。
-> Mat 使用了引用计数和浅复制，为了实现深复制，使用方法img.copyTo(cv::Mat img_1)             
+> Mat 使用了引用计数和浅复制，为了实现深复制，使用方法img.copyTo(cv::Mat img_1)或者深度拷贝函数cv::Mat Mat::clone() .         
 > img.size().height                
 > img.size().width             
-> ***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确读取。          
+> ***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确载入。          
 > we can creat matrix data by Mat :         
 > `cv::Mat img(240,320,CV_8U,cv::Scalar(100));`                   
 > 为了实现浅偶合，因为Mat类的浅复制问题，最好不要在类中返回一个Mat类，这样和多时侯会造成对像之间的一些影响，增加类代码的复杂度：
@@ -48,7 +48,7 @@ int main( int argc, char** argv )
 
 ### 第二章
 -	对于一个灰度图而言，每一个元素代表一个像素的灰度值，其中0表示黑色，255表示白色。
-> 利用cv::Mat的构造函数，我们可以创建不同的构造函数来创建不同的的图像，如灰度头，彩色图...
+> 利用cv::Mat的构造函数，我们可以用不同的构造函数来创建不同的的图像，如灰度头，彩色图...
 ```
 	#include <iostream>
 	#include <cstdlib>
@@ -79,20 +79,35 @@ int main( int argc, char** argv )
 -	cv::Mat::at<typename>(int i , int j) can over load 
 > 使用CV::Mat_<typename >类可以简化某些操作，例如在Mat_中重载了运算符 () ：cv::Mat_::operator()(int i , int j);与cv::Mat::at()有相同意思。
 
+-	uchar * data Mat::ptr<typename>(int i)   //给出图片第i行的内存首地址。
 -	在opencv中，彩色的三通道图片的像素中三个通道的顺序是：BGR，blue蓝色在第一个字节。
--	***因为到效率问题，图片在内存中存储时其行的像素数可能与图像的实际行的像素数不同，一般在内存中数据对其会增加数据的传输速度。所以我们不能认为图像的存储是连续的。***
+-	***因为效率问题（内存对齐，增加数据的传输速度），图片在内存中存储时其行的像素数可能与图像的实际行的像素数不同，一般在内存中数据对其会增加数据的传输速度。所以我们不能认为图像的存储是连续的。***
 > 在Mat类中，rows属性给出图像的真实行数，cols给出真实列数，那么在cols中是不包含系统为了效率额外添加的像素。step变量给出每行的字节数，elemSize给出每个像素的字节数。total()给出图片的像素总数。
 
-
-
-
-
-
-
-page 26
-### 第三章：
-
-
+```
+void ReduceColors(cv::Mat img , int n)
+{
+	if (img.channels() == 3) {
+		//get the sum num of pixel
+		int num_of_pixel = img.rows * img.cols ;
+		//img.total();
+		
+		for (int i = 0; i < img.rows ; i++) {
+			//get pointer to row 
+			uchar *p_row = img.ptr<uchar>(i);
+			for (int j = 0; j < img.cols * 3; j++) {
+				p_row[j] = p_row[j]/n*n + n/2;
+				//p_row[j] = p_row[j] - p_row[j]%n +n/2;  this is slower
+				//如果我们限定n的取值是2的整数倍，那么效率最高的方法是位运算：
+				//uchar mask = 0xFF << a;  n = 2^a;
+				//p_row[j] = (p_row[j]&mask) + n/2;
+			}	
+		}
+	} else {
+		return ;
+	}
+}
+```
 
 
 
