@@ -44,11 +44,13 @@ int main( int argc, char** argv )
 -	Mat imread( const string& filename, int flags=1 ); 
 -	cv::imwrite(filename , Mat,...)
 -	cv::flip(Mat src ,Mat dst,int flipcode)    //if flipcode == 0 vertical if flipcode == 1 horizontal 
--	cv::waitKey(int delay = 0) //default ,this fun will wait for ever if no key is pressed ,if delay is not 0... 
+-	cv::waitKey(int delay = 0) //default ,this fun will wait for ever if no key is pressed ,if delay is not 0...          
+-	cv::Mat::reshape(...)  对图像维度和其他参数的更改。
 
 ### 第二章
 -	对于一个灰度图而言，每一个元素代表一个像素的灰度值，其中0表示黑色，255表示白色。
-> 利用cv::Mat的构造函数，我们可以用不同的构造函数来创建不同的的图像，如灰度头，彩色图...
+> 利用cv::Mat的构造函数，我们可以用不同的构造函数来创建不同的的图像，如灰度图，彩色图...
+
 ```
 	#include <iostream>
 	#include <cstdlib>
@@ -76,39 +78,55 @@ int main( int argc, char** argv )
 	}
 ```
 
--	cv::Mat::at<typename>(int i , int j) can over load 
-> 使用CV::Mat_<typename >类可以简化某些操作，例如在Mat_中重载了运算符 () ：cv::Mat_::operator()(int i , int j);与cv::Mat::at()有相同意思。
+-	cv::Mat::at<typename>(int i , int j) 
+> 使用`cv::Mat_<typename >`类可以简化某些操作，例如在`Mat_`中重载了运算符 () ：`cv::Mat_::operator()(int i , int j);`与`cv::Mat::at()`有相同意思。
 
--	uchar * data Mat::ptr<typename>(int i)   //给出图片第i行的内存首地址。
--	在opencv中，彩色的三通道图片的像素中三个通道的顺序是：BGR，blue蓝色在第一个字节。
+-	`uchar * data Mat::ptr<typename>(int i)`   //给出图片第i行的内存首地址。
+-	在opencv中，彩色的三通道图片的像素中三个通道的顺序是：***BGR***，blue蓝色在第一个字节。
 -	***因为效率问题（内存对齐，增加数据的传输速度），图片在内存中存储时其行的像素数可能与图像的实际行的像素数不同，一般在内存中数据对其会增加数据的传输速度。所以我们不能认为图像的存储是连续的。***
-> 在Mat类中，rows属性给出图像的真实行数，cols给出真实列数，那么在cols中是不包含系统为了效率额外添加的像素。step变量给出每行的字节数，elemSize给出每个像素的字节数。total()给出图片的像素总数。
+> 在mat类中，***isContinuous()***方法给出了图像在内存中是否连续存储，即是否有padding。rows属性给出图像的真实行数，cols给出真实列数，那么在cols中是不包含系统为了效率额外添加的像素。step变量给出每行的字节数（包含padding），elemSize给出每个像素的字节数。total()给出图片的像素总数。
 
 ```
-void ReduceColors(cv::Mat img , int n)
-{
-	if (img.channels() == 3) {
-		//get the sum num of pixel
-		int num_of_pixel = img.rows * img.cols ;
-		//img.total();
-		
-		for (int i = 0; i < img.rows ; i++) {
-			//get pointer to row 
-			uchar *p_row = img.ptr<uchar>(i);
-			for (int j = 0; j < img.cols * 3; j++) {
-				p_row[j] = p_row[j]/n*n + n/2;
+	void colorReduce(cv::Mat &image, int div=64) {
+		int nl= image.rows; // number of lines
+		int nc= image.cols ; // number of columns
+		// is it a continous image
+		if (image.isContinuous()) {
+			// then no padded pixels
+			nc= nc*nl;
+			nl= 1; // it is now a 1D array
+		}
+		//div ～= 2^n  约等于 
+		int n= static_cast<int>(log(static_cast<double>(div))/log(2.0));
+		// mask used to round the pixel value
+		uchar mask= 0xFF<<n; // e.g. for div=16, mask= 0xF0
+		// for all pixels
+		for (int j=0; j<nl; j++) {
+			// pointer to first column of line j
+			//在不考虑效率的情况下，我们可以使用迭代器来访问像素   P49
+			uchar* data= image.ptr<uchar>(j);
+			for (int i=0; i<nc; i++) {
+				// process each pixel ---------------------
+				//p_row[j] = p_row[j]/n*n + n/2;//这里的运算不会被编译器优化（化简）
 				//p_row[j] = p_row[j] - p_row[j]%n +n/2;  this is slower
 				//如果我们限定n的取值是2的整数倍，那么效率最高的方法是位运算：
-				//uchar mask = 0xFF << a;  n = 2^a;
-				//p_row[j] = (p_row[j]&mask) + n/2;
-			}	
+				*data++= *data&mask + div/2;
+				*data++= *data&mask + div/2;
+				*data++= *data&mask + div/2;
+				// end of pixel processing ----------------
+			} // end of line
 		}
-	} else {
-		return ;
 	}
-}
-```
 
+```
+上面的函数将直接在源数据上进行操作。为了不在源图进行操作我们可以创建一个新的Mat，例如：
+```
+cv::Mat img = result;
+result.creat(img.rows , img.cols, img.type());//这个函数创建的图像是没有padding的，不考虑效率问题。
+```
+P49页讲述了如何使用迭代器来访问像素。
+
+为了测试程序的性能，opencv提供了cv::getTickCount()和cv:getTickFrequency()两个方法，前者获得从开机开始到当前为止cpu的tick数，而后者就获得了cpu的时钟频率。在测试程序前后分别使用gteTickCount()来获得一个tick数，两者相减即为间隔tick数，再除以频率即得时间。
 
 
 
