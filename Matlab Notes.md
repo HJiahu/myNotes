@@ -22,7 +22,7 @@
 	-   floor()				左向取整
 	-   fix(x)              朝零取整
 	-   round()				取离其最近的整数。
-	-	char(x)				 Converts a matrix of numbers into a character string.
+	-	char(x)				Converts a matrix of numbers into a character string.
 	-	double(x) 			Converts a character string into a matrix of numbers.
 	-	int2str(x) 			Converts x into an integer character string.
 	-	num2str(x) 			Converts x into a character string.
@@ -89,8 +89,10 @@ matlab内存中数据组织形式：
 -  	format compact suppress extra line feeds format loose restore extra line feeds format + Only signs are printed.         
 
 保存和读取文件数据：        
--	save filename var1 var2 var3 ...   save var to filename.默认情况下保存的文件不是文本格式，为了保存为文本格式可在save后添加指令  -acsii ：save -acsii filename var...文件后缀可选.dat
--	load filename。从已知的文件中读取数据，一般情况下matlab会以文件的后缀来载入文件，但可以强制要求matlab以某种格式载入数据：        load -mat xx.txt  或load -acsii xx.mat 
+-	save filename var1 var2 var3 ...   save var to filename.默认情况下保存的文件不是文本格式，为了保存为文本格式可在save后添加指令        
+`-acsii ：save -acsii filename var... `  文件后缀可选.dat
+-	load filename。从已知的文件中读取数据，一般情况下matlab会以文件的后缀来载入文件，但可以强制要求matlab以某种格式载入数据：         
+`load -mat xx.txt  或load -acsii xx.mat `
 
 ***矩阵的左除***
 > 对于由矩阵表示的线性方程组，如Ax = B，一般而言x = A^-1 *B 。而左除的意义就是inv(A)*B，x = A \ B ;
@@ -99,15 +101,10 @@ matlab内存中数据组织形式：
 > 一般而言如果操作符前有点如：.*  ./等表示向量操作，一般就是对应元素之间的操作。当运算符前没有点且操作对像是矩阵时，此时就要使用矩阵的运算法则。o
 
 Matlab的内建函数：
-> matlab的内建函数一般返回多个参数，例如max 一般会返回一个列表中最大的值和这个值的下标。matlab的内建函数会根据右值的类型来决定返回几个值：x = max(A)，返回一个值，[maxval  index] = max(A) 会返回两个值。	
+> matlab的内建函数一般返回多个参数，例如max 一般会返回一个列表中最大的值和这个值的下标。matlab的内建函数会根据右值的类型来决定返回几个值：x = max(A)，返回一个值，[maxval  index] = max(A) 会返回两个值。	       
+> ***matlab可以依据返回值来重载函数***
 
-从matlab中导出图片：
-> page59     
-> -deps Creates a monochrome encapsulated postcript image.    
-> -depsc Creates a color encapsulated postcript image.    
-> -djpeg Creates a JPEG image.    
-> -dpng Creates a Portable Network Graphic color image.   
-> -dtiff Creates a compressed TIFF image.   
+从matlab中导出图片：> page59     
 
 matlab 图像设置：(marker 用于标记关健点，一般就是绘图的取值点）：       
 一般matlab可以设置曲线的三个特性：颜色，marker style和line style。
@@ -136,6 +133,15 @@ k black 	v triangle (down)
 3. The semilogy function plots x data on linear axes and y data on loga- rithmic axes.
 4. The loglog function plots both x and y data on logarithmic axes.
 
-### 分枝语句和程序设计
+### 第三章 分枝语句和程序设计
+***Top Down Design***
+1. 明确声明需要解决的问题。
+2. 定义输入和输出。
+3. 定义算法。
+4. 编码。
+5. 测试。
+
+Page 93
+
 
 

@@ -130,12 +130,13 @@ Forms验证：
   <location path="accessableTest">  <!--需要进行权限管理的目录或文件位置-->
     <system.web>   <!--这一行是必须的-->
       <authorization>
+	    <allow users="?">
         <allow roles="admin"/>   <!--允许读取本文件夹或文件的用户-->
-        <deny roles="*"/>   <!--默认情况下所有人是可读取所有文件的，如果不加这一行，未登陆用户易可读取-->
+        <deny user="*"/>   <!--默认情况下所有人是可读取所有文件的，如果不加这一行，未登陆用户易可读取-->
       </authorization>
     </system.web>
   </location>
-</configuration>``
+</configuration>
 ```
 具体的角色与授权管理见337~339
 
