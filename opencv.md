@@ -1,27 +1,13 @@
-Notes for opencv .
-OpenCV2 cooking book
+本文摘自：OpenCV2 cooking book
 
 ### 第一章：  2015-09-06 07:57:40
 introduce opencv2.0
-opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
-```
-int main( int argc, char** argv ) 
-{
-	cv::Mat img;
-	img = cv::imread("../Imags/lena.jpg",1);
-	//在opencv的C接口中使用下面这个函数来载入图像，Ipl表示一个intel的库名，P29
-	// IplImage* iplImage = cvLoadImage("c:\\img.jpg");     
-	//可以很方便的将iplImage指向的C 结构体转化为Mat类：
-	//cv::Mat image4(iplImage,false);
-	//cvReleaseImage(&iplImage);//必须使用明确的语句来清除IplImage结构
-	cv::namedWindow("Image_1",cv::WINDOW_AUTOSIZE);
-	while (1) {
-		cv::imshow("Image_1", img);  //显式窗口和保存图片的内存是相关联的。
-		cv::waitKey(0);
-		cv::flip(img, img, 1);
-	}
-}
-```
+opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow() 
+> //在opencv的C接口中使用下面这个函数来载入图像，Ipl表示一个intel的库名，P29                
+// IplImage* iplImage = cvLoadImage("c:\\img.jpg");             
+//可以很方便的将iplImage指向的C 结构体转化为Mat类：               
+//cv::Mat image4(iplImage,false);
+
 -	cv::Mat img //  Mat is a class 。
 > Mat 使用了引用计数和浅复制，为了实现深复制，使用方法img.copyTo(cv::Mat img_1)或者深度拷贝函数cv::Mat Mat::clone() .         
 > img.size().height                
@@ -51,40 +37,15 @@ int main( int argc, char** argv )
 -	对于一个灰度图而言，每一个元素代表一个像素的灰度值，其中0表示黑色，255表示白色。
 > 利用cv::Mat的构造函数，我们可以用不同的构造函数来创建不同的的图像，如灰度图，彩色图...
 
-```
-	#include <iostream>
-	#include <cstdlib>
-	#include <ctime>
-	#include <opencv2/highgui/highgui.hpp>
-	void salt_image(cv::Mat  &img , int n)
-	{
-		srand(time(NULL));
-		for (int i = 0; i < n ; i++) {
-			int row_num = rand()%img.rows ; 
-			int col_num = rand()%img.cols ; 
-			if (img.channels() == 1) {
-				img.at<uchar>(row_num , col_num) = 255;
-				//cv::Mat_ img_2 = img ; //shallow copy 
-				//img(row_num , col_num) = 255;
-			}
-			else {
-				if(img.channels() == 3){
-					img.at<cv::Vec3b>(row_num , col_num)[0] = 255;
-					img.at<cv::Vec3b>(row_num , col_num)[1] = 255;
-					img.at<cv::Vec3b>(row_num , col_num)[2] = 255;
-				}
-			}
-		}		
-	}
-```
+-	srand()和rand()在头文件cstdlib中，time()在头文件ctime中。srand(time(NULL))
 
--	cv::Mat::at<typename>(int i , int j) 
+-	`cv::Mat::at<typename>(int i , int j)`   //效率较差
 > 使用`cv::Mat_<typename >`类可以简化某些操作，例如在`Mat_`中重载了运算符 () ：`cv::Mat_::operator()(int i , int j);`与`cv::Mat::at()`有相同意思。
 
 -	`uchar * data Mat::ptr<typename>(int i)`   //给出图片第i行的内存首地址。
 -	在opencv中，彩色的三通道图片的像素中三个通道的顺序是：***BGR***，blue蓝色在第一个字节。
 -	***因为效率问题（内存对齐，增加数据的传输速度），图片在内存中存储时其行的像素数可能与图像的实际行的像素数不同，一般在内存中数据对其会增加数据的传输速度。所以我们不能认为图像的存储是连续的。***
-> 在mat类中，***isContinuous()***方法给出了图像在内存中是否连续存储，即是否有padding。rows属性给出图像的真实行数，cols给出真实列数，那么在cols中是不包含系统为了效率额外添加的像素。step变量给出每行的字节数（包含padding），elemSize给出每个像素的字节数。total()给出图片的像素总数。
+> 在mat类中，***isContinuous()***方法给出了图像在内存中是否连续存储，即是否有padding。rows属性给出图像的真实行数，cols给出真实列数，那么在cols中是不包含系统为了效率额外添加的像素（额外添加的像素时不会显式出来的）。step变量给出每行的字节数（包含padding），elemSize给出每个像素的字节数。total()给出图片的像素总数。
 
 ```
 	void colorReduce(cv::Mat &image, int div=64) {
@@ -122,13 +83,15 @@ int main( int argc, char** argv )
 上面的函数将直接在源数据上进行操作。为了不在源图进行操作我们可以创建一个新的Mat，例如：
 ```
 cv::Mat img = result;
-result.creat(img.rows , img.cols, img.type());//这个函数创建的图像是没有padding的，不考虑效率问题。
+result.creat(img.rows , img.cols, img.type());//这个函数创建的图像是没有padding的，不考虑效率问题。而且如果result已经有了和参数相同的图片存储区，那么这个函数将什么都不做。
 ```
 P49页讲述了如何使用迭代器来访问像素。
 
-为了测试程序的性能，opencv提供了cv::getTickCount()和cv:getTickFrequency()两个方法，前者获得从开机开始到当前为止cpu的tick数，而后者就获得了cpu的时钟频率。在测试程序前后分别使用gteTickCount()来获得一个tick数，两者相减即为间隔tick数，再除以频率即得时间。
+为了测试程序的性能，opencv提供了cv::getTickCount()和cv:getTickFrequency()两个方法，前者获得从开机开始到当前为止cpu的tick数，而后者就获得了cpu的时钟频率。在测试程序前后分别使用getTickCount()来获得一个tick数，两者相减即为间隔tick数，再除以频率即得时间。
 
-
+像素的临近像素读取：2015-09-13 08:33:34          
+-	锐化操作：`sharpened_pixel= 5*current-left-right-up-down;` 具体的操作是对源使用三个指针，对目地图像使用一个指针。P56
+-	`cv::saturate_cast<typename>(...) `防制数据的溢出。
 
 
 
