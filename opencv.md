@@ -79,6 +79,9 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 		}
 	}
 
+使用运算符重载的版本：
+image=(image&cv::Scalar(mask,mask,mask)) + cv::Scalar(div/2,div/2,div/2);
+
 ```
 上面的函数将直接在源数据上进行操作。为了不在源图进行操作我们可以创建一个新的Mat，例如：
 ```
@@ -91,7 +94,54 @@ P49页讲述了如何使用迭代器来访问像素。
 
 像素的临近像素读取：2015-09-13 08:33:34          
 -	锐化操作：`sharpened_pixel= 5*current-left-right-up-down;` 具体的操作是对源使用三个指针，对目地图像使用一个指针。P56
--	`cv::saturate_cast<typename>(...) `防制数据的溢出。
+-	`cv::saturate_cast<typename>(...) `防制数据的溢出，例如 `cv::saturate_cast<uchar>( data )` 将data的值限制在0～255。
+-	cv::Mat::creat(cv::Mat::size() , cv::Mat::type()) 要么创建一个新的存储区（无padding），要么就不做任何事情（已存在满足要求的存储区）。
+-	cv::Mat::row(int n)::setTo(cv::Scalar(0 , 0 , 0));
+-	***使用已经存在的函数来勾践锐化函数：***
+> `cv::Mat kernel(3, 3, CV_32F, cv::Scalar(0)`            
+> `kernel.at<float>(i , j) = ...`         
+> `cv::filter2D(img , dst , img.depth() , kernel)`   
+
+***图片的叠加***       
+```
+	// c[i]= a[i]+b[i];
+	cv::add(imageA,imageB,resultC);
+	// c[i]= a[i]+k;
+	cv::add(imageA,cv::Scalar(k),resultC);
+	// c[i]= k1*a[1]+k2*b[i]+k3;
+	cv::addWeighted(imageA,k1,imageB,k2,k3,resultC);
+	result= 0.7*image1+0.9*image2;  //图像运算非重载
+	// c[i]= k*a[1]+b[i];
+	cv::scaleAdd(imageA,k,imageB,resultC);
+	```
+
+在opencv中有很多直接对图像像素进行处理的函数，而且这些函数大部份都有对应的运算符重载函数。在这里一一列出，具体见API 手册。
+
+***获得有色图像不同的颜色通道***
+```
+	// create vector of 3 images
+	std::vector<cv::Mat> planes;
+	// split 1 3-channel image into 3 1-channel images
+	cv::split(image1,planes);
+	// add to blue channel
+	planes[0]+= image2;
+	// merge the 3 1-channel images into 1 3-channel image
+
+	cv::merge(planes,result);
+```
+
+***ROI***
+> Region of interset     
+> `cv::Mat roi_img = img(cv:Rect(x , y ,length ,height)`            
+> `cv::Mat roi_img = img(cv::Rang(from , to) , cv::Rang(from ,to)`        
+```
+	// define ROI
+	imageROI= image(cv::Rect(385,270,logo.cols,logo.rows));
+	// load the mask (must be gray-level)
+	cv::Mat mask= cv::imread("logo.bmp",0);
+	// copy to ROI with mask
+	logo.copyTo(imageROI,mask);
+```
 
 
 
