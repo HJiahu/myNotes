@@ -13,7 +13,7 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 > img.size().height                
 > img.size().width             
 > ***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确载入。          
-> we can creat matrix data by Mat :         
+> we can create matrix data by Mat :         
 > `cv::Mat img(240,320,CV_8U,cv::Scalar(100));`                   
 > 为了实现浅偶合，因为Mat类的浅复制问题，最好不要在类中返回一个Mat类，这样和多时侯会造成对像之间的一些影响，增加类代码的复杂度：
 > ```
@@ -95,9 +95,9 @@ P49页讲述了如何使用迭代器来访问像素。
 像素的临近像素读取：2015-09-13 08:33:34          
 -	锐化操作：`sharpened_pixel= 5*current-left-right-up-down;` 具体的操作是对源使用三个指针，对目地图像使用一个指针。P56
 -	`cv::saturate_cast<typename>(...) `防制数据的溢出，例如 `cv::saturate_cast<uchar>( data )` 将data的值限制在0～255。
--	cv::Mat::creat(cv::Mat::size() , cv::Mat::type()) 要么创建一个新的存储区（无padding），要么就不做任何事情（已存在满足要求的存储区）。
+-	cv::Mat::create(cv::Mat::size() , cv::Mat::type()) 要么创建一个新的存储区（无padding），要么就不做任何事情（已存在满足要求的存储区）。
 -	cv::Mat::row(int n)::setTo(cv::Scalar(0 , 0 , 0));
--	***使用已经存在的函数来勾践锐化函数：***
+-	***使用已经存在的函数来构建锐化函数：***
 > `cv::Mat kernel(3, 3, CV_32F, cv::Scalar(0)`            
 > `kernel.at<float>(i , j) = ...`         
 > `cv::filter2D(img , dst , img.depth() , kernel)`   
@@ -113,9 +113,10 @@ P49页讲述了如何使用迭代器来访问像素。
 	result= 0.7*image1+0.9*image2;  //图像运算非重载
 	// c[i]= k*a[1]+b[i];
 	cv::scaleAdd(imageA,k,imageB,resultC);
-	```
+```
 
-在opencv中有很多直接对图像像素进行处理的函数，而且这些函数大部份都有对应的运算符重载函数。在这里一一列出，具体见API 手册。
+
+在opencv中有很多直接对图像像素进行处理的函数，而且这些函数大部份都有对应的运算符重载函数。在这里不一一列出，具体见API 手册。
 
 ***获得有色图像不同的颜色通道***
 ```
@@ -125,8 +126,8 @@ P49页讲述了如何使用迭代器来访问像素。
 	cv::split(image1,planes);
 	// add to blue channel
 	planes[0]+= image2;
-	// merge the 3 1-channel images into 1 3-channel image
 
+	// merge the 3 1-channel images into 1 3-channel image
 	cv::merge(planes,result);
 ```
 
@@ -143,7 +144,11 @@ P49页讲述了如何使用迭代器来访问像素。
 	logo.copyTo(imageROI,mask);
 ```
 
-
+### 第三章 用类来处理图片
+-	City block distancee ：出租车距离，曼哈顿距离。形像的说“方格距离”
+-	Enclidean norm ：欧几里德距离，两点之间的距离。
+	-	`cv::norm<int , 3>(...);`
+-	***对于库中已经存在的重载运算符，有时侯要注意他们的行为，例如对于两个Vec3u型的数据a和b，c=a-b中减号 - 中已经调用了saturate_cast()函数来防制溢出。这点要注意。***
 
 
 
