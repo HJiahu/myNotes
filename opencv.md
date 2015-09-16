@@ -150,6 +150,21 @@ P49页讲述了如何使用迭代器来访问像素。
 	-	`cv::norm<int , 3>(...);`
 -	***对于库中已经存在的重载运算符，有时侯要注意他们的行为，例如对于两个Vec3u型的数据a和b，c=a-b中减号 - 中已经调用了saturate_cast()函数来防制溢出。这点要注意。***
 
+***设计模式***
+1. 策略设计模式（strategy pattern）：简单的说就是将方法封装到类中。
+2. 单态模式：
+3. MVC模式：modle-view-controler        GUI P84
+
+**颜色空间的转化**
+-	The Structure and Properties of Color Spaces and the Representation of Color Images  :a useful book
+-	BGR ，BGR  is not a perceptually uniform color space .
+-	CIE L*a*b* 颜色空间是一个对于人眼而言的线性颜色空间。
+	-	L:0~100    a,b:-127 ~ +127
+-	cv::cvtColor(tmp, tmp, CV_BGR2Lab);//用于转化颜色空间。
+	-	cv::cvtColor(color, gray, CV_BGR2Gray);
+	-	CV_BGR2YCrCb
+
+
 
 
 
