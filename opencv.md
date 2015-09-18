@@ -2,6 +2,9 @@
 -	目录 <span id="Index"/> 
 	-	[第一章 简介](#1)           
 	-	[第二章 像素的操作](#2)          
+	-	[第三章 用类来处理图片](#3)
+	-	[第四章 用直方图来描述像素](#4)
+
 
 
 ### 第一章：  2015-09-06 07:57:40 <h1 id="1"></h1> 
@@ -149,7 +152,7 @@ P49页讲述了如何使用迭代器来访问像素。
 	logo.copyTo(imageROI,mask);
 ```
 
-### 第三章 用类来处理图片
+### 第三章 用类来处理图片  <span id="3"/> [\[目录\]](#Index)  
 -	City block distancee ：出租车距离，曼哈顿距离。形像的说“方格距离”
 -	Enclidean norm ：欧几里德距离，两点之间的距离。
 	-	`cv::norm<int , 3>(...);`
@@ -170,8 +173,10 @@ P49页讲述了如何使用迭代器来访问像素。
 	-	CV_BGR2YCrCb
 
 
-### 第四章 用直方图来描述像素
+### 第四章 用直方图来描述像素  <span id="4"/> [\[目录\]](#Index) 
 
+-	`void calcHist( const Mat* arrays, int narrays, const int* channels, const Mat& mask, MatND& hist, int dims, const int* histSize, const float** ranges, bool uniform=true, bool accumulate=false );`
+-	`void calcHist( const Mat* arrays, int narrays, const int* channels, const Mat& mask, SparseMat& hist, int dims, const int* histSize, const float** ranges, bool uniform=true, bool accumulate=false );`
 
 
 
