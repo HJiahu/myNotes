@@ -1,6 +1,10 @@
 本文摘自：OpenCV2 cooking book
+-	目录 <span id="Index"/> 
+	-	[第一章 简介](#1)           
+	-	[第二章 像素的操作](#2)          
 
-### 第一章：  2015-09-06 07:57:40
+
+### 第一章：  2015-09-06 07:57:40 <h1 id="1"></h1> 
 introduce opencv2.0
 opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow() 
 > //在opencv的C接口中使用下面这个函数来载入图像，Ipl表示一个intel的库名，P29                
@@ -9,7 +13,7 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 //cv::Mat image4(iplImage,false);
 
 -	cv::Mat img //  Mat is a class 。
-> Mat 使用了引用计数和浅复制，为了实现深复制，使用方法img.copyTo(cv::Mat img_1)或者深度拷贝函数cv::Mat Mat::clone() .         
+> Mat 使用了引用计数和浅复制，为了实现深复制，使用方法`void img.copyTo(cv::Mat img_1) const;`或者深度拷贝函数`cv::Mat Mat::clone() const;`         
 > img.size().height                
 > img.size().width             
 > ***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确载入。          
@@ -33,7 +37,8 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 -	cv::waitKey(int delay = 0) //default ,this fun will wait for ever if no key is pressed ,if delay is not 0...          
 -	cv::Mat::reshape(...)  对图像维度和其他参数的更改。
 
-### 第二章
+### 第二章 像素的操作 <span id="2"/> [\[目录\]](#Index) 
+
 -	对于一个灰度图而言，每一个元素代表一个像素的灰度值，其中0表示黑色，255表示白色。
 > 利用cv::Mat的构造函数，我们可以用不同的构造函数来创建不同的的图像，如灰度图，彩色图...
 
@@ -71,7 +76,7 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 				//p_row[j] = p_row[j]/n*n + n/2;//这里的运算不会被编译器优化（化简）
 				//p_row[j] = p_row[j] - p_row[j]%n +n/2;  this is slower
 				//如果我们限定n的取值是2的整数倍，那么效率最高的方法是位运算：
-				*data++= *data&mask + div/2;
+				*data++= *data&mask + div/2;//&的优先级在关系运算符之后逻辑运算符之前
 				*data++= *data&mask + div/2;
 				*data++= *data&mask + div/2;
 				// end of pixel processing ----------------
@@ -93,7 +98,7 @@ P49页讲述了如何使用迭代器来访问像素。
 为了测试程序的性能，opencv提供了cv::getTickCount()和cv:getTickFrequency()两个方法，前者获得从开机开始到当前为止cpu的tick数，而后者就获得了cpu的时钟频率。在测试程序前后分别使用getTickCount()来获得一个tick数，两者相减即为间隔tick数，再除以频率即得时间。
 
 像素的临近像素读取：2015-09-13 08:33:34          
--	锐化操作：`sharpened_pixel= 5*current-left-right-up-down;` 具体的操作是对源使用三个指针，对目地图像使用一个指针。P56
+-	锐化操作：`sharpened_pixel= 5*current-left-right-up-down;` 具体的操作是对源使用三个指针，对目的图像使用一个指针。P56
 -	`cv::saturate_cast<typename>(...) `防制数据的溢出，例如 `cv::saturate_cast<uchar>( data )` 将data的值限制在0～255。
 -	cv::Mat::create(cv::Mat::size() , cv::Mat::type()) 要么创建一个新的存储区（无padding），要么就不做任何事情（已存在满足要求的存储区）。
 -	cv::Mat::row(int n)::setTo(cv::Scalar(0 , 0 , 0));
@@ -125,7 +130,7 @@ P49页讲述了如何使用迭代器来访问像素。
 	// split 1 3-channel image into 3 1-channel images
 	cv::split(image1,planes);
 	// add to blue channel
-	planes[0]+= image2;
+	planes[0]+= image2;//add image2 to the blue channel of image1
 
 	// merge the 3 1-channel images into 1 3-channel image
 	cv::merge(planes,result);
@@ -158,66 +163,16 @@ P49页讲述了如何使用迭代器来访问像素。
 **颜色空间的转化**
 -	The Structure and Properties of Color Spaces and the Representation of Color Images  :a useful book
 -	BGR ，BGR  is not a perceptually uniform color space .
--	CIE L*a*b* 颜色空间是一个对于人眼而言的线性颜色空间。
+-	***CIE L*a*b* 颜色空间是一个对于人眼而言的线性颜色空间。***
 	-	L:0~100    a,b:-127 ~ +127
 -	cv::cvtColor(tmp, tmp, CV_BGR2Lab);//用于转化颜色空间。
 	-	cv::cvtColor(color, gray, CV_BGR2Gray);
 	-	CV_BGR2YCrCb
 
 
-
-
-
-### some functions structure etc for opencv 
-#### functions 
-- Mat imread( const string &filename, int flags=1 );
-	> return a structure(cv::Mat) to handle images .
-	flags Specifies color type of the loaded image:
-	>0 the loaded image is forced to be a 3-channel color image
-	=0 the loaded image is forced to be grayscale
-	<0 the loaded image will be loaded as-is (note that in the current
-	implementation the alpha channel, if any, is stripped from the output
-	image, e.g. 4-channel RGBA image will be loaded as RGB if f lags ≥ 0).
-
-- bool Mat::empty() const;  
-	> check to see if an image was in fact read.
-
-- void cv::namedWindow( const string& winname, int flags ); 
-	> winname is the name of new window and Future HighGUI calls that interact
-	with this window will refer to it by this name.
-	> flag can be 0(the default value) and cv::WINDOW_AUTOSIZE.
-	if 0:all images will display in the same size .
-	if auto differdnt pictures will show in different size .
-
-- void imshow( const string& winname, const Mat& image );
-	> winname Name of the window.
-	image Image to be shown.
-
-- int waitKey(int delay=0); 
-	> this fun is used to wait a keypress event.if delay if >=0 this functions 
-	will wait for infinit .if delay is >0 ,this functions will return if some 
-	key is pressed or wait time ivvs more than delay.
-	Returns the code of the pressed key or -1 if no key was pressed before the 
-	specified time had elapsed.
-	*	Note: This function is the only method in HighGUI that can fetch and handle events, so it
-	needs to be called periodically for normal event processing, unless HighGUI is used within some
-	environment that takes care of event processing.
-
-- void DestroyWindow( const char* name );
-	> name is the window's name .
+### 第四章 用直方图来描述像素
 
 
 
 
-	## structures && classes
-
-	### class :
-- cv::Mat:         opencv use this structure to handle all kinds of images .
-- cv::VideoCapture Class for video capturing from video files or cameras. 
-
-	### structure :
-
-
-
-
-
+ 
