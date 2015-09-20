@@ -143,5 +143,88 @@ k black 	v triangle (down)
 
 Page 93
 
+a = true  创建一个logical value
+
+~=  
+
+&&提供短路运算，而&不提供
 
 
+ischar(a) Returns true if a is a character array and false otherwise.
+isempty(a) Returns true if a is an empty array and false otherwise.
+isinf(a) Returns true if the value of a is infinite (Inf) and false otherwise.
+isnan(a) Returns true if the value of a is NaN (not a number) and false otherwise.
+isnumeric(a) Returns true if a is a numeric array and false otherwise.
+logical Converts numerical values to logical values: if a value is non-zero, it is converted t
+
+
+```
+switch (switch_expr)
+case {case_expr_1, case_expr_2, case_expr_3},   %可以有多个表达式，满足其中一个机会执行
+Statement 1 
+Statement 2 ...  Block 1
+
+otherwise,    %类似C中的default
+Statement 1 Statement 2 ...  Block n
+end
+```
+
+```
+try
+Statement 1 Statement 2 ... ⎭ ⎬ ⎫ Try Block
+catch
+Statement 1 Statement 2 ... ⎭ ⎬ ⎫ Catch Block
+end
+```
+
+MALTAB 编译器无论什么时
+候遇到这个命令，它都能转化为相应的函数。它把命令直接当作函数来用，而不是应用命令
+语法。下面的两个语句是等价的：
+axis on;
+axis ('on');
+
+while expr
+...
+...
+...
+end
+
+
+for ii = 1:10
+Statement 1
+...
+Statement n
+end
+
+for ii = 1:2:10
+Statement 1
+...
+Statement n
+end
+
+for ii = [5 9 7]
+Statement 1
+...
+Statementn
+end
+
+for ii = [1 2 3; 4 5 6]
+Statement 1
+...
+Statement n
+end
+
+循环指数 ii 在第一次执行时为行向量[1 4] ，第二次执行时为 [4 5]，第三次执行时为 [6 7]
+
+break 和 continue 语句
+
+function [outarg1, outarg2, ...] = fname(inarg1, inarg2, ...)
+%H1 comment line               //我们可以使用lookfor指令找到第一行注释
+%Other comment lines            //使用help指令可以找到余下的指令
+...
+(Executable code)
+...
+(return)
+
+
+maltab 程序与它们函数之间的交互用是按值传递机制。
