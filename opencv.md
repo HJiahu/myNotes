@@ -174,9 +174,13 @@ P49页讲述了如何使用迭代器来访问像素。
 
 
 ### 第四章 用直方图来描述像素  <span id="4"/> [\[目录\]](#Index) 
-
 -	`void calcHist( const Mat* arrays, int narrays, const int* channels, const Mat& mask, MatND& hist, int dims, const int* histSize, const float** ranges, bool uniform=true, bool accumulate=false );`
+> 
+
 -	`void calcHist( const Mat* arrays, int narrays, const int* channels, const Mat& mask, SparseMat& hist, int dims, const int* histSize, const float** ranges, bool uniform=true, bool accumulate=false );`
+
+-	`cv::threshold(cv::Mat sor_img,cv::Mat threshold_img,60,255,cv::THRESH_BINARY)`a
+
 
 
 
