@@ -40,7 +40,7 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 -	cv::waitKey(int delay = 0) //default ,this fun will wait for ever if no key is pressed ,if delay is not 0...          
 -	cv::Mat::reshape(...)  对图像维度和其他参数的更改。
 
-### 第二章 像素的操作 <span id="2"/> [\[目录\]](#Index) 
+### 第二章 像素的操作 [\[目录\]](#Index) <span id="2"/> 
 
 -	对于一个灰度图而言，每一个元素代表一个像素的灰度值，其中0表示黑色，255表示白色。
 > 利用cv::Mat的构造函数，我们可以用不同的构造函数来创建不同的的图像，如灰度图，彩色图...
