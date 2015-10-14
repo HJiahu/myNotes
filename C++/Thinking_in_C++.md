@@ -10,6 +10,7 @@
 	-	[第十章：名字控制](#10)              
 	-	[第十一章：引用和拷贝构造函数 ](#11)              
 	-	[第十二章：运算符重载 ](#12)              
+	-	[第十三章：动态对象创建](#13)
 	-	[keywords](#keywords)
 
 ### 第零章：help and tips  [\[Index\]](#Index) <span id="0">              
@@ -712,8 +713,16 @@ _**如果知道一定会使用按值传递来传递一个对像时，那么就�
 > `MyType a = b`;//调用拷贝构造函数         
 > `a = b` ;      //使用重载的运算符等号
 
+***自动类型转换***
 
-
+### 第十三章 动态对象创建  [\[Index\]](#Index) <span id="13"/>      
+***大部分的new和delete是使用malloc和free实现的***故使用delete删除malloc分配的内存的行为是没有定义的，因为这样做很可能没有调用析构函数而直接释放内存。
+-	void * malloc(unsigned int size);//malloc在分配内存时会记录所分配的内存大小，便于后续的删除。
+-	new
+	-	MyType *fp = new MyType(1,2);
+	-	MyType *fp = new MyType;//注意如何使用默认构造函数
+-	delete 
+	-	delete fp;//如果fp是NULL则不会发生任何事情。
 
 ### C++ keywords   [\[Index\]](#Index) <span id="keywords"/>      
 ```
