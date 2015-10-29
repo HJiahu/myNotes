@@ -5,6 +5,7 @@
 -	[第三章 运输层（第二层）](#2)
 -	[第十章 网络层](#3)
 -	[在网络上传输的包](#B)
+
 ### tips [\[Index\]](#Index) <span id="0"/>      
 -	RJ-45网线的连接规则：一般而言当同种设备相连时使用交叉线，异种设备相连使用直通线。在这里，设备只分为两类：DTE（数据终端），DCE（数据通信设备）。如今的网卡有自动识别功能，故一般直通和交叉可以混用。
 -	集线器和交换机（第二层交换机）：集线器是无源的，工作原理为CSMA/CD；而交换机有端口MAC记忆功能，其不会发生数据碰撞。
@@ -197,7 +198,7 @@ web缓存器（web cache）也称为web代理器（proxy  server）：
 > 假设路由器有四个向外转发的接口，每个接口连接在不同的地址空间端，那么拿ip报首地址的前几位与这些端口的段范围进行匹配，将数据用匹配到的端口向外发送。     
 > 这种方法叫 ~           
 
-***交换机的一般结构****
+***路由器的一般结构****
 -	输入端口：一般在每一个输入端口都有一个处理器，用来搜索转发路径。而转发表一般由中央选路处理器算得。
 -	可以使用多种手段来加快查询速度，例如使用快速的查询算法（如二叉树查找）或者保存最近使用的数据（相当于缓存）。
 
@@ -217,8 +218,8 @@ web缓存器（web cache）也称为web代理器（proxy  server）：
 -	***编址方案***
 	-	分类编址：IP地址的网络部分被确定为8位、16位和24位这三种A、B、C类网址。分类编址的问题在于C类网址中子网可用的IP太少，只有2^8 - 2 = 254台（有两个IP地址有特殊的用途）。B类网址中子网中可用的IP又太多。
 	-	以二进制说明 Network 第一个数字的定义：
-	```
-	Class A : 0xxxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx  ==> NetI_D 的开头是 0
+  > ```
+  >Class A : 0xxxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx  ==> NetI_D 的开头是 0
 			  |--net--|---------host------------|
 	Class B : 10xxxxxx.xxxxxxxx.xxxxxxxx.xxxxxxxx  ==> NetI_D 的开头是 10
 			  |------net-------|------host------|
@@ -232,9 +233,8 @@ web缓存器（web cache）也称为web代理器（proxy  server）：
 	Class C : 192.xx.xx.xx ~ 223.xx.xx.xx
 	Class D : 224.xx.xx.xx ~ 239.xx.xx.xx
 	Class E : 240.xx.xx.xx ~ 255.xx.xx.xx
-
-	上表中你只要记忆三种等级，亦即是 Class A, B, C 即可，因为 Class D 是用来作为群播 (multicast) 的特殊功能之用 (最常用在大批计算机的网络还原)，至于 Class E 则是保留没有使用的网段。
 	```
+	上表中只要记忆三种等级，亦即是 Class A, B, C 即可，因为 Class D 是用来作为群播 (multicast) 的特殊功能之用 (最常用在大批计算机的网络还原)，至于 Class E 则是保留没有使用的网段。
 	-	CIDR (classess interdormain routing)   无类别域间选址。即32位IP地址被分为两个部分：a.b.c.d/x  ，x 表示a.b.c.d的前x位为网络前缀。剩余32-x位是用来区分组织内部设备的。            
 
 ***DHCP（C/S 协议）***
@@ -253,9 +253,29 @@ web缓存器（web cache）也称为web代理器（proxy  server）：
 	-	NAT使能路由器在接收到一个IP数据时，会提取这个数据报中的端口号，与NAT维护的NAT转发表进行对照，找到对应的内网IP和端口号，并将IP数据报中的对应字段进行更改，再将数据报发向内网。
 
 -	由上面的NAT原理，我们知道一般而言，内网主机与NAT中的NAT转换表不一定是固定的，故一个TCP连接可能不会持续很久。而TCP是面向连接的，故对于纯TCP程序可能会出问题，虽然有NAT穿越技术，但并不适用所有，不过UPnP可以解决这个问题(P229)。
+
 ***ARP&RARP***
 -	ARP (Address Resolution Protocol, 网络地址解析) 协议，以及 RARP (Revers ARP, 反向网络地址解析)
 > 当我们想要了解某个 IP 其实是设定于某张以太网络卡上头时，我们的主机会对整个区网发送出 ARP 封包， 对方收到 ARP 封包后就会回传他的 MAC 给我们，我们的主机就会知道对方所在的网卡，那接下来就能够开始传递数据啰。当使用 ARP 协议取得目标 IP 与他网卡卡号后， 就会将该笔记录写入我们主机的 ARP table 中 (内存内的数据) 记录 20 分钟。使用指令arp -a 可以在windows下看见与本机同网段的其他主机的MAC地址。ARP 封包取得的 IP/MAC 对应，这个记录的 ARP table 是动态的信息 (一般保留 20 分钟)，他会随时随着你的网域里面计算机的 IP 更动而变化。即 ARP table 会自动的重新对应 IP 与 MAC 的表格内容！但如果你有特殊需求的话， 也可以利用『 arp -s 』这个选项来定义静态的 ARP 对应。
+
+***ICMP协议***
+-	ICMP 的全名是『 Internet Control Message Protocol, 因特网讯息控制协议 』。 基本上，ICMP 是一个错误侦测与回报的机制，最大的功能就是可以确保我们网络的联机状态与联机的正确性！ ICMP 也是网络层的重要封包之一，不过，这个封包并非独立存在，而是纳入到 IP 的封包中。
+```
+类别编号	意义
+	0		Echo Reply (代表一个响应信息)
+	3		Destination Unreachable (表示目的地不可到达)
+	4		Source Quench (当 router 的负载过高时，此类别码可用来让发送端停止发送讯息)
+	5		Redirect (用来重新导向路由路径的信息)
+	8		Echo Request (请求响应消息)
+	11		Time Exceeded for a Datagram (当数据封包在某些路由传送的现象中造成逾时状态，此类别码可告知来源该封包已被忽略的讯息)
+	12		Parameter Problem on a Datagram (当一个 ICMP 封包重复之前的错误时，会回复来源主机关于参数错误的讯息)
+	13		Timestamp Request (要求对方送出时间讯息，用以计算路由时间的差异，以满足同步性协议的要求)
+	14		Timestamp Reply (此讯息纯粹是响应 Timestamp Request 用的)
+	15		Information Request (在 RARP 协议应用之前，此讯息是用来在开机时取得网络信息)
+	16		Information Reply (用以响应 Infromation Request 讯息)
+	17		Address Mask Request (这讯息是用来查询子网 mask 设定信息)
+	18		Address Mask Reply (响应子网 mask 查询讯息的)
+```
 
 ###  在网络上传输的包 [\[Index\]](#Index) <span id="B"/>      
 
