@@ -86,7 +86,7 @@ int shutdown(int sockfd , int how);
 	};
 	struct sockaddr_in       {
 		sa_family_t     sin_family;
-		in_port_t       sin_port;
+		in_port_t       sin_port;//网络字节序
 		struct in_addr  sin_add;
 	};
 	```
@@ -96,11 +96,11 @@ int shutdown(int sockfd , int how);
 		uint8_t  s6_addr[16];
 	};
 	struct sockaddr_in16{
-		sa_family_t     sin_family ;
-		in_port_t       sin6_port;
-		uint32_t       	sin6_flowinfo;
-		struct in6_addr sin6_addr;
-		uint32_t       	sin6_scope_id;
+		sa_family_t			sin_family ;
+		in_port_t			sin6_port;
+		uint32_t			sin6_flowinfo;
+		struct in6_addr		sin6_addr;
+		uint32_t			sin6_scope_id;
 	};
 	```
 	-	地址格式的转换（机器表示与便于人读的格式之间的转换）头文件 arpa/inet.h
