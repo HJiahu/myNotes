@@ -13,12 +13,12 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 > //在opencv的C接口中使用下面这个函数来载入图像，Ipl表示一个intel的库名，P29                
 // IplImage* iplImage = cvLoadImage("c:\\img.jpg");             
 //可以很方便的将iplImage指向的C 结构体转化为Mat类：               
-//cv::Mat image4(iplImage,false);
+//cv::Mat image4(iplImage,false);//false 表示与原变量共享图片数据
 
 -	cv::Mat img //  Mat is a class 。
 > Mat 使用了引用计数和浅复制，为了实现深复制，使用方法`void img.copyTo(cv::Mat img_1) const;`或者深度拷贝函数`cv::Mat Mat::clone() const;`         
-> img.size().height                
-> img.size().width             
+> img.size().height    //img.rows            
+> img.size().width    //img.cols         
 > ***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确载入。          
 > we can create matrix data by Mat :         
 > `cv::Mat img(240,320,CV_8U,cv::Scalar(100));`                   
