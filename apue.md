@@ -16,6 +16,22 @@
 	-	Accept a connection with the accept() system call. This call typically blocks until a client connects with the server.
 	-	Send and receive data
 -	创建一个套接字：
+
+#### 常用函数
+
+-	`int socket(int domain , int type ,int protocol);//#include<sys/socket.h>`return -1 if failed
+-	`uint32_t htonl(uint32_t hostint32);//#include<arpa/inet.h>`
+-	`uint16_t htonl(uint16_t hostint16);//#include<arpa/inet.h>`
+-	ntohl and ntohs
+-	`const char *inet_ntop(int domain , const void *restrict addr , char *restrict str ,socklen_t size);//#include<arpa/inet.h>`//return NULL if failed 
+-	`int inet_pton(int domain , const *restrict str , void *restrict add);//in arpa inet.h`return 1 if  successed ,return -1 if failed and 0 if the formate is illegal
+-	`struct hostent *gethostent(void);//#include<netdb.h>`//return NULL if failed , 使用网络字节序
+-   `int shutdown(int sockfd , int how);//#include<sys/socket.h> `//return -1 if failed,0 if successed
+-   `int bind(int sockfd , const struct sockaddr *addr ,socklen_t len);//#include<sys/socket.h>`//return -1 if failed ,return 0 if successed 
+-   `int getsockname(int sockfd , struct sockaddr *restrict addr , socklen_t *restrict alenp);//#include <sys/socket.h>`//return 0 if successed ,return -1 if failed 
+-   `int getpeername(int sockfd , struct sockaddr *restrict addr , socklen_t *restrict alenp)`
+-   `int connect(int sockfd , const struct sockaddr *addr , socklen_t len);//socket.h`return 0 if successed return -1 if failed
+
 ```
 #include<sys/socket.h>
 int socket(int domain , int type, int protocol);
@@ -24,26 +40,26 @@ int socket(int domain , int type, int protocol);
 	-	参数解释：
 	-	domain：通信的域(相同的域和相同的类型的socket之间才可通信)
 	```
-		-	AF_INET    ipv4网域
-		-	AF_INET6   ipv6网域
-		-	AF_UNIX    unix域
-		-	AF_UPSPEC  未指定
+		-	af_inet    ipv4网域
+		-	af_inet6   ipv6网域
+		-	af_unix    unix域
+		-	af_upspec  未指定
 	```
 	-	type：套接字的类型，不是传输层数据传输的协议，指的是套接字传输数据的类型。
 	```
-		-	SOCK_DGRAM     固定长度的，无连接的，不可靠的文件传输。
-		-	SOCK_RAW       跳过传输层，直接与网络层的数据进行通信。必须有超级用户权限
-		-	SOCK_SEQPACKET 固定长度的，有序的，可靠的，面向连接的报文传输
-		-	SOCK_STREAM    有序的，可靠的，双向的，面向连接的字节流。SOCK_SEQPACKET 和 SOCK_STREAM 的区别在于前者的数据长度是固定的。前者读取一次套接字就可以获得另一端发来的完整数据，而后者可能需要多次的读取。
+		-	sock_dgram     固定长度的，无连接的，不可靠的文件传输。
+		-	sock_raw       跳过传输层，直接与网络层的数据进行通信。必须有超级用户权限
+		-	sock_seqpacket 固定长度的，有序的，可靠的，面向连接的报文传输
+		-	sock_stream    有序的，可靠的，双向的，面向连接的字节流。sock_seqpacket 和 sock_stream 的区别在于前者的数据长度是固定的。前者读取一次套接字就可以获得另一端发来的完整数据，而后者可能需要多次的读取。
 	```
 	-	protocol 指定传输层的协议，这个参数要与前两个参数对照选取，因为某一个域下的套接字类型可能只支持一种传输层协议，此时protocol的值为0
 	```
-		-	IPPROTO_IP   ipv4网际协议
-		-	IPPROTO_IPV6 ipv6 网际协议
-		-	IPPROTO_ICMP 因特网控制报文协议
-		-	IPPROTO_RAW  原始的数据包协议
-		-	IPPROTO_TCP  传输控制协议
-		-	IPPROTO_UDP  用户数据报文协议
+		-	ipproto_ip   ipv4网际协议
+		-	ipproto_ipv6 ipv6 网际协议
+		-	ipproto_icmp 因特网控制报文协议
+		-	ipproto_raw  原始的数据包协议
+		-	ipproto_tcp  传输控制协议
+		-	ipproto_udp  用户数据报文协议
 	```
 
 -	限定一个套接字的动作

@@ -7,7 +7,7 @@
 -	回调函数的原理：
 > 调用回调函数时，我们提供回调函数的的指针和其所需要的参数，这些参数会在调用函数内部被”组装“，例如一个回调函数 void call_back(int a, int b);我们将其函数指针作为参数传给一个函数 `point(void (*fp)(int, int ) )  ` ,在point中使用call_back函数时的形式类似于：`(*fp)(m , n);`或fp(a,b);其中fp中的参数是由point函数提供的。在FLTK中，回到函数的第一个参数是调用回调函数的控件的指针，是默认的。第二个参数是一个void指针，第二个参数可以没有。
 
--	FLTK 中的每一个控件都只有一个callback函数，股只能对一种动作做出反应。例如button的callback是用于按钮的点击，窗体的callback用于窗体的关闭box（右上角的 X ）
+-	FLTK 中的每一个控件都只有一个callback函数，故只能对一种动作做出反应。例如button的callback是用于按钮的点击，窗体的callback用于窗体的关闭box（右上角的 X ）
 - 	在FLTK中，所以的回调函数均只有两个参数，其中第一个参数已经确定，就是调用回调函数的控件的指针，故其类型是确定的 `Fl_Widget *p_widget` 。第二个参数是一个void 指针`void * `。
 
 

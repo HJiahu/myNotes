@@ -17,8 +17,6 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 
 -	cv::Mat img //  Mat is a class 。
 > Mat 使用了引用计数和浅复制，为了实现深复制，使用方法`void img.copyTo(cv::Mat img_1) const;`或者深度拷贝函数`cv::Mat Mat::clone() const;`         
-> img.size().height    //img.rows            
-> img.size().width    //img.cols         
 > ***img.data***  是指向图像存储空间的指针，使用这个参数可以测试图片是否被正确载入。          
 > we can create matrix data by Mat :         
 > `cv::Mat img(240,320,CV_8U,cv::Scalar(100));`                   
@@ -31,6 +29,9 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 > 	Mat img;
 > }
 > ```
+
+-	cv::Mat_<> matNmae;//cv::Mat_ 是一个类的模板，在已知图像的格式的时候使用这个模板可以简化一些操作。因为在Mat_ 中定义了一些Mat类中没有的操作和重载的运算符。
+> cv::Mat_<uchar> img;//可以使用img(x ,  y)来对像素进行赋值。
 
 -	cv::namedWindow("Original Image"); // define the window
 -	cv::imshow("Original Image", image); // show the image
@@ -48,6 +49,8 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 -	srand()和rand()在头文件cstdlib中，time()在头文件ctime中。srand(time(NULL))
 
 -	`cv::Mat::at<typename>(int i , int j)`   //效率较差
+-	`cv::Mat::at<uchar>(x , y)`
+-	`cv::Mat::at<cv::Vec3b>(x , y)[]`
 > 使用`cv::Mat_<typename >`类可以简化某些操作，例如在`Mat_`中重载了运算符 () ：`cv::Mat_::operator()(int i , int j);`与`cv::Mat::at()`有相同意思。
 
 -	`uchar * data Mat::ptr<typename>(int i)`   //给出图片第i行的内存首地址。
