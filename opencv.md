@@ -37,11 +37,30 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 -	cv::imshow("Original Image", image); // show the image
 -	Mat imread( const string& filename, int flags=1 ); 
 -	cv::imwrite(filename , Mat,...)
--	cv::flip(Mat src ,Mat dst,int flipcode)    //if flipcode == 0 vertical if flipcode == 1 horizontal 
+-	cv::flip(Mat src ,Mat dst,int flipcode)    //if flipcode == 0 vertical if `flipcode > 0` horizontal ,if `flipcode < 0` ,both
 -	cv::waitKey(int delay = 0) //default ,this fun will wait for ever if no key is pressed ,if delay is not 0...          
 -	cv::Mat::reshape(...)  对图像维度和其他参数的更改。
 
 ### 第二章 像素的操作 [\[目录\]](#Index) <span id="2"/> 
+-	some functions in this capture
+```
+cv::Mat::at<cv::Vec3b>(x, y)[];//返回的是一个左值
+cv::Mat_<uchar> img;//包含了cv::Mat 中没有的一些成员函数
+cv::Mat::isContinues();//是否有padding
+cv::Mat::step;//给出每行的字节数（包含padding），而不是像素的个数
+uchar cv::Mat::data;//给出保存图片的内存的第一个字节地址，注意返回的指针类型为uchar *
+cv::elemSize();//返回每个像素的字节数
+cv::Mat::cols;//返回右值
+cv::Mat::rows;
+uchar *cv::Mat::ptr<uchar>(y);//返回第y行首元素指针
+int cv::Mat::channels();
+cv::Mat cv::clone(void);//返回深度复制的副本
+cv::Mat::create(rows , cols , img.type());//如果当前mat对象中的数据和create中的参数是相同的，则create不做任何的操作。***creat函数创建的图像是continue的·***
+itreator<???> cv::MatItreator_<> it;
+itreator<> cv::Mat_<>::itreator it;//这两个迭代器都有对应的常量型迭代器。
+cv::Mat::begin<>() ;//
+cv::Mat::end<>();//很明显Mat中的begin和end迭代器都是模板，但使用cv::Mat_时就可以不使用指明类型。
+```
 
 -	对于一个灰度图而言，每一个元素代表一个像素的灰度值，其中0表示黑色，255表示白色。
 > 利用cv::Mat的构造函数，我们可以用不同的构造函数来创建不同的的图像，如灰度图，彩色图...

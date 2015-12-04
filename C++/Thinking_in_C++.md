@@ -91,6 +91,8 @@ yum install man-pages libstdc++-docs
 > for(auto &a:str){}//pass-by-reference 
 > ```
 
+-	迭代器it的一个注意事项：it[n] 和(*it)[n] 并不是同一个意思。一个是元素之间，一个是元素内的元素之间。
+
 ### 第一章：对象    [\[Index\]](#Index) <span id="1"/>               
 聚合(aggregation）或组合：被认为是“有一个” ， 就像“汽车有发动机”。 
 inheritance（继承）：reusing the interface （接口的重用） 消耗较组合大。   
