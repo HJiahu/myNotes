@@ -60,6 +60,10 @@ itreator<???> cv::MatItreator_<> it;
 itreator<> cv::Mat_<>::itreator it;//这两个迭代器都有对应的常量型迭代器。
 cv::Mat::begin<>() ;//
 cv::Mat::end<>();//很明显Mat中的begin和end迭代器都是模板，但使用cv::Mat_时就可以不使用指明类型。
+cv::getTickCount();
+cv::getTickFrequency();
+static_cast<double> expression;//强制类型转化。
+
 ```
 
 -	对于一个灰度图而言，每一个元素代表一个像素的灰度值，其中0表示黑色，255表示白色。
