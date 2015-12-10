@@ -11,42 +11,25 @@
 > 其包括了三个部分,一个是在一个 Makefile 中引用另一个 Makefile,就像C 语言中的 include 一样;另一个是指根据某些情况指定 Makefile 中的有效部分,就像 C 语言中的预编译 #if 一样;还有就是定义一个多行的命令。
 
 -	注释。
-> Makefile 中只有行注释,和 UNIX 的 Shell 脚本一样,其注释是用“#”字符。这个就像 C/C++ 中的“//”一样。如果你要在你的 Makefile 中使用“#”字符,可以用反斜框进行转义,如:\# 。最后,还值得一提的是,在 Makefile 中的命令,必须要以 Tab 键开始。
+> Makefile 中只有行注释,和 UNIX 的 Shell 脚本一样,其注释是用“#”字符开头。如果你要在你的 Makefile 中使用“#”字符,可以用反斜框进行转义,如:\# 。最后,还值得一提的是,在 Makefile 中的命令,必须要以 Tab 键开始。
 
 ### makefile的语法规则（注意在makefile中指令必须以tab键开头，在vim中设定：set tabstop=4）
 
-在 Makefile 使用 include 关键字可以把别的 Makefile 包含进来,这很像 C 语言的#include,被包含的文件会原模原样的放在当前文件的包含位置。 
-
-包含的语法类似于：include foo.make   *.make  $(macro) 可以在include前面添加一个减号，表示当本行指令存在问题时，make只是警告而不报错停止。
-
-在 include 前面可以有一些空字符,但是绝不能是 Tab 键开始。include是make保留的关键字不是shell中可执行的指令。
-
-环境变量 MAKEFILES，尽量不用这个特性。当 Makefile 出现了怪事,可以看看当前环境中有没有定义这个变量。
+-	在 Makefile 使用 include 关键字可以把别的 Makefile 包含进来,这很像 C 语言的#include,被包含的文件会原模原样的放在当前文件的包含位置。 
+-	包含的语法类似于：include foo.make   *.make  $(macro) 可以在include前面添加一个减号，表示当本行指令存在问题时，make只是警告而不报错停止。
+-	在 include 前面可以有一些空字符,但是绝不能是 Tab 键开始。include是make保留的关键字不是shell中可执行的指令。
 
 一般来说,makefile的目标基本上是一个文件,但也有可能是多个文件：
 
-targets : prerequisites ; command 
->冒号前是需要生成的文件，冒号后面是生成这个文件所需要的文件(文件依赖) 。只有在冒号后面的文件比冒号前的文件新，指令command才会被执行。    
-	　　command         
-	...        
-targets 是文件名.command 是命令行,如果其不与“target:prerequisites”在一行,那么,必须以 [Tab键] 开头,如果和 prerequisites 在一行,那么可以用分号做为分隔。           
-
-targets 可以是一个 object file(目标文件)，也可以是一个执行文件，还可以是一个标签（label）。make 会比较 targets 文件和 prerequisites 文件的修改日期，如果 prerequisites 文件的日期要比 targets 文件的日期要新，或者 targets 不存在的话，那么，make 就会执行后续定义的命令。 
-
-例1： 
+`targets : prerequisites ; command `
+或者：
 ```
-edit : main.o kbd.o command.o display.o insert.o search.o files.o utils.o 
-
-　　cc -o edit main.o kbd.o command.o display.o\             //反斜杠（\）是换行符的意思。指令必须以tab键开头。
-
-                  insert.o search.o files.o utils.o
-
-　　　　... ...
-
-clean :
-	　　rm edit main.o kbd.o command.o display.o insert.o search.o files.o utils.o 
+targets : prerequisites
+	command 
 ```
-第一行中冒号前面的edit是make要生成打目标文件，而后面的.o文件是生成这个文件所依赖文件。第二行中的cc是编译指令，只有在.o文件中有比edit新的文件存在或在edit这个文件不存在，第二行的指令行才会被执行，这样可以减少重复编译。因为clean后面没有文件，所以make不会主动的执行其后面的指令，但可以显示的调用这条指令：make clean 
+> 冒号前是需要生成的文件，冒号后面是生成这个文件所需要的文件(文件依赖) 。只有在冒号后面的文件比冒号前的文件新，指令command才会被执行。     
+
+第一行中冒号前面的edit是make要生成的目标文件，而后面的.o文件是生成这个文件所依赖文件。第二行中的cc是编译指令，只有在.o文件中有比edit新的文件存在或在edit这个文件不存在，第二行的指令行才会被执行，这样可以减少重复编译。因为clean后面没有文件，所以make不会主动的执行其后面的指令，但可以显示的调用这条指令：make clean 
 
 例2：（这段代码的作用和例1是一样的）
 ```
