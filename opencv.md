@@ -53,7 +53,8 @@ cv::elemSize();//返回每个像素的字节数
 cv::Mat::cols;//返回右值
 cv::Mat::rows;
 uchar *cv::Mat::ptr<uchar>(y);//返回第y行首元素指针
-int cv::Mat::channels();
+int cv::Mat::channels();//图像每个像素的通道个数
+enum ?? cv::Mat::depth();//图像中每个像素的深度，指的是像素占多少位，返回的值是枚举，具体的意义以参考资料为准。
 cv::Mat cv::clone(void);//返回深度复制的副本
 cv::Mat::create(rows , cols , img.type());//如果当前mat对象中的数据和create中的参数是相同的，则create不做任何的操作。***creat函数创建的图像是continue的·***
 itreator<???> cv::MatItreator_<> it;
@@ -63,7 +64,16 @@ cv::Mat::end<>();//很明显Mat中的begin和end迭代器都是模板，但使用cv::Mat_时就可以
 cv::getTickCount();
 cv::getTickFrequency();
 static_cast<double> expression;//强制类型转化。
-
+cv::add(img_1 , img_2 , result);//resutl = img_1 + img_2  add是被重载的函数，用其他的使用方式  默认使用了saturate_cast<>()
+cv::add(img_1, img_2 , result , mask);//只用在mask[i] !=0 的像素上，img_1和img_2才会被处理。
+cv::addWeighted(img_1 , k1 ,img_2 , k2 ,k3 , resutl);//resutl = k1*img_1 + k2*img_2 + k3;默认使用了saturate_cast<>()
+img * 0.1;//is not in place 
+cv::split(src_img , vector<cv::Mat> planes);
+cv::merge(vector<cv::Mat> planes , resutl);
+ROI = img(cv::Rect(x1 , y1 , x2, y2));//in place ROI
+ROI = img(cv::Range(x1 , x2) ,cv::Range(y1 , y2));
+ROI = img.rowRange(start , end);
+ROI = img.colRange(start , end);
 ```
 
 -	对于一个灰度图而言，每一个元素代表一个像素的灰度值，其中0表示黑色，255表示白色。
@@ -114,7 +124,7 @@ static_cast<double> expression;//强制类型转化。
 	}
 
 使用运算符重载的版本：
-image=(image&cv::Scalar(mask,mask,mask)) + cv::Scalar(div/2,div/2,div/2);
+***image=(image&cv::Scalar(mask,mask,mask)) + cv::Scalar(div/2,div/2,div/2);***运算符重载的版本甚至比上面的版本要快，而且版本更加简洁。
 
 ```
 上面的函数将直接在源数据上进行操作。为了不在源图进行操作我们可以创建一个新的Mat，例如：
