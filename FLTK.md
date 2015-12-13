@@ -2,6 +2,7 @@
 
 -	关于FLTK的编译，使用-I指令引入包含文件：gcc -I/usr/.../include...  使用指令-L引入库文件：gcc -L/usr/.../lib...
 -	FLTK为了实现静态链接一般将不同的函数放在了不同的库文件中，需要链接那个函数时才会链接，不会链接不需要的部分。
+-	在FLTK中不同的控件位于不同的头文件中，所以FLTK中有很多的头文件：FL/Fl\_Window.h  FL/Fl\_Button ...每一个FLTK文件必须包含FL/Fl\_Fl.h
 -	在FLTK中除了设置lable可以不调用redraw函数，设置其他的属性之后都需要显式的调用redraw函数来刷新显示。
 -	在FLTK中一般控件只保存其label字符串的指针，故lable字符串不能保存在栈中，但可以使用copy_label函数来设置label，这样就不用担心label字符串的保存位置。
 -	回调函数的原理：
@@ -52,6 +53,7 @@ void copy_cb( Fl_Widget* o , void* v) {
    Fl_Button* b=(Fl_Button*)o;
    Fl_Input* i=(Fl_Input*)v;
    b->copy_label(i->value());  //FLTK中的set和get属性使用函数的重载来实现，含参数的函数一般为设置函数（set）而不含参数的函数可以认为是获得属性（get）。
+   b->position(x, y);
 }
 
 

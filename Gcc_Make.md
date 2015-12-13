@@ -94,6 +94,8 @@ gcc  testfun.o test.o -o test //将testfun.o和test.o链接成test
 ## Makefile
 
 ### tips
+-	搜索路径和文件的顺序一定要处理好，即包含文件夹要在包含文件之前（L 要在 l之前）
+-	***对于GCC而言，-llib 意味着lib 的全名为liblib.a ,系统会默认lib的后缀为.a ，前缀为lib***   使用-l 和-L指令和直接在gcc后添加编译文件的区别在于系统会自动的在-L指定的文件夹中搜索-l后的库，而直接添加库名意味着要写全文件的路径和名，不便于读makefile。
 -	通配符：~ 表示用户的$HOME ,~John 表示Johb的HOME；* 任意长度的字符；
 -	makefile文件一般保存名称为makefile或者Makefile，没有后缀。
 -	make 会一层又一层地去找文件的依赖关系,直到最终编译出第一个目标文件。 
