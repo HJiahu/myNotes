@@ -42,7 +42,7 @@ opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow()
 -	cv::Mat::reshape(...)  对图像维度和其他参数的更改。
 
 ### 第二章 像素的操作 [\[目录\]](#Index) <span id="2"/> 
--	some functions in this capture
+-	some functions in this chapter
 ```
 cv::Mat::at<cv::Vec3b>(x, y)[];//返回的是一个左值
 cv::Mat_<uchar> img;//包含了cv::Mat 中没有的一些成员函数
@@ -57,8 +57,8 @@ int cv::Mat::channels();//图像每个像素的通道个数
 enum ?? cv::Mat::depth();//图像中每个像素的深度，指的是像素占多少位，返回的值是枚举而不是具体的位数，具体的意义以参考资料为准。
 cv::Mat cv::clone(void);//返回深度复制的副本
 cv::Mat::create(rows , cols , img.type());//如果当前mat对象中的数据和create中的参数是相同的，则create不做任何的操作。***creat函数创建的图像是continue的·***
-itreator<???> cv::MatItreator_<> it;
-itreator<> cv::Mat_<>::itreator it;//这两个迭代器都有对应的常量型迭代器。
+iterator<???> cv::Matiterator_<> it;
+iterator<> cv::Mat_<>::iterator it;//这两个迭代器都有对应的常量型迭代器。
 cv::Mat::begin<>() ;//
 cv::Mat::end<>();//很明显Mat中的begin和end迭代器都是模板，但使用cv::Mat_时就可以不使用指明类型。
 cv::getTickCount();
@@ -176,7 +176,7 @@ P49页讲述了如何使用迭代器来访问像素。
 ```
 
 ***ROI***
-> Region of interset     
+> Region of interest
 > `cv::Mat roi_img = img(cv:Rect(x , y ,length ,height)`            
 > `cv::Mat roi_img = img(cv::Rang(from , to) , cv::Rang(from ,to)`        
 ```
@@ -196,10 +196,10 @@ P49页讲述了如何使用迭代器来访问像素。
 	-	`cv::norm<int , 3>(...);`
 -	***对于库中已经存在的重载运算符，有时侯要注意他们的行为，例如对于两个Vec3u型的数据a和b，c=a-b中减号 - 中已经调用了saturate_cast()函数来防制溢出。这点要注意。***
 
-***设计模式***
-1. 策略设计模式（strategy pattern）：简单的说就是将方法封装到类中。
-2. 单态模式：
-3. MVC模式：modle-view-controler        GUI P84
+-	***设计模式***            
+	1. 策略设计模式（strategy pattern）：简单的说就是将方法封装到类中。
+	2. 单态模式：
+	3. MVC模式：modle-view-controler        GUI P84
 
 **颜色空间的转化**
 -	The Structure and Properties of Color Spaces and the Representation of Color Images  :a useful book

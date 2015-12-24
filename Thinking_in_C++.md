@@ -12,12 +12,28 @@
 	-	[第十二章：运算符重载 ](#12)              
 	-	[第十三章：动态对象创建](#13)
 	-	[迭代器](#iterator)
+	-	[C++异常处理](#exception)
 	-	[keywords](#keywords)
 
 ### 第零章：help and tips  [\[Index\]](#Index) <span id="0">              
-安装c/c++的帮助文档：   
-yum install man-pages libstdc++-docs     
+-	安装c/c++的帮助文档：   
+> yum install man-pages libstdc++-docs     
+
+-	使用宏区分编译器和系统：WIN32 linux \_sun (用于区分solaris) \_MSC\_VER \_GNUC\_ \_SUNPRO\_C和\_SUNPRO\_CC  
+-	C++不允许跳过变量的初始化语句转到该变量作用域的另一个位置。
+```
+goto Label;
+//int a;//goto合法，因为a未初始化  
+//int a = 2;//goto非法，因为goto跳过了初始化的变量，并且Label处是a的作用域
+//{int a = 2;}//goto合法，应为Lable处不是a的作用域。
+Label:;
+```
+
+-	在C++中最简单的语句是空语句：`;`  `int a = 3; [空语句];`
+-	在c和C++中任何类型的指针都可以赋予void指针，但反过来赋值在C中是可以的，在C++的新标准中是禁止的，必须显式的进行类型的转化。
 -	头文件中不应该使用using指令。
+-	数组名在很多时候会被编译器转化为指针来使用，但不是所有情况下，因为数组和指针是两种完全不同的类型，做数组与指针之间的转换只是运行时的需要。当auto的推导变量是数组时，编译器返回的类型是指针，因为auto在推导类型时必须进行赋值操作而便准c++中又不允许数组之间的赋值。但当decltype中的变量是数组时，声明的变量依旧是数组。当数组进行下标运算时，编译器自动将数组名转化为指针类型。
+-	注意这种类型转化：`while(cin >> string )`while中的返回值是cin ，而系统自动的将cin转化为了布尔变量，`cin>> string `执行成功则返回true，否则返回false。
 -	因为标准并没有对有符号型数据的位运算做规定，故最好只将位运算用在无符号数据上。
 -	对于左移运算，补零。对于右移运算，对于无符号型，补上值为0的二进制位，对于有符号型，要么插入符号的副本，要么插入值为0的二进制位，要视具体环境而言。
 -	sizeof的表达式有两种形式（满足右结合律）。sizeof关键字并不计算运算对象的值。
@@ -377,10 +393,10 @@ volitile 与const相反，volatile通知编译器不要优化某个变量。
 
 
 c++中的显式转换：
--	static_cast:用于非多态类型的转换。
+-	`static_cast<double > data`:用于非多态类型的转换，包含底层const是不允许使用这种转化的 。
 -	dynamic_cast:用于多态类型的转换。
--	const_cast:用来消除const, volatile, __unaligned属性的转换。
--	reinterpret_cast:用于空间的重新解释。   
+-	`const_cast`:用来消除底层const属性（一般用于制指针，不能用于类型的转化）, volatile, \_\_unaligned属性的转换。
+-	reinterpret\_cast:用于空间的重新解释类似于` int *p = &int_data ; reinterpret_cast<char*> p;`。   
 具体见：[http://blog.csdn.net/callmeback/article/details/4040583](http://blog.csdn.net/callmeback/article/details/4040583) 
 
 与c不同，c++中结构体的名字可以直接用来定义新的变量。
@@ -812,6 +828,32 @@ _**如果知道一定会使用按值传递来传递一个对像时，那么就�
 -	迭代器it的一个注意事项：it[n] 和(*it)[n] 并不是同一个意思。一个是元素之间，一个是元素内的元素之间。
 -	迭代器的大小以迭代器的位置进行判断，与指针的形式相同。
 -	difference_type 是由string和vector定义的一种带符号整数类型，表示两个迭代器之间的距离，prtdiff_t是指针之间的距离。
+
+### C++异常处理  [\[Index\]](#Index) <span id="exception"/>      
+-	异常是存在于运行时的反常行为，这些行为超出了函数正常功能的范围。如丢失数据库连接。
+-	被抛出的异常会***一层一层***的向上抛出，知道找出可以出来这个异常的catch，否则函数会转到terminate的标准函数处，这样会使整个程序非正常退出。
+-	throw 表达式：抛出异常(一般是抛出一个异常类)。
+```
+if(a != b)throw runtime_error("a and b must be equal !");
+```
+-	try 语句块：用于捕获在try块中抛出的异常。
+```
+try{
+	...
+}
+```
+-	catch；处理对应的异常，如果几个catch中都没有与抛出的异常对应的异常类，则当前的函数会被终止，异常会被抛到上一层函数，直达整个程序被非正常终止。
+```
+try{
+	... 
+}catch(exception declaration){//catch块中可能没有与抛出的异常对于的catch分支
+	...
+}catch(exception declaration){
+	...
+}
+//	...
+```
+#### 标准异常
 
 ### C++ keywords   [\[Index\]](#Index) <span id="keywords"/>      
 ```
