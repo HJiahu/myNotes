@@ -108,3 +108,11 @@ In visual mode, a simple "S" with an argument wraps the selection.
 4.	解决GCC
 下载GCC，并将对应的文件夹写入环境变量。            
 复制一份mingw32-make.exe到相同的文件夹下，并且将其名称给位make.exe。
+
+删除文章中的空行
+:g/^s*$/d
+简单解释一下：
+g ：全区命令
+/ ：分隔符
+^s*$ ：匹配空行，其中^表示行首，s表示空字符，包括空格和制表符，*重复0到n个前面的字符，$表示行尾。连起来就是匹配只有空字符的行，也就是空行。
+/d ：删除该行

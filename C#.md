@@ -1,30 +1,83 @@
-本文摘自 C#从入门到精通
+## C#
+### 注意事项
+-	在C#中char用于存储Unicode，故c#中的char是两个字节。
+-	C#中的string和StringBuilder中保存的都是Unicode。
+-	***C#和C++的一个不同点：在C#中关键字new是用来调用类中的构造函数的，并返回一个对象。而在C++中new关键字将在堆中创建对象，并返回这个对象的地址。***这意味着在C#中构造函数不是系统自动调用的。
 
-### 第一到第三章
+### C#数据类型
+```
+sbyte	   -128 到 127				有符号 8 位整数
+byte	   0 到 255					无符号 8 位整数
+char	   U+0000 到 U+ffff			16 位 Unicode 字符
+short	   -32,768到32767			有符号 16 位整数
+ushort	   0 到***					无符号 16 位整数
+int		   ***到***					有符号 32 位整数
+uint	   0 到***					无符号 32 位整数
+long	   ***到***					有符号 64 位整数
+ulong	   0 到***					无符号 64 位整数 
+float      ±1.5e−45 到 ±3.4e38      7 位
+double     ±5.0e−324 到 ±1.7e308    15 到 16 位
+```
+### C#基础
+-	特殊于C++的运算符
+	-	is运算符  判断变量是否为指定的类型：`bool result = i is int;`
+	-	new运算符  用于创建一个新的类型实例。这与C++的区别还是很大的。
+	-	typeof运算符  用于获得系统原型对象的类型：`Type mytype = typeof(int);`
+-	在C#中String对象中的字符串是不能改变的，而StringBuilder类中的串可以改变。
+-	C#中的foreach：`foreach(int a in all);`类似于C++11中范围for。
+-	C#中的static函数和非static函数与C++中的概念是相同的。
 
--	C#是一种面向对象的语言，故程序的入口也是类的成员函数。因为程序刚启动时没有创建类的对象，故需要程序的入口是静态的成员函数，也就是：`static void Main(string[] args)`。这样Main就可以不依赖类的实例而执行。
+#### C#中的数组与集合
+-	可以使用foreach语句来遍历数组中的元素。
+-	数组的声明：`int[] arr;`
+-	数组的初始化：`int[] arr = new int[5];`
+-	数组初始化时赋初值：`int[] arr = new int[5]{1,2,3,4,5};`与c++不同，这里初始值的个数必须与数组的长度一致。
+-	声明一维数组可以不使用new，也不用指定数组的长度：`string[] str_arr = {"Hello","word","!"};`
+-	二维数组的声明：`int[,] arr = new int[2,2]{{1,2},{3,4}};`可以不指定数组的维数，让编译器由初始化参数来推导。
+-	C#中的数组的维度可以在运行时确定，而不必像C++那样要在编译时确定：`int[,] arr = new int[a , b];`	
+-	C#中的ArrayList类（在System.Collections命名空间中）类似于C++中的vector，只不过ArrayList并不限定元素的类型都一样：同一个ArrayList中可以保存整数，也可以保存字符串。
+-	C#中有哈希表类型Hashtable。
+#### C#中的属性
+C#中的属性提供了一种与类内数据成员交互的方式。对于C++而言，我们对私有数据成员的访问一般是写个函数间接的对私有数据成员进行访问。C#中的属性类似于C++中的方式，只不过在形式上就像使用成员数据一样：
+```
 
--	Console.WriteLine();
--	Console.ReadLine();
+```
+### C#中的对象
+-	C#是一种面向对象的语言，故程序的入口也是类的成员函数。因为程序刚启动时没有创建类的对象，故需要程序的入口是静态的成员函数，也就是：`static void Main(string[] args)`。这样Main就可以不依赖类的实例而执行。***c#中的所有语句都必须位于类内***
+```
+using System;
+using System.Collections.Generic;//C/C++中有域解析运算符，但C#中没有，C#中全部使用 成员运算符  .      
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace C_sharp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+			string[] str_arr = new string[]{"Hello ","word !"};
+            Console.WriteLine("Hello C#!");//类似于console对象，这些是系统已经定义的对象。
+			Console.ReadKey();
+        }
+    }
+}
+```
 -	在C++中引用一个名字空间时的语法是：`using namespace std;`  而在C#中是：`using N1` 其中N1是一个名字空间的名字。
 -	C#中的类型转换：
 	-	隐式：系统自动完成，这一般是相互之间可以转换的类型，有系统自动完成。
 	-	显式：`(int)m`或者使用关键字***Convert*** , `Convert.ToInt32()`
 -	C#中的值类型和引用类型与C++中的概念是相似的，只是在C#中没有指针的概念。
--	在C#中所有的类均是引用类型的：类、借口、数字和委托。
--	装箱与拆箱：
-	-	C#中将值类型转化为引用类型称之为装箱，其逆过程为拆箱。
->	```
->	int i = 3;
->	Object obj =  i;//装箱   注意此时的obj是引用类型，而i依旧是值类型。
->	int j = (int)obj;//拆箱
-	```
-
+-	在C#中所有的类均是引用类型的：类、接口、数字和委托。
+-	装箱与拆箱：C#中将值类型转化为引用类型称之为装箱（装箱装的是原值的***副本***），其逆过程为拆箱（副本）。
+```
+int i = 3;
+Object obj =  i;//装箱   注意此时的obj是引用类型，而i依旧是值类型。
+int j = (int)obj;//拆箱
+```
 ### 第八章 OOP
 
-***类是模板，对象是实体。对象是类的实例化结果。***
-
-***C#和C++的一个不同点：在C#中关键字new是用来调用类中的构造函数的，并返回一个对象。而在C++中new关键字将在堆中创建对象，并返回这个对象的地址。***这意味着在C#中构造函数不是系统自动调用的。
 
 ？？？？？静态构造函数和静态类，与C++不同的概念。C#中的虚函数似乎与C++也不太相同P167
 

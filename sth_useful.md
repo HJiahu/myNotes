@@ -8,6 +8,7 @@ yang1111
 政治课：
 202.121.199.138/CSCI
 
+腾讯云HJiahu密码：.h...4
 
 qxu1649550238.my3w.com
 
@@ -23,4 +24,6 @@ wget -r -np -k http://xxx.com/xxx
 -np, --no-parent（不追溯至父级）          don't ascend to the parent directory.
 
 另外断点续传用-nc参数 日志 用-o参数
+
+vim的文件格式不兼容vs，直接将用于vim的文件复制到vs下回出现很多意想不到的错误。
 
