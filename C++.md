@@ -16,10 +16,11 @@
 	-	[keywords](#keywords)
 
 -	新的组织，新的目录
-	-	[名子](#name)
+	-	[名字](#name)
 	-	[变量](#variable)
 	-	[函数](#function)
 	-	[对象](#object)
+	-	[标准库](#libs)
 
 ### 第零章：help and tips  [\[Index\]](#Index) <span id="0">              
 -	安装c/c++的帮助文档：   
@@ -170,84 +171,10 @@ decltype(arr) *p_ch = &arr; //在这里，p_ch 的   指针步长为9
 	-	内置的解引用返回的是左值，而取地址返回的是右值。
 
 
-### 第一章：对象    [\[Index\]](#Index) <span id="1"/>               
-
-使用关键字virtual声明你想让一个函数具有晚绑定的属性。
--	早捆绑：在编译时确定调用的函数（即编译时确定所调用的函数的绝对地址）。
--	晚捆绑：在运行时确定所调用的函数的地址。 
-
-我们把**处理继承类就像处理其基类**的过程称为**向上类型转换**（upcasting）。 
 
 
-`#include <iostream.h>`  
-means    
-`#include <iostream>`  
-`using namespace std; `
 
-八进制和十六进制：
--	`cout << "in octal: " << oct << 15 << endl;  `
--	`cout << "in hex: " << hex << 15 << endl; `
-
-#### 容器 vector：  
--   容器是模板，意味着它可以高效的应用于不同的类型。 
--   不存在引用vector ，但可以存在指针型的vector。引用原本就是原数据的别名，编译器是知道原数据的精确地址的，然而vector中是要保存其自己的数据的，这就产生了矛盾：vector中应该保存什么？保存指针的话违背了引用的含义。
--   在早期的编译器中如果vector中的对象也是一个vector，那么在声明新vector时要使用这样的语法：`vector<vector<type>>`，在新的编译器中不用这样。
--   vector的初始化；
-    -   因为vector相当于一个对象的数组，故在初始化时我们可以预先设定对象的个数，并对这些对象赋相同的初始值。`vector<T> v(n , val)` v中有n个T类型的且初始值为val的对象。`vector <string> v2("a" , "a")`是错误的，括号相当于调用构造函数，而这条语句没有太大的意义。 `vector<string> v3(10)` v3中有10个string对象，而且其初始化值为0。对于没有默认初始化值的类型，使用类似  `vector<T> val(n)` 的语法是错误的，系统不知道对n个T类型的对象赋什么样的初始值。当然了，内建类型都有默认的初始值。
--	vector就是一个容器（其结构类似于数组，左边是起始，右边是尾部）故使用push_back()添加新的数据。   
--	vector中的元素以字典顺序比较大小。
--	vector和string对象的下标运算符可以用于访问已存在的数据，不可以用于添加数据。
--	可以使用数组来初始化vector ，`vector<int> ivec(begin(arr) , end(arr))`其中arr是一个int类型的数组。注意首迭代器和尾后迭代器的区别，以及对容器的影响（尾后迭代器指向的不是有效的成员）。
-```
-	#include<iostream>
-	#include<fstream>
-	#include<vector>
-	#include<string>
-	using namespace std;
-	int main()
-	{
-		ifstream in("test.txt");
-		string str;
-		vector< string > strvec;
-		//while(getline(in, str)) strvec.push_back(strvec); // 每次读一行，下面这行代码，每次读两个空格之间的字符串，
-		while( in >> str )strvec.push_back(str);                //以空格作为间隔读取数据，可能同时输出单词和符号，例如  .hello, 
-			for(int i = 0 ; i <strvec.size();i++)cout<<i<<':'<<strvec[i]<<endl;
-			return 0;
-	}  
-```
-
-如果定义了一个数组而没有初始化，则编译器不会初始化数组。但若给出少于数组元素个数的初始化数据，则余下的数组元素会被初始化为0。         
-故int b[n] = {0} ; 是将所有数组元素初始化为0 的简洁方法。      
-     
-
-### 第二章：c in c++  [\[Index\]](#Index) <span id="2"/>              
-
--	pass-by-value：按值传递，c中只有这一种传递方式，分为数据传递与指针传递（注意指针也是按值传递）。
--	pass-by-reference：按引用传递，c++独有，可在函数中直接使用内存中存在的变量。
--   C 原来的库在C++中有与其对应的库，但库名进行了更改：stdio.h 更名为 cstdio ，其他的库类似。
  
--	引用的特点：
-	1. 引用被创建的同时必须被初始化（指针则可以在任何时候被初始化）。 
-	2. ***不能有 null 引用，引用必须与合法的存储单元关联（指针则可以是 null）。 ***
-	3. 一旦引用被初始化，就不能改变引用的关系（指针则可以随时改变所指的对象）。这中操作是没有意义的，故非法。
-
--	强制转换：c++比c多了一种转换的语法int(data),在c中只能写成（int）data。
-
--	强制类型转换：   
-	-	c可用：     (int) i;
-	-	c++可用：(int) i; int(i); 
-
--	c++的类型检查比c严格：
-```
-int i = 10;
-void *vp = &i;//c与ｃ＋＋均可
-int *ip = vp;//c中可用，但在c++中不允许，在c++中不允许将void指针直接赋予其他类型的指针。
-```
-
--	c++中不允许调用未事先声明的函数，但ｃ可以。 c++中有显式运算符，例如：`&&`可以表达为  and  
-
--	使用函数指针调用函数的正规语法：(*funp)(data),但大部分编译器允许程序员写作funp(data) ，但这只是一种简写的方式。 
-
 
 	  
 
@@ -894,6 +821,22 @@ dynamic_cast                 register                    while
 > \#将变量或表达式转化为字符串。当你在宏变量前加上 \# ，预处理器会把宏参数转换为字符串。             
 > 标志粘贴：##将两个标识符连接从而形成一个新的标识符。   
 
+-	强制转换：c++比c多了一种转换的语法int(data),在c中只能写成（int）data。
+-	强制类型转换：   
+	-	c可用：     (int) i;
+	-	c++可用：(int) i; int(i); 
+-	c++的类型检查比c严格：
+```
+int i = 10;
+void *vp = &i;//C与C++均可
+int *ip = vp;//c中可用，但在c++中不允许，在c++中不允许将void指针直接赋予其他类型的指针。
+```
+
+-	c++中不允许调用未事先声明的函数，但ｃ可以。 c++中有显式运算符，例如：`&&`可以表达为  and  
+
+-	使用函数指针调用函数的正规语法：(*funp)(data),但大部分编译器允许程序员写作funp(data) ，但这只是一种简写的方式。 
+
+-   C 原来的库在C++中有与其对应的库，但库名进行了更改：stdio.h 更名为 cstdio ，其他的库类似。
 -	编译器提供的一些编译选项与变量名：
 	-	`__func__ ` ：保存当前函数的名称，在函数内部可用
 	-	`__LINE__ ` ：保存本行语句在原编译单元的行数
@@ -907,6 +850,12 @@ dynamic_cast                 register                    while
 assert(expr);
 //NDEBUG
 ```
+
+-	头文件包含：
+> `#include <iostream.h>`         
+> means         
+> `#include <iostream>`     
+> `using namespace std; `      
 
 ### 名字   [\[Index\]](#Index) <span id="name"/>      
 -	如果编译器在当前的作用域内找到了所需的名字，那么其就会忽略外层作用域的同名实体。
@@ -934,7 +883,10 @@ auto f1(int) -> int (*)(int );
 ### 变量   [\[Index\]](#Index) <span id="variable"/>      
 -	在c和C++中任何类型的指针都可以赋予void指针，但反过来赋值在C中是可以的，在C++的新标准中是禁止的，必须显式的进行类型的转化。
 -	内置的算术类型之间转化级别是一样的，例如double转化为float与double转化为int型的优先级是相同的。但系统一般会向精度最高的类型进行转化。
-
+-	引用的特点（引用是编译时的特性）：
+	1. 引用被创建的同时必须被初始化（指针则可以在任何时候被初始化）。 
+	2. ***不能有 null 引用，引用必须与合法的存储单元关联（指针则可以是 null）。 ***
+	3. 一旦引用被初始化，就不能改变引用的关系（指针则可以随时改变所指的对象）。这中操作是没有意义的，故非法。
 -	C++不允许跳过变量的初始化语句转到该变量作用域的另一个位置。
 ```
 goto Label;
@@ -945,7 +897,7 @@ Label:;
 //a = 10;
 //cout<<a;//对于goto 下第一行，若有此行的上一行，则msvc可以编译通过，否则会报使用未初始化变量的错误。
 ```
-
+-	如果定义了一个数组而没有初始化，则编译器不会初始化数组。但若给出少于数组元素个数的初始化数据，则余下的数组元素会被初始化为0，故int b[n] = {0} ; 是将所有数组元素初始化为0 的简洁方法。      
 
 ### 函数   [\[Index\]](#Index) <span id="function"/>      
 -	默认参数
@@ -1051,3 +1003,32 @@ func(3.14 , 9);//上面两个函数均可用，而且没有最佳匹配项，故
 -	聚合(aggregation）或组合：被认为是“有一个” ， 就像“汽车有发动机”。             
 -	inheritance（继承）：reusing the interface （接口的重用） 消耗较组合大。   
 -	当构建一个新类时你应该首先考虑组合（而不是继承），因为组合比继承更简单更灵活。 
+
+### 标准库  [\[Index\]](#Index) <span id="libs"/>      
+#### 容器 vector：  
+-   不存在引用vector（引用是编译时的特性，不是运行时的特性） ，但可以存在指针型的vector。引用原本就是原数据的别名，编译器是知道原数据的精确地址的，然而vector中是要保存其自己的数据的，这就产生了矛盾：vector中应该保存什么？保存指针的话违背了引用的含义。
+-   在早期的编译器中如果vector中的对象也是一个vector，那么在声明新vector时要使用这样的语法：`vector<vector<type>>`，在新的编译器中不用这样。
+-   vector的初始化；
+    -   因为vector相当于一个对象的数组，故在初始化时我们可以预先设定对象的个数，并对这些对象赋相同的初始值。`vector<T> v(n , val)` v中有n个T类型的且初始值为val的对象。`vector <string> v2("a" , "a")`是错误的，括号相当于调用构造函数，而这条语句没有太大的意义。 `vector<string> v3(10)` v3中有10个string对象，而且其初始化值为0。***对于没有默认初始化值的类型，使用类似  `vector<T> val(n)` 的语法是错误的***，系统不知道对n个T类型的对象赋什么样的初始值。当然了，内建类型都有默认的初始值。
+-	vector就是一个容器（其结构类似于数组，左边是起始，右边是尾部）故使用push_back()添加新的数据。   
+-	vector中的元素以字典顺序比较大小。
+-	vector和string对象的下标运算符可以用于访问已存在的数据，不可以用于添加数据。
+-	可以使用数组来初始化vector ，`vector<int> ivec(begin(arr) , end(arr))`其中arr是一个int类型的数组。注意首迭代器和尾后迭代器的区别，以及对容器的影响（尾后迭代器指向的不是有效的成员）。
+```
+	#include<iostream>
+	#include<fstream>
+	#include<vector>
+	#include<string>
+	using namespace std;
+	int main()
+	{
+		ifstream in("test.txt");
+		string str;
+		vector< string > strvec;
+		//while(getline(in, str)) strvec.push_back(strvec); // 每次读一行，下面这行代码，每次读两个空格之间的字符串，
+		while( in >> str )strvec.push_back(str);                //以空格作为间隔读取数据，可能同时输出单词和符号，例如  .hello, 
+			for(int i = 0 ; i <strvec.size();i++)cout<<i<<':'<<strvec[i]<<endl;
+			return 0;
+	}  
+```
+     

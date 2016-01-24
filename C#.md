@@ -1,8 +1,9 @@
-## C#
+## C#基础
 ### 注意事项
 -	在C#中char用于存储Unicode，故c#中的char是两个字节。
 -	C#中的string和StringBuilder中保存的都是Unicode。
--	***C#和C++的一个不同点：在C#中关键字new是用来调用类中的构造函数的，并返回一个对象。而在C++中new关键字将在堆中创建对象，并返回这个对象的地址。***这意味着在C#中构造函数不是系统自动调用的。
+-	在C#中关键字new是用来调用类中的构造函数的，并返回一个对象（`string str = new string("");`）。而在C++中new关键字将在堆中创建对象，并返回这个对象的地址。这意味着在C#中构造函数不是系统自动调用的。
+-	C#中没有C++中那样专用的域解析运算符，在C#中都使用点成员运算符：`.`  。
 
 ### C#数据类型
 ```
@@ -15,15 +16,15 @@ int		   ***到***					有符号 32 位整数
 uint	   0 到***					无符号 32 位整数
 long	   ***到***					有符号 64 位整数
 ulong	   0 到***					无符号 64 位整数 
-float      ±1.5e−45 到 ±3.4e38      7 位
-double     ±5.0e−324 到 ±1.7e308    15 到 16 位
+float      ±1.5e−45 到 ±3.4e38      
+double     ±5.0e−324 到 ±1.7e308    
 ```
 ### C#基础
 -	特殊于C++的运算符
 	-	is运算符  判断变量是否为指定的类型：`bool result = i is int;`
 	-	new运算符  用于创建一个新的类型实例。这与C++的区别还是很大的。
 	-	typeof运算符  用于获得系统原型对象的类型：`Type mytype = typeof(int);`
--	在C#中String对象中的字符串是不能改变的，而StringBuilder类中的串可以改变。
+-	在C#中String对象中的字符串是不能改变的（更改string意味着重新分配内存），StringBuilder类中的串可以改变，而且不用重新分配内存。
 -	C#中的foreach：`foreach(int a in all);`类似于C++11中范围for。
 -	C#中的static函数和非static函数与C++中的概念是相同的。
 
@@ -34,16 +35,41 @@ double     ±5.0e−324 到 ±1.7e308    15 到 16 位
 -	数组初始化时赋初值：`int[] arr = new int[5]{1,2,3,4,5};`与c++不同，这里初始值的个数必须与数组的长度一致。
 -	声明一维数组可以不使用new，也不用指定数组的长度：`string[] str_arr = {"Hello","word","!"};`
 -	二维数组的声明：`int[,] arr = new int[2,2]{{1,2},{3,4}};`可以不指定数组的维数，让编译器由初始化参数来推导。
--	C#中的数组的维度可以在运行时确定，而不必像C++那样要在编译时确定：`int[,] arr = new int[a , b];`	
+-	C#中的数组的维度可以在运行时确定，而不必像C++那样要在编译时确定：`int[,] arr = new int[a , b];`	。在C/C++中只能在堆中创建可变长的数组。
 -	C#中的ArrayList类（在System.Collections命名空间中）类似于C++中的vector，只不过ArrayList并不限定元素的类型都一样：同一个ArrayList中可以保存整数，也可以保存字符串。
 -	C#中有哈希表类型Hashtable。
+
 #### C#中的属性
 C#中的属性提供了一种与类内数据成员交互的方式。对于C++而言，我们对私有数据成员的访问一般是写个函数间接的对私有数据成员进行访问。C#中的属性类似于C++中的方式，只不过在形式上就像使用成员数据一样：
 ```
+class TimePeriod
+{
+    private double seconds;
 
+    public double Hours
+    {
+        get { return seconds / 3600; }
+        set { seconds = value * 3600; }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        TimePeriod t = new TimePeriod();
+		//属性提供了一种访问类内数据成员的方式
+        // Assigning the Hours property causes the 'set' accessor to be called.
+        t.Hours = 24;
+
+        // Evaluating the Hours property causes the 'get' accessor to be called.
+        System.Console.WriteLine("Time in hours: " + t.Hours);
+    }
+}
 ```
 ### C#中的对象
--	C#是一种面向对象的语言，故程序的入口也是类的成员函数。因为程序刚启动时没有创建类的对象，故需要程序的入口是静态的成员函数，也就是：`static void Main(string[] args)`。这样Main就可以不依赖类的实例而执行。***c#中的所有语句都必须位于类内***
+-	C#是一种面向对象的语言，故程序的入口也是类的成员函数。因为程序刚启动时没有创建类的对象，故需要程序的入口是静态的成员函数，也就是：`static void Main(string[] args)`。这样Main就可以不依赖类的实例而执行。***c#中的所有语句都必须位于类内***。
+
 ```
 using System;
 using System.Collections.Generic;//C/C++中有域解析运算符，但C#中没有，C#中全部使用 成员运算符  .      
@@ -64,6 +90,7 @@ namespace C_sharp
     }
 }
 ```
+
 -	在C++中引用一个名字空间时的语法是：`using namespace std;`  而在C#中是：`using N1` 其中N1是一个名字空间的名字。
 -	C#中的类型转换：
 	-	隐式：系统自动完成，这一般是相互之间可以转换的类型，有系统自动完成。
@@ -76,6 +103,7 @@ int i = 3;
 Object obj =  i;//装箱   注意此时的obj是引用类型，而i依旧是值类型。
 int j = (int)obj;//拆箱
 ```
+
 ### 第八章 OOP
 
 
@@ -300,4 +328,19 @@ public void DoSomethingElse()   //接口的隐式实现，可以使用类或接�
 -	一般在ajax中的动作只会更新部分页面，而不再ajax中的动作会更新整个页面。
 -	在服务器上检查数据的正确与有效性是绝对必须的，因为客户端是永远都不能信任的。
 
+***************************************************************************************************************
+默认情况下，类声明为内部的，即只有当前项目中的代码才能访问它。可以使
+用internal 访问修饰符关键字显式指定，如下所示(但这是不必要的)： 
+      internal class MyClass 
+      { 
+          // Class members. 
+      }
 
+	  还可以指定类是公共的，应该可以由其他项目中的代码来访问。为此，要使用关键字public。 
+      public class MyClass 
+      { 
+          // Class members. 
+      }
+
+	  还可以指定类是抽象的(不能实例化，只能继承，可以有抽象
+成员)或密封的(sealed，不能继承)。为此，可以使用两个互斥的关键字abstract 或sealed。
