@@ -1,5 +1,10 @@
 本文摘自：HTML5与CSS3基础教程；
-## HTML5 CSS3
+-	目录：    
+	-	[HTML5 CSS3](#html)	
+	-	[JavaScript](#js)
+	-	[PHP](#php)
+
+## HTML5 CSS3   [\[Index\]](#Index) <span id="html"/>      
 ### HTML5的一般概念
 -	渐进增强（progressive  enhancement）的理念能帮助你构建具有普适性的网站。不必要求网站对所有人来说体验都是一样的，关键是网站的内容是可访问的`<body>`开始标签以上的内容都是为浏览器和搜索引擎准备的。在每个HTML 页面的开头都有一些主要用于浏览器和搜索引擎（如Bing、Duck Duck Go、Google、Yahoo 等）的信息。浏览器不会将这些信息呈现给访问者。
 -	无障碍访问：内容对所有用户可用，不论其能力如何。万维网的力量在于其普适性。让包括残障人士在内的每个人都能访问万维网，
@@ -103,7 +108,7 @@ role = "complementary"
 -	CSS每条规则都由两个部分组成：选择器，声明块。
 -	CSS的注释：`/*...*/`
 -	
-## JavaScript 
+## JavaScript   [\[Index\]](#Index) <span id="js"/>      
 ### 问题
 -	为例减少对性能的影响，应尽量减少网页中的标记并减少对DOM的访问。还可以对js脚本进行压缩：去除脚本中多余的字符，如注释与多余的空格（现成的工具可用。）
 -	JavaScript代码有两种方式放入HTML中：
@@ -113,9 +118,9 @@ role = "complementary"
 	4. 注意JavaScript是对DOM进行操作的，故当DOM没有建立前调用JavaScript将得不到想要的结果（window.onload = scriptNmae;）。
 -	JavaScript的注释有三种形式：
 	1. 类似于C的单行注释：//
-	2. 类似于C的多行注释：/* ... */
+	2. 类似于C的多行注释：`/* ... */`
 	3. 类似于HTML：`<!--`  在JavaScript中可以不用 `->`结尾 。（不推荐使用。）
--	在JavaScript中内建数据类型使用的是pass-by-value；
+-	在JavaScript中内建数据类型使用的是pass-by-value（js中只有三种内建数据：数字，布尔，串。数组是对象）；
 -	为了实现渐进增强，一般要将JavaScript从html中分离：
 
 ```
@@ -163,9 +168,14 @@ function popUp(winURL) {
 -	***不使用var声明而直接使用的变量会成为全局变量***。
 -	JavaScript中的字符串可以使用单引号或双引号。注意转义字符 \ 。
 -	使用函数splice()删除数组中的一个元素并将使后面的元素的index减一。
+### 对象
+-	this对象：this表示当前的元素对象（例如对于a元素：this.href  ）。
+-	JavaScript中new的用处：new用于创建一个类的实例，不使用new就相当于执行了一个函数，具体效果依靠函数的返回值。
+-	数组是JavaScript中特殊的内建对像（可以认为数组是对象的子类）。
 -	传统数组：
 	-	`var beatls = Array(4);`//4个元素
 	-	`var beatls = Array();`//元素个数未知
+	-	`var beatls = [];`//元素个数未知
 	-	`var beatls = Array("John","Paul",3.14,"Tom","Ringo");`//数组中的元素类型不一定要一样
 	-	`var beatls = ["John","Paul",3.14,"Tom","Ringo"]`
 	-	`beatls[0] = "John"; beatls[3] = "Paul"; `
@@ -184,9 +194,6 @@ lennon.name = "John";
 lennon.years = 1940;
 lennon.leaving = false;
 ```
-### 对象
--	this对象：this表示当前的元素对象（例如对于a元素：this.href  ）。
--	JavaScript中new的用处：new用于创建一个类的实例，不使用new就相当于执行了一个函数，具体效果依靠函数的返回值。
 -	对象的创建方式：
 	1. `var len = object();`
 	2. `var len = {propertyName:value , propertyName:value ...};`//***对象中的元素用逗号分隔***。
@@ -228,7 +235,9 @@ false === "" ;//将返回false，因为false和""的类型不同。
 ### 运行
 -	JavaScript没有编译单元的说法，故在一个文件中的JavaScript语句（包括对其他js文件的引用）共享一个全局，故要注意名字冲突的问题。
 -	`window.onload = countBodyChildren; `window.onload是在页面加载之后执行的一个js函数。
-## PHP
+
+
+## PHP  [\[Index\]](#Index) <span id="php"/>      
 -	PHP 文件的后缀是 ".php"。
 -	PHP 脚本可放置于文档中的任何位置。PHP 脚本以` <?php `开头，以` ?>` 结尾。
 -	PHP 支持三种注释
