@@ -1,9 +1,8 @@
 本文摘自：HTML5与CSS3基础教程；
-
+## HTML5 CSS3
 ### HTML5的一般概念
--	渐进增强（progressive  enhancement）的理念能帮助你构建具有普适性的网站。不必要求网站对所有人来说体验都是一样的，关键是网站的内容是可访问的`<body>`开始标签以上的内容都是为浏览器和搜索引擎准备的。
+-	渐进增强（progressive  enhancement）的理念能帮助你构建具有普适性的网站。不必要求网站对所有人来说体验都是一样的，关键是网站的内容是可访问的`<body>`开始标签以上的内容都是为浏览器和搜索引擎准备的。在每个HTML 页面的开头都有一些主要用于浏览器和搜索引擎（如Bing、Duck Duck Go、Google、Yahoo 等）的信息。浏览器不会将这些信息呈现给访问者。
 -	无障碍访问：内容对所有用户可用，不论其能力如何。万维网的力量在于其普适性。让包括残障人士在内的每个人都能访问万维网，
--	在每个HTML 页面的开头都有一些主要用于浏览器和搜索引擎（如Bing、Duck Duck Go、Google、Yahoo 等）的信息。浏览器不会将这些信息呈现给访问者。
 -	HTML 元素描述的是内容是什么（语义），而非看起来是什么样。CSS（从第7 章开始讲解）才控制内容的外观（如字体、颜色、阴影等）。
 -	元素由开始标签、内容和结束标签组成。
 -	空元素（empty element或void element），既不包含文本也不包含其他元素。
@@ -100,3 +99,265 @@ role = "complementary"
 -	title：为网站上任何部分加上提示标签（注意与title元素的区别）。
 -	cite：可以对blockquote 和q 使用可选的cite 属性，提供引述内容来源的URL。
 
+### CSS
+-	CSS每条规则都由两个部分组成：选择器，声明块。
+-	CSS的注释：`/*...*/`
+-	
+## JavaScript 
+### 问题
+-	为例减少对性能的影响，应尽量减少网页中的标记并减少对DOM的访问。还可以对js脚本进行压缩：去除脚本中多余的字符，如注释与多余的空格（现成的工具可用。）
+-	JavaScript代码有两种方式放入HTML中：
+	1. 将JavaScript代码放在head中的script之间：`<head><script> ...</script></head>`
+	2. 第二种方式是直接引用js文件：`<script src="..."></script> `。
+	3. 最好的办法是将`<script></script>`标签放在HTML文档最后，`</body>`标签之前，这样可以加快页面的载入。
+	4. 注意JavaScript是对DOM进行操作的，故当DOM没有建立前调用JavaScript将得不到想要的结果（window.onload = scriptNmae;）。
+-	JavaScript的注释有三种形式：
+	1. 类似于C的单行注释：//
+	2. 类似于C的多行注释：/* ... */
+	3. 类似于HTML：`<!--`  在JavaScript中可以不用 `->`结尾 。（不推荐使用。）
+-	在JavaScript中内建数据类型使用的是pass-by-value；
+-	为了实现渐进增强，一般要将JavaScript从html中分离：
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Example</title>
+<script>
+window.onload = function() {
+  if (!document.getElementsByTagName) return false;
+  var lnks = document.getElementsByTagName("a");
+  for (var i=0; i<lnks.length; i++) {
+    if (lnks[i].getAttribute("class") == "popup") {
+      lnks[i].onclick = function() {
+        popUp(this.getAttribute("href"));
+        return false;
+      }
+    }
+  }
+}
+
+function popUp(winURL) {
+  window.open(winURL,"popup","width=320,height=480");
+}
+
+</script>
+</head>
+<body>
+<a href="http://www.example.com/" class="popup">Example</a>
+</body>
+</html>
+
+```
+
+### JavaScript 变量
+-	JavaScript中的单引号与双引号之间没有区别，但是在引号的嵌套中需要注意：双引号中嵌套的引号必须是单引号。
+-	JavaScript中的基本类型为：数字、布尔、串。（***数组是特殊的内建对象，不是基本数据类型***）
+-	JavaScript是弱类型语言。
+-	JavaScript是大小写敏感的。
+-	JavaScript中的变量可以声明也可以不声明。若程序员未声明变量（默认全局）则系统会在变量赋值时自动的声明。当然了，可以显式的声明变量：
+	-	`var age;`
+	-	`var mood ,age;`
+	-	`var mood = "happy" , age = 33;`
+-	***不使用var声明而直接使用的变量会成为全局变量***。
+-	JavaScript中的字符串可以使用单引号或双引号。注意转义字符 \ 。
+-	使用函数splice()删除数组中的一个元素并将使后面的元素的index减一。
+-	传统数组：
+	-	`var beatls = Array(4);`//4个元素
+	-	`var beatls = Array();`//元素个数未知
+	-	`var beatls = Array("John","Paul",3.14,"Tom","Ringo");`//数组中的元素类型不一定要一样
+	-	`var beatls = ["John","Paul",3.14,"Tom","Ringo"]`
+	-	`beatls[0] = "John"; beatls[3] = "Paul"; `
+	-	***数组中可以包含其他的数组，而且子数组的维度可以不一样。***
+-	关联数组：
+	-	关联数组中的index可以是字符而不仅仅是数字。
+	-	***所谓的关联数组在JavaScript中其实是向Array对象中添加属性。***故一般不推荐使用这种方式，***为了实现关联数组的形式，可以使用对象（object()）。***
+```
+var lennon = Array();//关联数组是向Array对象中添加属性。这种方式不推荐
+lennon["name"] = "John";
+lennon["years"] = 1940;
+lennon["leaving"] = false;
+//使用对象来实现关联数组
+var lennon = object();//推荐的方式，对象和数组对元素的读取语法不同。
+lennon.name = "John";
+lennon.years = 1940;
+lennon.leaving = false;
+```
+### 对象
+-	this对象：this表示当前的元素对象（例如对于a元素：this.href  ）。
+-	JavaScript中new的用处：new用于创建一个类的实例，不使用new就相当于执行了一个函数，具体效果依靠函数的返回值。
+-	对象的创建方式：
+	1. `var len = object();`
+	2. `var len = {propertyName:value , propertyName:value ...};`//***对象中的元素用逗号分隔***。
+-	对象和数组的混合使用：（对象同样可以使用类似数组的形式对元素进行访问，objectNmae[propertyName]）
+```
+var beatls = Array();
+beatls[0] = lennon;
+//获得值的方式
+beatls[0].name = ...;
+//beatls和 lennon 均为对象
+var beatls = {};
+beatls.vocalist = lennon;
+beatls.vacation.name = ...;
+```
+-	向对象中添加属性的方式很简单：直接为新属性赋值即可创建一个新的属性：
+```
+lennon.age = 99;//lennon中以前是没有age这个属性的，直接对其进行赋值即可创建属性age。
+```
+### 操作
+-	运算符：
+	-	`"10" + 20 ;` //结果为 "1020"
+	-	`3 + "4"`;   //结果为"34"，数字和字符串的混合，最终的结果都是字符串。
+	-	`10 + 20 `;   //结果为30
+-	JS中的“range for”：`for(val in container){ ... };`//若container是对象，则val为对象中属性的名字。val的次序与属性的位置没有直接的关系。
+-	JavaScript中的严格比较：`===` 同时比较值与类型，变量只有在完全相同时才会返回true。
+```
+false == "";//将返回true
+false === "" ;//将返回false，因为false和""的类型不同。
+```
+-	JavaScript中的函数名可以赋予另一个变量，这样这个变量也将代表原函数。
+
+
+### JavaScript内建属性与函数
+-	`Math.random();`：生成一个0~1的随机数
+-	`element.childNodes`：返回一个数组，包含当前元素的所有子元素。（length属性，数组的长度）
+-	`var body_element = document.getElementsByTagName("body")[0];` ：通过元素名（body ul a img ...）获得对象***数组***，因为一个文档中不一定只有一个a元素（也不一定只有一个img元素），故返回值是数组。
+-	`window.open(url , "popup" , "width= 320 , height=480");`弹出一个窗口，url为窗口的链接，第二个参数为窗口的名称，第三个参数完成对窗口的设定。
+
+### 运行
+-	JavaScript没有编译单元的说法，故在一个文件中的JavaScript语句（包括对其他js文件的引用）共享一个全局，故要注意名字冲突的问题。
+-	`window.onload = countBodyChildren; `window.onload是在页面加载之后执行的一个js函数。
+## PHP
+-	PHP 文件的后缀是 ".php"。
+-	PHP 脚本可放置于文档中的任何位置。PHP 脚本以` <?php `开头，以` ?>` 结尾。
+-	PHP 支持三种注释
+```
+<?php
+// 这是单行注释
+# 这也是单行注释
+/*
+这是多行注释块
+它横跨了
+多行
+*/
+```
+-	在 PHP 中，所有用户定义的函数、类和关键词（例如 if、else、echo 等等）都对大小写不敏感，故Echo、echo、ecHo...表达相同的意思。但在 PHP 中，所有变量都对大小写敏感，$color、$COLOR、$coLOr...表达不同的意思。
+
+### 变量
+-	PHP 有三种不同的变量作用域：
+	-	local（局部）//与C类似
+	-	global（全局）//与C相差较大
+	-	static（静态）//与C类似
+-	超全局变量：它们在一个脚本的全部作用域中都可用，无需 global 关键字。
+```
+$GLOBALS     //PHP 在名为 $GLOBALS[index] 的数组中存储了所有全局变量。变量的名字就是数组的键。
+$_SERVER    //$_SERVER 这种超全局变量保存关于报头、路径和脚本位置的信息。
+$_REQUEST   //$_REQUEST 用于收集 HTML 表单提交的数据。
+$_POST     //$_POST 广泛用于收集提交 method="post" 的 HTML 表单后的表单数据。$_POST 也常用于传递变量。
+$_GET      //$_GET 也可用于收集提交 HTML 表单 (method="get") 之后的表单数据。
+$_FILES
+$_ENV
+$_COOKIE
+$_SESSION
+```
+-	变量以 $ 符号开头，其后是变量的名称。PHP对变量的大小写敏感。
+-	变量会在首次为其赋值时被创建：`$x = 5;`
+-	函数之外声明的变量拥有 Global 作用域，***只能在函数以外进行访问***。函数内部声明的变量拥有 LOCAL 作用域，只能在函数内部进行访问。在函数内部访问全局变量的方式有两种：
+	1.	在函数内部使用关键字global再次对全局变量进行声明，而且名字要与全局变量名完全一致。
+	2.	php中的全局变量保存在名为$GLOBALS[index]的数组中，故可以使用这样的语法访问全局变量：`$GLOBAL['val_name']`
+```
+<?php
+$x=5;
+$y=10;
+
+function myTest() {
+	global $x;
+	global $y;
+	$GLOBALS['y']=$GLOBALS['x']+$GLOBALS['y'];
+} 
+
+myTest();
+echo $y; // 输出 15
+?>
+```
+-	PHP 逻辑：逻辑是 true 或 false。
+-	PHP 数组：
+```
+<?php 
+$cars=array("Volvo","BMW","SAAB");
+var_dump($cars);//var_dump() 会返回变量的数据类型和值
+?>
+```
+-	PHP对象：
+```
+<?php
+class Car
+{
+  var $color;
+  function Car($color="green") {
+    $this->color = $color;
+  }
+  function what_color() {
+    return $this->color;
+  }
+}
+?>
+```
+-	PHP 常量：常量名称前面没有 $ 符号。与变量不同，常量贯穿整个脚本是自动全局的。
+```
+<?php
+//php使用define定义常亮，define含有3个参数，
+//第一参数为变量名，第二个参数为变脸的值，
+//第三个参数表示变量名是否对大小写敏感，默认为false
+define("GREETING", "Welcome to W3School.com.cn!");
+echo GREETING;
+?>
+```
+### PHP运算符
+-	PHP的特殊运算符：
+	-	串运算符 `.` (一个点)。
+	-	完全相等：===  （PHP是动态语言，但其内部实现也是有类型之分的 == 表示值相等，=== 表示类型也一样）
+	-	`!=`和`<>` 都表示不等，一般指值不同。
+	-	`!==` 只要不是 === 就是 `!==`
+-	if...elseif...else ...
+-	foreach($array as $value)...//PHP的foreach和特别，元素位置和其他语言完全相反。
+-	PHP中创建数组：`$cars=array("Volvo","BMW","SAAB");`
+```
+<?php
+$cars=array("Volvo","BMW","SAAB");
+echo count($cars);    //返回数组的长度
+echo "I like " . $cars[0] . ", " . $cars[1] . " and " . $cars[2] . ".";
+?>
+```
+-	PHP关联数组（index不是整数，而是字符串）：
+```
+$age=array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
+//或
+$age['Peter']="35";
+$age['Ben']="37";
+$age['Joe']="43";
+
+echo "Peter is " . $age['Peter'] . " years old.";
+//使用foreach遍历关联数组
+foreach($age as $x=>$x_value) {//对于 "peter"=>"35" x对应peter，x_value对应 35
+   echo "Key=" . $x . ", Value=" . $x_value;
+   echo "<br>";
+}
+```
+
+### 函数
+-	function fun_name(){ }
+```
+function sum($x,$y) {
+  $z=$x+$y;
+  return $z;//直接返回，PHP是动态语言
+}
+```
+-	数组的排序函数
+	-	sort() - 以升序对数组排序
+	-	rsort() - 以降序对数组排序
+	-	asort() - 根据值，以升序对关联数组进行排序
+	-	ksort() - 根据键，以升序对关联数组进行排序
+	-	arsort() - 根据值，以降序对关联数组进行排序
+	-	krsort() - 根据键，以降序对关联数组进行排序

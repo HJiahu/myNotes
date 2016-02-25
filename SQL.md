@@ -1,5 +1,65 @@
+本文以MySQL为例
+### mySQL的设置
+-	安装
+-	以root权限登录：`mysql -u root -p`  ( `mysql -h hotname -u username -p`缺省的host为当前机器，缺省的username为登录系统的用户名)
+-	可以直接执行包含sql语句的文件：`> mysql -h host -u bookorama -D books -p < bookorama.sql`
+-	删除匿名访问权限：
+	-	`use mysql;`//指令后的分号告诉系统执行当前语句
+	-	`delete from user where User=''`
+	-	使命令生效：`mysqladmin -u root -p reload`
+-	grant和revoke命令：赋予和撤销用户的global、database、table、column四种不同的权限。
+
+```
+mysql> grant select, insert, update, delete, index, alter, create, drop
+	-> on books.*          #在这里books为数据库名，.*表示books中的所有表。
+	-> to username identified by ‘'pwd';
+```
+-	使用指定的数据库：`use dbname`
+-	创建表：`create table tablename(columns );`
+
+```
+Book-O-Rama schema:
+	Customers(CustomerID, Name, Address, City)  CustomerID 为主键
+	Orders(OrderID, CustomerID, Amount, Date)   OrderID 为主键 CustomerID 为外键
+	Books(ISBN, Author, Title, Price) ISBN为主键 
+	Order_Items(OrderID, ISBN, Quantity) OrderID 和ISBN同为主键与外键
+	Book_Reviews(ISBN, Reviews) ISBN为主键且为外键
+SQL语句：
+create table customers
+(  customerid int unsigned not null auto_increment primary key,
+   name char(50) not null,
+   address char(100) not null,
+   city char(30) not null
+);
+create table orders
+(  orderid int unsigned not null auto_increment primary key,
+   customerid int unsigned not null,
+   amount float(6,2), #显示6位有效数字（不含小数点），2位的小数点
+   date date not null
+);
+create table books
+(  isbn char(13) not null primary key,
+   author char(50),
+   title char(100),
+   price float(4,2)
+);
+create table order_items
+(  orderid int unsigned not null,
+   isbn char(13) not null,
+   quantity tinyint unsigned,
+
+   primary key (orderid, isbn)
+);
+create table book_reviews
+(
+  isbn char(13) not null primary key,
+  review text
+);
+```
+-	查看表与数据库：`show tables;`，`show databases;` ,`describe databasename`（describe描述的是***表的信息***不是数据库）
+
 ### SQL注意事项：
--	sql对大小写不敏感
+-	sql对大小写不敏感，但数据库和表名对大小写敏感。
 ### sql语句示例：
 
 1. 选区指定的列
