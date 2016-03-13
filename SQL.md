@@ -1,18 +1,35 @@
 本文以MySQL为例
 ### mySQL的设置
--	安装
+-	安装（因为mysql被oracle收购，应该算纯开源，故使用mariabd替代）
+	-	`yum -y install mariadb* `
+	-	`systemctl start mariadb.service `
+	-	`systemctl enable mariadb.service `
+	-	`mysql_secure_installation `//一路yes,为数据库增加安全功能
 -	以root权限登录：`mysql -u root -p`  ( `mysql -h hotname -u username -p`缺省的host为当前机器，缺省的username为登录系统的用户名)
+-	创建用户：`insert into mysql.user(Host,User,Password) values("localhost","username",passward("123456"));`。也可以直接使用grant命令在授予权限的同时创建用户。
+-	为用户授权：见下面grant命令（需要使用root登录）。
 -	可以直接执行包含sql语句的文件：`> mysql -h host -u bookorama -D books -p < bookorama.sql`
 -	删除匿名访问权限：
 	-	`use mysql;`//指令后的分号告诉系统执行当前语句
 	-	`delete from user where User=''`
 	-	使命令生效：`mysqladmin -u root -p reload`
+-	创建数据库：`create database books;`
+-	从数据库中导出语句：` mysqldump  -u  root  -p  javadb > d:\789.sql`
 -	grant和revoke命令：赋予和撤销用户的global、database、table、column四种不同的权限。
 
 ```
+//用户典型的权限设置
 mysql> grant select, insert, update, delete, index, alter, create, drop
-	-> on books.*          #在这里books为数据库名，.*表示books中的所有表。
+	-> on books.*          #在这里books为数据库名，books.*表示books中的所有表。*.*表示所有数据库中的表。
 	-> to username identified by ‘'pwd';
+//取消用户的某些权限
+//删除用户username
+revoke  all privileges ,grant
+	-> from username;
+//减少部分权限
+revoke alter，create ，drop
+	-> on books.*
+	-> from username;
 ```
 -	使用指定的数据库：`use dbname`
 -	创建表：`create table tablename(columns );`
@@ -57,7 +74,32 @@ create table book_reviews
 );
 ```
 -	查看表与数据库：`show tables;`，`show databases;` ,`describe databasename`（describe描述的是***表的信息***不是数据库）
+-	用户管理：
+	-	最小权限原则：一个用户或进程应该拥有能够执行分配给它的任务的最低级别的权限。
 
+### 表的设计理念
+-	每一个表都要有一个***主键***，这样才能实现与其他表的交互，主键最好有一定的意义，最好不要将自动增长的id作为主键。
+-	***主键***：表中可以唯一标识行的列或列的组合（主键用下划线表示）。
+-	外键：当前表中的列在其他表中为主键，则称此列为外键（外键使用斜体表示）。
+-	***原子列***：列中的元素是不可分割的，例如一个订单中可能有多本书，但为了不在一个列中存放多个书名，可以再建立一个表，表中放置订单号、书名和对应的书的数量，通过查找相同的订单号来获取同一个订单中的所有书名。
+-	模式：数据库整套表格的完整设计，可以认为模式为数据库的设计蓝图。
+-	关系：同一个数据库中不同表之间行与行之间的关系。主要由三种：一对一（两个表中的行与行之间只存在一对一的关系），一对多（一个表中的一行和另一个表中的若干行相对应），多对多。
+-	在设计表时，我们常对现实世界的**实体**与**关系**（实体与实体之间的关系）建立模型。
+-	每个表中只放置与实体和关系必要的属性以防数据的冗余。很多数据如果不是唯一的，就只在一张表中保存，否则要改动这些数据时的开销会很大，而且很可能会破坏数据的完整性（例如数据的不一致）
+### mySQL中的数据类型（php和mySQL web开发中文版179页）
+-	整数类型（在类型后添加unsigned，创建对应的无符号型变量）：tinyint、bit、bool、smallint、mediumint、int、integrate、bigint。
+-	浮点数：float、double、precision、real、decimal、numeric、dec、fixed。
+-	日期和时间：
+	-	date yyyy-mm-dd
+	-	time hh:mm:ss
+	-	datetime yyyy-mm-dd hh:mm:ss
+	-	timestamp  有不同的表示方式
+	-	year
+-	字符串类型
+	-	char [binary|ascii|unicode]、varchar 
+	-	text
+	-	BLOB （binary large objects），可以用于存储图片、视频、声音等所有类型的数据。
+	-	set 和 enum
 ### SQL注意事项：
 -	sql对大小写不敏感，但数据库和表名对大小写敏感。
 ### sql语句示例：

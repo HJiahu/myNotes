@@ -8,7 +8,7 @@
 
 
 ### 第一章：  2015-09-06 07:57:40 <h1 id="1"></h1> 
-introduce opencv2.0
+-	introduce opencv2.0
 opencv使用的名字空间是cv，例如调用显示image的函数的语法可以是：cv::imshow() 
 > //在opencv的C接口中使用下面这个函数来载入图像，Ipl表示一个intel的库名，P29                
 // IplImage* iplImage = cvLoadImage("c:\\img.jpg");             

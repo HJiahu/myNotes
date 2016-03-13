@@ -4,6 +4,18 @@
 
 
 ### 第十六章 网络IPC 套接字 [\[Index\]](#Index) <span id="16"/>      
+-	linux socket编程思想
+> 在类Berkeley socket编程中，socket 的最顶层是一个整型的socket描述符fd，所有关于数据的操作都是通过这个描述符完成。fd是整个系统的最高抽象层。这个fd就是客户软件与服务器端的“数据终端”，这个终端隐藏了网络的底层，使我们像操作文件一样来进行数据的传输。         
+> <br/>
+> 要使这个fd可用，在使用前要先对其进行一定的设置：fd要和“数据管道进行关联”。在网络中ip与端口号可以唯一的确定一个“数据终端”，两个ip端口对就可以唯一的确定一条数据“管道”，所以要将每一个socket fd和一个ip端口对相关联，从而实现数据的端对端传输。           
+> <br/>
+> 对于客户端：使用connect函数将本地的fd和远程的ip端口对相关联，组成一条“数据管道”，从而实现数据的传输（本地客户端的socket可以不用特意的设置端口号和ip，系统会自动的分配。当然了，也可以手动的分配）。              
+> 对于服务器端：使用bind函数和本地的一个ip和端口号相关联，使得服务器可以监控管道的一段，等待接收数据。          
+> <br/>
+> 因为网络上有不同的网络协议，所以ip可以是ipv4 也可以是IPv6，而数据报的传输可以是tcp也可以是udp，故sockfd的设置要依据不同的环境做不同的配置。        
+> <br/>
+> 注意事项：因为网络上传输的数据使用的是大端法，故所有应用于socket的数据都要转化为网络上传输的格式，一般使用htons等函数对数据进行转化。***这一步是必不可少的。`htonl(INADDR_ANY);htons(port);`，sin_family不用转化字节序是因为sin_family用于系统的判断，而sin_addr与sin_port是取自IP和UDP协议层的。***
+
 -	使用socket通信的一般流程（[参考](http://www.linuxhowtos.org/C_C++/socket.htm)）：
 -	客户端
 	-	Create a socket with the socket() system call
@@ -19,12 +31,13 @@
 
 #### 常用函数
 
--	`int socket(int domain , int type ,int protocol);//#include<sys/socket.h>`return -1 if failed
+-	`int socket(int domain , int type ,int protocol);//#include<sys/socket.h>`return -1 if failed and set errno
 -	`uint32_t htonl(uint32_t hostint32);//#include<arpa/inet.h>`
 -	`uint16_t htonl(uint16_t hostint16);//#include<arpa/inet.h>`
 -	ntohl and ntohs
 -	`const char *inet_ntop(int domain , const void *restrict addr , char *restrict str ,socklen_t size);//#include<arpa/inet.h>`//return NULL if failed 
 -	`int inet_pton(int domain , const *restrict str , void *restrict add);//in arpa inet.h`return 1 if  successed ,return -1 if failed and 0 if the formate is illegal
+-	`in_addr_t inet_addr(const char *strptr) `//直接将数字和点表示的ip（192.168.1.1）转化为无符号长整型，而且不用使用htonl就可以赋予sockaddr。
 -	`struct hostent *gethostent(void);//#include<netdb.h>`//return NULL if failed , 使用网络字节序
 -   `int shutdown(int sockfd , int how);//#include<sys/socket.h> `//return -1 if failed,0 if successed
 -   `int bind(int sockfd , const struct sockaddr *addr ,socklen_t len);//#include<sys/socket.h>`//return -1 if failed ,return 0 if successed 
@@ -95,7 +108,7 @@ int shutdown(int sockfd , int how);
 		char 		sa_data[14];//可变长的地址
 	};
 	```
-	-	ipv4域中的地址格式:sockaddr_in（***端口号是16位无符号整型***）
+	-	ipv4域中的地址格式:sockaddr_in（***端口号是16位无符号整型（unsigned short 或in_port_t）***）
 	```
 	struct in_addr{
 		in_addr_t   s_addr;//ipv4 address 	

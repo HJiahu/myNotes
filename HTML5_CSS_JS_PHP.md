@@ -1,9 +1,12 @@
 本文摘自：HTML5与CSS3基础教程；
 -	目录：    
+	-	[web环境](#environment)
 	-	[HTML5 CSS3](#html)	
 	-	[JavaScript](#js)
 	-	[PHP](#php)
 
+## web环境 [\[Index\]](#Index) <span id="environment"/>      
+-	nginx html目录：/usr/share/html
 ## HTML5 CSS3   [\[Index\]](#Index) <span id="html"/>      
 ### HTML5的一般概念
 -	渐进增强（progressive  enhancement）的理念能帮助你构建具有普适性的网站。不必要求网站对所有人来说体验都是一样的，关键是网站的内容是可访问的`<body>`开始标签以上的内容都是为浏览器和搜索引擎准备的。在每个HTML 页面的开头都有一些主要用于浏览器和搜索引擎（如Bing、Duck Duck Go、Google、Yahoo 等）的信息。浏览器不会将这些信息呈现给访问者。
@@ -240,6 +243,7 @@ false === "" ;//将返回false，因为false和""的类型不同。
 ## PHP  [\[Index\]](#Index) <span id="php"/>      
 -	PHP 文件的后缀是 ".php"。
 -	PHP 脚本可放置于文档中的任何位置。PHP 脚本以` <?php `开头，以` ?>` 结尾。
+-	PHP中的单引号与双引号的区别在于：单引号中的数据不会被处理，双引号中的数据会被解析。
 -	PHP 支持三种注释
 ```
 <?php
@@ -254,27 +258,25 @@ false === "" ;//将返回false，因为false和""的类型不同。
 -	在 PHP 中，所有用户定义的函数、类和关键词（例如 if、else、echo 等等）都对大小写不敏感，故Echo、echo、ecHo...表达相同的意思。但在 PHP 中，所有变量都对大小写敏感，$color、$COLOR、$coLOr...表达不同的意思。
 
 ### 变量
--	PHP 有三种不同的变量作用域：
-	-	local（局部）//与C类似
-	-	global（全局）//与C相差较大
-	-	static（静态）//与C类似
--	超全局变量：它们在一个脚本的全部作用域中都可用，无需 global 关键字。
-```
-$GLOBALS     //PHP 在名为 $GLOBALS[index] 的数组中存储了所有全局变量。变量的名字就是数组的键。
-$_SERVER    //$_SERVER 这种超全局变量保存关于报头、路径和脚本位置的信息。
-$_REQUEST   //$_REQUEST 用于收集 HTML 表单提交的数据。
-$_POST     //$_POST 广泛用于收集提交 method="post" 的 HTML 表单后的表单数据。$_POST 也常用于传递变量。
-$_GET      //$_GET 也可用于收集提交 HTML 表单 (method="get") 之后的表单数据。
-$_FILES
-$_ENV
-$_COOKIE
-$_SESSION
-```
--	变量以 $ 符号开头，其后是变量的名称。PHP对变量的大小写敏感。
+-	PHP中的变量都由 `$` 开头。PHP对变量的大小写敏感。
 -	变量会在首次为其赋值时被创建：`$x = 5;`
+-	可变变量：
+-	定义常量：`define('MONEY' , 100);`使用时不加 $ ：`echo MONEY`。
+-	PHP访问变量的方式：（假设变量在表单中的属性name 为 name-value：`<input type="text" name = "name-value"）`
+	-	$name-value  //要使用这种方式要先设置 `register_globals`为 on，不推荐这种方式
+	-	`$_POST['name-value']`  //推荐这种方式，如果method为get则将POST改为GET。
+	-	`$HTTP_POST_VARS['name-value']`  //不推荐使用
+-	PHP是弱类型语言，但其支持基本的数据类型：int,float(double),string,bool,array,object。而且PHP中可以对数据进行类型的转化：`$total = (float)tatal_1`
+-	PHP 有四种不同的变量作用域：
+	-	local（局部）//与C类似
+	-	global（全局）//与C相差较大（在PHP中，在函数内部是无法直接使用全局变量的，这是与C差距差距十分明显的地方。）
+	-	超全局变量：它们在一个脚本的全部作用域中都可用，无需 global 关键字（如：$GLOBALS,_POST,_GET...）。常量是元一种超全局变量。
+	-	static（静态）//与C类似
+
 -	函数之外声明的变量拥有 Global 作用域，***只能在函数以外进行访问***。函数内部声明的变量拥有 LOCAL 作用域，只能在函数内部进行访问。在函数内部访问全局变量的方式有两种：
 	1.	在函数内部使用关键字global再次对全局变量进行声明，而且名字要与全局变量名完全一致。
-	2.	php中的全局变量保存在名为$GLOBALS[index]的数组中，故可以使用这样的语法访问全局变量：`$GLOBAL['val_name']`
+	2.	php中的全局变量保存在名为$GLOBALS[index]的数组中，故可以使用这样的语法访问全局变量：`$GLOBAL['val_name']`         
+
 ```
 <?php
 $x=5;
@@ -325,13 +327,27 @@ echo GREETING;
 ```
 ### PHP运算符
 -	PHP的特殊运算符：
-	-	串运算符 `.` (一个点)。
+	-	串连接运算符 `.` (一个点)。
 	-	完全相等：===  （PHP是动态语言，但其内部实现也是有类型之分的 == 表示值相等，=== 表示类型也一样）
 	-	`!=`和`<>` 都表示不等，一般指值不同。
 	-	`!==` 只要不是 === 就是 `!==`
+	-	引用运算符  `&` 与C++中的引用的概念是相同的。
+	-	错误抑制操作符：@ ，例如：`@(4/0)`，代码将抑制除零警告。
+	-	执行操作符：\` \`(一对反向单引号)，引号中的命令会被当做服务器端的命令行来执行，其返回值为命令的返回值。
+	-	类型操作符：`instanceof` ，`$objectNmae instanceof sampleClass`判断objectNmae是不是sampleClass这个类的对象。
+	-	delcare ,控制后面的代码的运行规则。
 -	if...elseif...else ...
 -	foreach($array as $value)...//PHP的foreach和特别，元素位置和其他语言完全相反。
+-	PHP中有类似于python的控制结构语法：
+
+```
+if($a == 0) :
+	echo ...;
+	exit;
+endif;
+```
 -	PHP中创建数组：`$cars=array("Volvo","BMW","SAAB");`
+
 ```
 <?php
 $cars=array("Volvo","BMW","SAAB");
@@ -340,6 +356,7 @@ echo "I like " . $cars[0] . ", " . $cars[1] . " and " . $cars[2] . ".";
 ?>
 ```
 -	PHP关联数组（index不是整数，而是字符串）：
+
 ```
 $age=array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
 //或
