@@ -1,12 +1,19 @@
 本文摘自：[廖雪峰的python博客](http://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000)
 
+-	在python中使用pip安装第三方模块。
+-	可以使用type函数来确定对象的类型：`type(123)`将返回：`<class 'int'>`
+	-	`type(123) == type(345)`
+	-	`type(123) == int`
+	-	`type(abs) == types.BuiltinFunctionType`
+-	函数dir将以字符串的形式返回对象的所有属性和方法：`dir('abc')`。
+-	配合getattr()、setattr()以及hasattr()，我们可以直接操作一个对象的状态：` hasattr(obj, 'x') # 有属性'x'吗？`
 -	**注意python中变量之间赋值默认是以引用来传递可变对象（变量）的（list，set...）只有对于不可变量（内置数据类型int，double...）才会使用传值的形式。为了实现副本，可以使用复制例如list b与a：`b = a[:]`**
 
 ```
 #python中优先引用传递，只有无法使用引用的时候才会转按值传递。
 >>> a = 9
 >>> b = a#此时id(a) == id(b)
->>> b = 3#此时id(a) != id(b)，但是当a是可变的时候，id(b) == id(a)
+>>> b = 3#此时id(a) != id(b)，但是当a是可变的时候，id(b) == id(a)，如下
 >>> a = [1,2]
 >>> b = a
 >>> a[1] = 3#此时a == [1,3]，而 b == [1,3]，即id(a) == id(b)
@@ -199,19 +206,34 @@ while n>0:
 
 ```
 ### 函数
+-	装饰器
+-	偏函数
+-	在代码运行期间动态增加功能的方式，称之为“装饰器”（Decorator）
 #### lambda函数
 -	Lambda expressions (sometimes called lambda forms) are used to create anonymous functions.
+-	匿名函数有个限制，就是只能有一个表达式，不用写return，返回值就是该表达式的结果。
 
 ```
 lambda parameters:expression
 等价于
 def <lambda>(arguments):
     return expression
+#可以把匿名函数赋值给一个变量，再利用变量来调用该函数
+>>> f = lambda x: x * x
+>>> f
+<function <lambda> at 0x101c6ef28>
+>>> f(5)
+25
+#也可以把匿名函数作为返回值返回，比如：
+def build(x, y):
+    return lambda: x * x + y * y
 ```
 #### 部分内建函数
+-	int(str , base = 10)#base表示str中的进制，默认情况下base=10，即默认情况下将str中的数据当做10进制数。
 -	map():map()函数接收两个参数，一个是函数，一个是**Iterable**，map将传入的函数依次作用到序列的每个元素，并把结果作为新的**Iterator**返回。（注意返回的是iterator而不是iterable，故map并不改变源数据）
 -	filter():与map类似，接受两个参数。但filter第一个函数的返回值必须是bool类型，filter依据true，false来决定是否保留当前元素。与map同样，filter并不更改源数据，其返回的是一个iterator，不是序列。
 -	reduce():reduce把一个函数作用在一个序列[x1, x2, x3, ...]上，这个函数必须接收两个参数，reduce把结果继续和序列的下一个元素做累积计算：`reduce(f, [x1, x2, x3, x4]) 类似于 f(f(f(x1, x2), x3), x4)`
+
 ```
 def my_abs(x):#注意冒号
     if x >= 0:
@@ -285,5 +307,79 @@ def person(name, age, *, city='Beijing', job):
 >>> person('Jack', 24, job='Engineer')
 Jack 24 Beijing Engineer
 ```
+#### 将函数作为返回对象
+
+```
+def count():
+    fs = []
+    for i in range(1, 4):
+        def f():
+             return i*i
+        fs.append(f)
+    return fs
+
+f1, f2, f3 = count()
+#正真的输出是：9,9,9，原因就在于返回的函数引用了变量i，但它并非立刻执行。等到3个函数都返回时，它们所引用的变量i已经变成了3，因此最终结果为9。
+```
+### 模块
+-	一个.py文件就称之为一个模块
+-	每一个包目录下面都会有一个`__init__.py`的文件，这个文件是必须存在的，否则，Python就把这个目录当成普通目录，而不是一个包。`__init__.py`可以是空文件，也可以有Python代码，因为`__init__.py`本身就是一个模块，而它的模块名就是mycompany
+-	任何模块代码的第一个字符串都被视为模块的文档注释
+
+```
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+' a test module '# 任何模块的第一个字符串将被视为模块的文档注释
+
+__author__ = 'Michael Liao'# 作者名
+
+import sys
+```
+-	作用域问题：类似`__xxx__`的变量是特殊变量，如`__author__`表示模块的作者、`__doc__`表示注释。
+> 比如__len__方法返回长度。在Python中，如果你调用len()函数试图获取一个对象的长度，实际上，在len()函数内部，它自动去调用该对象的__len__()方法。                
+> 我们自己写的类，如果也想用len(myObj)的话，就自己写一个__len__()方法。            
+
+-	python中没有方法可以限制对private函数或变量的调用，但我们不应该调用他们。以下划线开头的变量名或函数名`_xx或__xx`被认为是私有的。
+-	配合getattr()、setattr()以及hasattr()，我们可以直接操作一个对象的状态。
+
+### python中的面向对象
+-	类的定义：
+-	注意类中变量self的作用，其要作为每一个成员函数的第一个参数，表示类对应的实例。
+-	类似于js，python对象中的成员变量是在使用的时候直接使用，不用声明，系统会自动的生成这些变量。
+
+```
+class Student(object): # 括号中包含的是当前类的父类，一般而言object是python中所有类的父类。
+	#__init__函数是Python的构造函数，其中selt是每一个__init__函数都有的变量，表示创建的对象本身，self有系统自动生成，不用认为传入
+ 	def __init__(self, name, score): 
+       		self.__name = name  #__name是无法在类外访问的。
+        	self.score = score
+
+	def print_score(self):  #注意self在此处的作用，在使用这个成员函数时，self也是不用认为传入的。
+			print('%s: %s' % (self.name, self.score))
+```
+-	有些时候，你会看到以一个下划线开头的实例变量名，比如`_name`，这样的实例变量外部是可以访问的，但是，按照约定俗成的规定，当你看到这样的变量时，意思就是，“虽然我可以被访问，但是，请把我视为私有变量，不要随意访问”。
+-	python中的变量如果使用两个下划线开头：`__xx`则表示变量不能从对象外方位，类似于C++中的private变量。但若变量同时以双下划线结尾，则表示这些变量是特殊变量，可以在对象外访问，而且不能使用这些名字作为普通的变量。
+-	双下划线开头的实例变量是不是一定不能从外部访问呢？其实也不是。不能直接访问`__name`是因为Python解释器对外把`__name`变量改成了`_Student__name`，所以，仍然可以通过`_Student__name`来访问`__name`变量。因为不同版本的python会把`__name`修饰不同的名称，故最好不要使用这些特性。
+-	***类属性与对象属性***：属于self的属性是对象属性，而不属于self且在类中的变量被称为类属性。对象属性的优先级高于类属性，故当对象属性和类属性同名则若使用对象来访问同名变量，则访问的是对象属性。**类属性并不是静态的，每一个对象都有其自己的类属性，改变一个对象的类属性并不会对其他的对象产生影响。**
+-	继承
+
+```
+class Animal(object):        #父类
+    def run(self):
+        print('Animal is running...')
+	
+class Dog(Animal):           #子类
+
+    def run(self):           #子类会直接覆盖父类中的同名方法
+        print('Dog is running...')
+
+class Cat(Animal):
+
+    def run(self):
+        print('Cat is running...')
 
 
+```
+-	判断一个变量是否是某个类型可以用isinstance()：`>>> isinstance(a, list) `
+-	对于静态语言来说，如果需要传入Animal类型，则传入的对象必须是Animal类型或者它的子类，否则，将无法调用run()方法。对于Python这样的动态语言来说，则不一定需要传入Animal类型。我们只需要保证传入的对象有一个run()方法就可以了，这就是动态语言的“鸭子类型”，它并不要求严格的继承体系，一个对象只要“看起来像鸭子，走起路来像鸭子”，那它就可以被看做是鸭子。
