@@ -337,8 +337,8 @@ __author__ = 'Michael Liao'# 作者名
 import sys
 ```
 -	作用域问题：类似`__xxx__`的变量是特殊变量，如`__author__`表示模块的作者、`__doc__`表示注释。
-> 比如__len__方法返回长度。在Python中，如果你调用len()函数试图获取一个对象的长度，实际上，在len()函数内部，它自动去调用该对象的__len__()方法。                
-> 我们自己写的类，如果也想用len(myObj)的话，就自己写一个__len__()方法。            
+> 比如`__len__`方法返回长度。在Python中，如果你调用len()函数试图获取一个对象的长度，实际上，在len()函数内部，它自动去调用该对象的`__len__()`方法。                
+> 我们自己写的类，如果也想用len(myObj)的话，就自己写一个`__len__()`方法。            
 
 -	python中没有方法可以限制对private函数或变量的调用，但我们不应该调用他们。以下划线开头的变量名或函数名`_xx或__xx`被认为是私有的。
 -	配合getattr()、setattr()以及hasattr()，我们可以直接操作一个对象的状态。
@@ -359,7 +359,7 @@ class Student(object): # 括号中包含的是当前类的父类，一般而言o
 			print('%s: %s' % (self.name, self.score))
 ```
 -	有些时候，你会看到以一个下划线开头的实例变量名，比如`_name`，这样的实例变量外部是可以访问的，但是，按照约定俗成的规定，当你看到这样的变量时，意思就是，“虽然我可以被访问，但是，请把我视为私有变量，不要随意访问”。
--	python中的变量如果使用两个下划线开头：`__xx`则表示变量不能从对象外方位，类似于C++中的private变量。但若变量同时以双下划线结尾，则表示这些变量是特殊变量，可以在对象外访问，而且不能使用这些名字作为普通的变量。
+-	python中的变量如果使用两个下划线开头：`__xx`则表示变量不能从对象外访问（**因为系统会重新命名这些名称，还有就是除非变量的后缀也是两个下划线**），类似于C++中的private变量。但若变量同时以双下划线结尾，则表示这些变量是特殊变量，可以在对象外访问，而且不能使用这些名字作为普通的变量。
 -	双下划线开头的实例变量是不是一定不能从外部访问呢？其实也不是。不能直接访问`__name`是因为Python解释器对外把`__name`变量改成了`_Student__name`，所以，仍然可以通过`_Student__name`来访问`__name`变量。因为不同版本的python会把`__name`修饰不同的名称，故最好不要使用这些特性。
 -	***类属性与对象属性***：属于self的属性是对象属性，而不属于self且在类中的变量被称为类属性。对象属性的优先级高于类属性，故当对象属性和类属性同名则若使用对象来访问同名变量，则访问的是对象属性。**类属性并不是静态的，每一个对象都有其自己的类属性，改变一个对象的类属性并不会对其他的对象产生影响。**
 -	继承
@@ -379,7 +379,70 @@ class Cat(Animal):
     def run(self):
         print('Cat is running...')
 
-
+>>> dog = Animal()
 ```
 -	判断一个变量是否是某个类型可以用isinstance()：`>>> isinstance(a, list) `
 -	对于静态语言来说，如果需要传入Animal类型，则传入的对象必须是Animal类型或者它的子类，否则，将无法调用run()方法。对于Python这样的动态语言来说，则不一定需要传入Animal类型。我们只需要保证传入的对象有一个run()方法就可以了，这就是动态语言的“鸭子类型”，它并不要求严格的继承体系，一个对象只要“看起来像鸭子，走起路来像鸭子”，那它就可以被看做是鸭子。
+-	**动态的向对象与类添加方法与属性：**
+	-	可以向js一样直接向已经存在的对象添加属性：`s.name = 'tom'`，s创建时时没有属性name的，这条语句会为其创建name属性。
+	-	也可以类似创建属性一样，向类和对象中动态的添加方法，向类中添加的方法可以用于所有对象，即使对象定义在添加方法之前（对类添加的方法似乎无法改变对象中已经存在的变量，这个问题有机会要查一下）：
+
+```
+>>> class Student(object):
+	def __init__(self,name,age):
+		self.name = name
+		self.age = age
+	def prints(self):
+		print(self.name , self.age)
+
+>>> def set_age(self,age):
+	self.age = age
+	#对实例绑定的新方法只适用于当前对象，而不会影响其他的实例，但当把方法绑定到类后这些方法就可以用于所有对象。
+>>> tom.set_age = MethodType(set_age,tom)#MethodType同样可以给类绑定方法，这样这些方法就可以适用于类所有的实例。
+```
+-	向类中添加属性是非常方便的，但有方式可以限制对象中添加属性：在类中定义`__slots__=('name','age',...)`对于对象而言，只能添加在`__slots__`中定义过的属性。**`__slots__`是不能继承的。**
+-	python中有与C#中属性类似的东西，即类似set与get的方法（`@property`）。
+-	python支持多重继承。
+-	python中其他面向对象特性：
+	-	定制类，特殊的成员函数，用双下划线开始与结尾。用于特殊的函数调用，如`__len__()`之于`len(...)`
+	-	枚举类，python中实现常量的方法。
+	-	元类，用于创建类（好神奇）
+
+### python中的socket
+-	网络通信就是两个进程之间的通信。
+-	TCP通信客户端：
+
+```
+>>> import socket
+>>> sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+>>> sock.connect(('115.159.118.165',9999))
+>>> sock.send('hello')
+>>> sock.send('hello'.encode())#内部字符保存为utf-16 
+5
+>>> sock.close()
+```
+-	TCP服务器端
+
+```
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind(('127.0.0.1', 9999))
+s.listen(5)
+while True:
+    # 接受一个新连接:
+    sock, addr = s.accept()
+    # 创建新线程来处理TCP连接:
+    t = threading.Thread(target=tcplink, args=(sock, addr))
+    t.start()
+
+def tcplink(sock, addr):
+    print('Accept new connection from %s:%s...' % addr)
+    sock.send(b'Welcome!')
+    while True:
+        data = sock.recv(1024)
+        time.sleep(1)
+        if not data or data.decode('utf-8') == 'exit':
+            break
+        sock.send(('Hello, %s!' % data.decode('utf-8')).encode('utf-8'))
+    sock.close()
+    print('Connection from %s:%s closed.' % addr)
+```
