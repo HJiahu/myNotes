@@ -7,7 +7,7 @@
 
 ## web环境 [\[Index\]](#Index) <span id="environment"/>      
 -	nginx html目录：/usr/share/html
-## HTML5 CSS3   [\[Index\]](#Index) <span id="html"/>      
+## HTML5 CSS3   [\[Index\]](#Index) <span id="html"/>         
 ### HTML5的一般概念
 -	渐进增强（progressive  enhancement）的理念能帮助你构建具有普适性的网站。不必要求网站对所有人来说体验都是一样的，关键是网站的内容是可访问的`<body>`开始标签以上的内容都是为浏览器和搜索引擎准备的。在每个HTML 页面的开头都有一些主要用于浏览器和搜索引擎（如Bing、Duck Duck Go、Google、Yahoo 等）的信息。浏览器不会将这些信息呈现给访问者。
 -	无障碍访问：内容对所有用户可用，不论其能力如何。万维网的力量在于其普适性。让包括残障人士在内的每个人都能访问万维网，
