@@ -110,9 +110,10 @@ role = "complementary"
 ### CSS
 -	CSS每条规则都由两个部分组成：选择器，声明块。
 -	CSS的注释：`/*...*/`
--	
+-	注意display中inline-block和block的区别
+-	HTML中的空格会被记录进DOM？
 ## JavaScript   [\[Index\]](#Index) <span id="js"/>      
-### 问题
+### TIPs
 -	为例减少对性能的影响，应尽量减少网页中的标记并减少对DOM的访问。还可以对js脚本进行压缩：去除脚本中多余的字符，如注释与多余的空格（现成的工具可用。）
 -	JavaScript代码有两种方式放入HTML中：
 	1. 将JavaScript代码放在head中的script之间：`<head><script> ...</script></head>`
@@ -125,6 +126,8 @@ role = "complementary"
 	3. 类似于HTML：`<!--`  在JavaScript中可以不用 `->`结尾 。（不推荐使用。）
 -	在JavaScript中内建数据类型使用的是pass-by-value（js中只有三种内建数据：数字，布尔，串。数组是对象）；
 -	为了实现渐进增强，一般要将JavaScript从html中分离：
+-	js中的函数没有重载的概念，所有同名的函数都会被最后一个同名函数所覆盖。调研函数时缺少指定变量的参数被认为是未定义，超过参数个数的值会被忽略。
+-	js的局部变量只能在当前函数中使用；js的全局变量可以在任何地方使用，包括在其他文件中。
 
 ```
 <!DOCTYPE html>
@@ -133,7 +136,7 @@ role = "complementary"
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>Example</title>
 <script>
-window.onload = function() {
+window.onload = function() {//匿名函数
   if (!document.getElementsByTagName) return false;
   var lnks = document.getElementsByTagName("a");
   for (var i=0; i<lnks.length; i++) {
@@ -171,12 +174,23 @@ function popUp(winURL) {
 -	***不使用var声明而直接使用的变量会成为全局变量***。
 -	JavaScript中的字符串可以使用单引号或双引号。注意转义字符 \ 。
 -	使用函数splice()删除数组中的一个元素并将使后面的元素的index减一。
-### 对象
+
+### 函数
+-	函数的定义
+```
+function fun(name , age , sex){//js中没有重载特性
+	//...
+}
+```
+
+### 对象与数组
 -	this对象：this表示当前的元素对象（例如对于a元素：this.href  ）。
+-	js中的对象使用`var obj = new Object();`创建；对象中可以添加函数和变量。
 -	JavaScript中new的用处：new用于创建一个类的实例，不使用new就相当于执行了一个函数，具体效果依靠函数的返回值。
 -	数组是JavaScript中特殊的内建对像（可以认为数组是对象的子类）。
+-	判断对象中是否存在某个属性：`var has_name = "name" in obj`，判断obj中是否有属性name，has_name为bool型变量。
 -	传统数组：
-	-	`var beatls = Array(4);`//4个元素
+	-	`var beatls = new Array(4);`//4个元素
 	-	`var beatls = Array();`//元素个数未知
 	-	`var beatls = [];`//元素个数未知
 	-	`var beatls = Array("John","Paul",3.14,"Tom","Ringo");`//数组中的元素类型不一定要一样
@@ -218,8 +232,9 @@ lennon.age = 99;//lennon中以前是没有age这个属性的，直接对其进�
 ### 操作
 -	运算符：
 	-	`"10" + 20 ;` //结果为 "1020"
-	-	`3 + "4"`;   //结果为"34"，数字和字符串的混合，最终的结果都是字符串。
+	-	`3 + "4"`;   //结果为"34"，**数字和字符串的混合，最终的结果都是字符串。**
 	-	`10 + 20 `;   //结果为30
+-	数字与字符串之间的转化：`(9).toString();`、`Number(<string>)`、`parseInt(<string>)`、`parseFloat(<string>)`
 -	JS中的“range for”：`for(val in container){ ... };`//若container是对象，则val为对象中属性的名字。val的次序与属性的位置没有直接的关系。
 -	JavaScript中的严格比较：`===` 同时比较值与类型，变量只有在完全相同时才会返回true。
 ```
@@ -241,27 +256,29 @@ false === "" ;//将返回false，因为false和""的类型不同。
 
 
 ## PHP  [\[Index\]](#Index) <span id="php"/>      
--	PHP 文件的后缀是 ".php"。
+### TIPs
+-	PHP 文件的后缀是 ".php"，PHP语句以分号结尾；
 -	PHP 脚本可放置于文档中的任何位置。PHP 脚本以` <?php `开头，以` ?>` 结尾。
 -	PHP中的单引号与双引号的区别在于：单引号中的数据不会被处理，双引号中的数据会被解析。
--	PHP 支持三种注释
-```
-<?php
-// 这是单行注释
-# 这也是单行注释
-/*
-这是多行注释块
-它横跨了
-多行
-*/
-```
 -	在 PHP 中，所有用户定义的函数、类和关键词（例如 if、else、echo 等等）都对大小写不敏感，故Echo、echo、ecHo...表达相同的意思。但在 PHP 中，所有变量都对大小写敏感，$color、$COLOR、$coLOr...表达不同的意思。
+-	PHP中的全局变量一般情况下只能在全局访问（函数内部不做特殊处理也不可），局部变量只能在函数内部被访问
+-	PHP 支持三种注释：
+```
+	<?php
+	// 这是单行注释
+	# 这也是单行注释
+	/*
+	这是多行注释块
+	它横跨了
+	多行
+	*/
+```
 
 ### 变量
 -	PHP中的变量都由 `$` 开头。PHP对变量的大小写敏感。
 -	变量会在首次为其赋值时被创建：`$x = 5;`
 -	可变变量：
--	定义常量：`define('MONEY' , 100);`使用时不加 $ ：`echo MONEY`。
+-	定义常量：`define('MONEY' , 100);`使用时不加 $ ：`echo MONEY`。define中的第三个参数是可选的，其表示常量的变量是否对大小写敏感，默认为false。
 -	PHP访问变量的方式：（假设变量在表单中的属性name 为 name-value：`<input type="text" name = "name-value"）`
 	-	$name-value  //要使用这种方式要先设置 `register_globals`为 on，不推荐这种方式
 	-	`$_POST['name-value']`  //推荐这种方式，如果method为get则将POST改为GET。
@@ -275,7 +292,7 @@ false === "" ;//将返回false，因为false和""的类型不同。
 
 -	函数之外声明的变量拥有 Global 作用域，***只能在函数以外进行访问***。函数内部声明的变量拥有 LOCAL 作用域，只能在函数内部进行访问。在函数内部访问全局变量的方式有两种：
 	1.	在函数内部使用关键字global再次对全局变量进行声明，而且名字要与全局变量名完全一致。
-	2.	php中的全局变量保存在名为$GLOBALS[index]的数组中，故可以使用这样的语法访问全局变量：`$GLOBAL['val_name']`         
+	2.	php中的全局变量保存在名为$GLOBALS[index]的数组中，故可以使用这样的语法访问全局变量：`$GLOBAL['val_name']` 
 
 ```
 <?php
@@ -325,9 +342,35 @@ define("GREETING", "Welcome to W3School.com.cn!");
 echo GREETING;
 ?>
 ```
+### PHP对象
+-	PHP中创建数组：`$cars=array("Volvo","BMW","SAAB");`
+
+```
+	<?php
+	$cars=array("Volvo","BMW","SAAB");
+	echo count($cars);    //返回数组的长度
+	echo "I like " . $cars[0] . ", " . $cars[1] . " and " . $cars[2] . ".";
+	?>
+```
+-	PHP关联数组（index不是整数，而是字符串）：
+
+```
+	$age=array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
+	//或
+	$age['Peter']="35";
+	$age['Ben']="37";
+	$age['Joe']="43";
+
+	echo "Peter is " . $age['Peter'] . " years old.";
+	//使用foreach遍历关联数组
+	foreach($age as $x=>$x_value) {//对于 "peter"=>"35" x对应peter，x_value对应 35
+	   echo "Key=" . $x . ", Value=" . $x_value;
+	   echo "<br>";
+	}
+```
 ### PHP运算符
 -	PHP的特殊运算符：
-	-	串连接运算符 `.` (一个点)。
+	-	串连接运算符 `.` (一个点)。串接赋值：`.=`
 	-	完全相等：===  （PHP是动态语言，但其内部实现也是有类型之分的 == 表示值相等，=== 表示类型也一样）
 	-	`!=`和`<>` 都表示不等，一般指值不同。
 	-	`!==` 只要不是 === 就是 `!==`
@@ -336,8 +379,8 @@ echo GREETING;
 	-	执行操作符：\` \`(一对反向单引号)，引号中的命令会被当做服务器端的命令行来执行，其返回值为命令的返回值。
 	-	类型操作符：`instanceof` ，`$objectNmae instanceof sampleClass`判断objectNmae是不是sampleClass这个类的对象。
 	-	delcare ,控制后面的代码的运行规则。
--	if...elseif...else ...
--	foreach($array as $value)...//PHP的foreach和特别，元素位置和其他语言完全相反。
+-	if...elseif...else ...和switch类似于C语法
+-	奇葩的 foreach($array as $value)...//PHP的foreach很特别，元素位置和其他语言完全相反。
 -	PHP中有类似于python的控制结构语法：
 
 ```
@@ -345,31 +388,6 @@ if($a == 0) :
 	echo ...;
 	exit;
 endif;
-```
--	PHP中创建数组：`$cars=array("Volvo","BMW","SAAB");`
-
-```
-<?php
-$cars=array("Volvo","BMW","SAAB");
-echo count($cars);    //返回数组的长度
-echo "I like " . $cars[0] . ", " . $cars[1] . " and " . $cars[2] . ".";
-?>
-```
--	PHP关联数组（index不是整数，而是字符串）：
-
-```
-$age=array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
-//或
-$age['Peter']="35";
-$age['Ben']="37";
-$age['Joe']="43";
-
-echo "Peter is " . $age['Peter'] . " years old.";
-//使用foreach遍历关联数组
-foreach($age as $x=>$x_value) {//对于 "peter"=>"35" x对应peter，x_value对应 35
-   echo "Key=" . $x . ", Value=" . $x_value;
-   echo "<br>";
-}
 ```
 
 ### 函数
@@ -380,10 +398,8 @@ function sum($x,$y) {
   return $z;//直接返回，PHP是动态语言
 }
 ```
--	数组的排序函数
-	-	sort() - 以升序对数组排序
-	-	rsort() - 以降序对数组排序
-	-	asort() - 根据值，以升序对关联数组进行排序
-	-	ksort() - 根据键，以升序对关联数组进行排序
-	-	arsort() - 根据值，以降序对关联数组进行排序
-	-	krsort() - 根据键，以降序对关联数组进行排序
+	
+### 运行环境
+-	ubuntu下默认的apache网页位置为：`/var/www/html`
+-	为了简化环境的搭建，整个系统使用phpstudy来搭建环境，在windows下可能需要安装vc11的依赖库，这需要从官网上下载。
+

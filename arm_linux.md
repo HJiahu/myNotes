@@ -27,8 +27,8 @@
 -	user:ssh_user pwd:jiahu123
 
 ### Ubuntu编译环境的配置
--	安装arm-linux-gcc：`sudo apt-get install arm-linux-gcc*`
--	安装arm-linux-g++：`sudo apt-get install arm-linux-g++*`
+-	安装arm-linux-gcc：`sudo apt-get install gcc-4.8-arm-linux-gnueabihf `
+-	安装arm-linux-g++：`sudo apt-get install g++-arm-linux-gnueabihf`
 
 ## 编译opencv
 -	cmake-gui operating system:Linux(大小写也不能错，必须写成Linux,否则cmake无法判断目标系统，版本填写板子上linux系统的版本号如3.12.10，处理器填arm),c:...gcc,c++:...g++,target root:bin （最好是当前系统如ubuntu的/usr）所处的目录。

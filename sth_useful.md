@@ -17,7 +17,7 @@ qxu1649550238.my3w.com
 在选择好MinGW后，就不再轻易的更改版本，否则以前编译的库可能就无法使用，例如使用MinGW4.8.1编译出的opencv库就无法在MinGW4.8.2下使用。
 
 
-wget -r -np -k http://xxx.com/xxx
+wget -p -r -np -k http://xxx.com/xxx
 -r,  --recursive（递归）          specify recursive download.（指定递归下载）
 -k,  --convert-links（转换链接）      make links in downloaded HTML point to local files.（将下载的HTML页面中的链接转换为相对链接即本地链接）
 -p,  --page-requisites（页面必需元素）    get all images, etc. needed to display HTML page.（下载所有的图片等页面显示所需的内容）
