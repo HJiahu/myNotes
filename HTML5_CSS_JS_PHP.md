@@ -1,5 +1,5 @@
 本文摘自：HTML5与CSS3基础教程；
--	目录：    
+-	目录：
 	-	[web环境](#environment)
 	-	[HTML5 CSS3](#html)	
 	-	[JavaScript](#js)
@@ -402,4 +402,22 @@ function sum($x,$y) {
 ### 运行环境
 -	ubuntu下默认的apache网页位置为：`/var/www/html`
 -	为了简化环境的搭建，整个系统使用phpstudy来搭建环境，在windows下可能需要安装vc11的依赖库，这需要从官网上下载。
+-	安装yii2的两种方法，第二种更方便：
+	-	安装[composer](https://getcomposer.org/Composer-Setup.exe)。
+	-	安装完PHPStudy之后选择组合为Apache和php5.5，在php55文件夹下将php.ini中`;extension=php_openssl.dll`这行前的分号去掉。
+	-	在对应的www文件夹下执行指令：
+		-	`composer global require "fxp/composer-asset-plugin:~1.1.1"`
+		-	`composer create-project --prefer-dist yiisoft/yii2-app-basic basic`
+		-	这样将会在当前目录下产生一个basic文件夹，这是基础yii2文档文件。
+-	直接使用文件安装yii2
+	-	下载[yii2文件][1]
+	-	将其中的basic文件夹复制到PHPstudy中的www文件夹下。
+	-	修改 basic 文件夹下 config/web.php 文件，给 cookieValidationKey 配置项添加一个密钥（我设置的是：.abc123456）
+	-	修改apache文件夹conf下的httpd.conf文件，将DocumentRoot改为yii2根目录`F:\phpStudy\WWW\basic\web`。
+	-	重启PHPstudy
+-	通过下面的URL来访问yii2默认产生的web程序：http://localhost/basic/web/index.php
 
+
+
+
+[1][https://github.com/yiisoft/yii2/releases/download/2.0.8/yii-basic-app-2.0.8.tgz]

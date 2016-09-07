@@ -7,6 +7,7 @@
 	-	`mysql_secure_installation `//一路yes,为数据库增加安全功能
 -	以root权限登录：`mysql -u root -p`  ( `mysql -h hotname -u username -p`缺省的host为当前机器，缺省的username为登录系统的用户名)
 -	创建用户：`insert into mysql.user(Host,User,Password) values("localhost","username",passward("123456"));`。也可以直接使用grant命令在授予权限的同时创建用户。
+-	无论使用什么方式创建用户都需刷新权限表：flush privileges;使用户生效。
 -	为用户授权：见下面grant命令（需要使用root登录）。
 -	可以直接执行包含sql语句的文件：`> mysql -h host -u bookorama -D books -p < bookorama.sql`
 -	删除匿名访问权限：
@@ -21,7 +22,7 @@
 //用户典型的权限设置
 mysql> grant select, insert, update, delete, index, alter, create, drop
 	-> on books.*          #在这里books为数据库名，books.*表示books中的所有表。*.*表示所有数据库中的表。
-	-> to username identified by ‘'pwd';
+	-> to username identified by ‘'pwd'; #flush privileges;使用户生效。
 //取消用户的某些权限
 //删除用户username
 revoke  all privileges ,grant

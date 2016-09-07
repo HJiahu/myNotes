@@ -18,6 +18,7 @@ qxu1649550238.my3w.com
 
 
 wget -p -r -np -k http://xxx.com/xxx
+
 -r,  --recursive（递归）          specify recursive download.（指定递归下载）
 -k,  --convert-links（转换链接）      make links in downloaded HTML point to local files.（将下载的HTML页面中的链接转换为相对链接即本地链接）
 -p,  --page-requisites（页面必需元素）    get all images, etc. needed to display HTML page.（下载所有的图片等页面显示所需的内容）
@@ -27,3 +28,4 @@ wget -p -r -np -k http://xxx.com/xxx
 
 vim的文件格式不兼容vs，直接将用于vim的文件复制到vs下回出现很多意想不到的错误。
 
+github token:fda32c03189037ca36db5a8d7caea1a7d1bbec3b
