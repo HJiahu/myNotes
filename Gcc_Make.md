@@ -102,13 +102,13 @@ gcc  testfun.o test.o -o test //将testfun.o和test.o链接成test
 -	在Makefile 中,规则的顺序是很重要的,因为,Makefile 中只应该有一个最终目标,其它的目标都是被这个目标所连带出来的,所以一定要让 make 知道你的最终目标是什么。一般来说,定义在 Makefile 中的目标可能会有很多,但是第一条规则中的目标将被确立为最终的目标。如果第一条规则中的目标有很多个,那么,第一个目标会成为最终的目标。make 所完成的也就是这个目标。
 
 -	变量的定义。
-> 在 Makefile 中我们要定义一系列的变量,变量一般都是字符串,这个有点像你 C 语言中的宏,当 Makefile 被执行时,其中的变量都会被扩展到相应的引用位置上。变量的定义方式：sourcefiles = 1.cpp 2.cpp ...变量的引用方式：$(sourcefiles),$(sourcefiles)会像c中打宏定义一样被展开。
+> 在 Makefile 中我们要定义一系列的变量,变量一般都是字符串,这个有点像 C 语言中的宏,当 Makefile 被执行时,其中的变量都会被扩展到相应的引用位置上。变量的定义方式：sourcefiles = 1.cpp 2.cpp ...变量的引用方式：$(sourcefiles),$(sourcefiles)会像c中打宏定义一样被展开。
 
 -	文件指示。
 > 其包括了三个部分,一个是在一个 Makefile 中引用另一个 Makefile,就像C 语言中的 include 一样;另一个是指根据某些情况指定 Makefile 中的有效部分,就像 C 语言中的预编译 #if 一样;还有就是定义一个多行的命令。
 
 -	注释。
-> Makefile 中只有行注释,和 UNIX 的 Shell 脚本一样,其注释是用“#”字符开头。如果你要在你的 Makefile 中使用“#”字符,可以用反斜框进行转义,如:\# 。最后,还值得一提的是,在 Makefile 中的命令,必须要以 Tab 键开始。
+> Makefile 中只有行注释,和 UNIX 的 Shell 脚本一样,其注释是用“#”字符开头。如果你要在你的 Makefile 中使用“#”字符,可以用反斜框进行转义,如:\# 。最后,还值得一提的是,**在 Makefile 中的命令,必须要以 Tab 键开始。**
 
 ### makefile的语法规则（注意在makefile中指令必须以tab键开头，在vim中设定：set tabstop=4）
 
@@ -126,8 +126,6 @@ targets : prerequisites
 ```
 > 冒号前是需要生成的文件，冒号后面是生成这个文件所需要的文件(文件依赖) 。只有在冒号后面的文件比冒号前的文件新，指令command才会被执行。     
 
-第一行中冒号前面的edit是make要生成的目标文件，而后面的.o文件是生成这个文件所依赖文件。第二行中的cc是编译指令，只有在.o文件中有比edit新的文件存在或在edit这个文件不存在，第二行的指令行才会被执行，这样可以减少重复编译。因为clean后面没有文件，所以make不会主动的执行其后面的指令，但可以显示的调用这条指令：make clean 
-
 例2：（这段代码的作用和例1是一样的）
 ```
 objects = main.o kbd.o command.o display.o insert.o search.o files.o utils.o
@@ -135,7 +133,7 @@ objects = main.o kbd.o command.o display.o insert.o search.o files.o utils.o
 edit : $(objects)
 	　　cc -o edit $(objects)
 
-clean :
+clean :#因为clean后面没有依赖文件所以clean不会主动被执行，需要使用指令make clean
 	　　rm edit $(objects)     
 ```
 
@@ -152,10 +150,7 @@ main.o : defs.h     #自动的将main.cpp当作依赖文件。当make看见.o文
 clean :
 	-rm edit $(objects)
 ```
-P伪目标一般没有依赖的文件。但是，我们也可以为伪目标指定所依赖的文件。伪目标同样
-可以作为“默认目标”，只要将其放在第一个。一个示例就是，如果你的 Makefile 需要一口气
-生成若干个可执行文件，但你只想简单地敲一个 make 完事，并且，所有的目标文件都写在一
-个 Makefile 中，那么你可以使用“伪目标”这个特性：HONY 意思表示 clean 是一个“伪目标”。而在 rm 命令前面加了一个小减号的意思不要管可能出现的某些错误,继续做后面的事。 
+伪目标一般没有依赖的文件。但是，我们也可以为伪目标指定所依赖的文件。伪目标同样可以作为“默认目标”，只要将其放在第一个。一个示例就是，如果你的 Makefile 需要一口气生成若干个可执行文件，但你只想简单地敲一个 make 完事，并且，所有的目标文件都写在一个 Makefile 中，那么你可以使用“伪目标”这个特性：HONY 意思表示 clean 是一个“伪目标”。而在 rm 命令前面加了一个小减号的意思不要管可能出现的某些错误,继续做后面的事。 
 ```
 all : prog1 prog2 prog3
 .PHONY : all
@@ -168,9 +163,8 @@ cc -o prog3 prog3.o sort.o utils.o
 ```
 
 ### 文件搜索
-VPATH变量：指定额外的搜索路径，VPATH=/usr/:../src:./include/  此时VPATH变量中定义了3个路径，不同的路径使用冒号来分隔        
-vpath关键字：	vpath关键字有三种使用方法          
-
-1.	vpath %.c /usr/include  其中第一个参数是pattern，第二个参数是路径。在路径下寻找符合pattern的文件，在这里就是寻找后缀为.c的文件。
-2.	vpath %.c 清除后缀为.c的pattern路径，此前定的关于%.c模式的路径都会被删除。
-3.	vpath  删除所有已经设置后打搜索路径。#百分号表示匹配若干个字符，如果名称中含有百分号，此时就要使用转意字符\，类似于\%
+*	VPATH变量：指定额外的搜索路径，VPATH=/usr/:../src:./include/  此时VPATH变量中定义了3个路径，不同的路径使用冒号来分隔        
+vpath关键字：	vpath关键字有三种使用方法
+	1.	vpath %.c /usr/include  其中第一个参数是pattern，第二个参数是路径。在路径下寻找符合pattern的文件，在这里就是寻找后缀为.c的文件。
+	2.	vpath %.c 清除后缀为.c的pattern路径，此前定的关于%.c模式的路径都会被删除。
+	3.	vpath  删除所有已经设置后的搜索路径。#百分号表示匹配若干个字符，如果名称中含有百分号，此时就要使用转意字符\，类似于\%

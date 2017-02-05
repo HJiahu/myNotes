@@ -1,7 +1,7 @@
 本文以MySQL为例
 ### mySQL的设置
--	安装（因为mysql被oracle收购，应该算纯开源，故使用mariabd替代）
-	-	`yum -y install mariadb* `
+-	安装
+	-	`yum -y install mariadb* ` 安装mariadb，安装mysql的方式是同样的
 	-	`systemctl start mariadb.service `
 	-	`systemctl enable mariadb.service `
 	-	`mysql_secure_installation `//一路yes,为数据库增加安全功能
@@ -103,6 +103,7 @@ create table book_reviews
 	-	set 和 enum
 ### SQL注意事项：
 -	sql对大小写不敏感，但数据库和表名对大小写敏感。
+- create 语句中UNSIGNED不能放在INT之前，否则无法创建表。
 ### sql语句示例：
 
 1. 选区指定的列
