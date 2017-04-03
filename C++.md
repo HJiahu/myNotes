@@ -1,4 +1,5 @@
 本文摘自：Thinking in C++ Vol.1  （添加部分C++ primer内容。待续...）
+
 -	目录：<span id="Index"/>
 	-	[第零章：help and tips ](#0)		
 	-	[第一章：对象](#1)
@@ -44,17 +45,17 @@ Label:;
 -	头文件中不应该使用using指令。
 -	数组名在很多时候会被编译器转化为指针来使用（除了引用），但不是所有情况下，因为数组和指针是两种完全不同的类型，做数组与指针之间的转换只是运行时的需要。当auto的推导变量是数组时，编译器返回的类型是指针，因为auto在推导类型时必须进行赋值操作而便准c++中又不允许数组之间的赋值。但当decltype中的变量是数组时，声明的变量依旧是数组。当数组进行下标运算时，编译器自动将数组名转化为指针类型。
 
-```
-char arr[9];
-void Print(const char *);
-void Print(cosnt char arr[]);
-void Print(const char[]);
-void Print(const char[9]);//上面四行的效果是相同的，参数被传递过来之后都会被转化为:char *类型
 
-void Print(const char str[9]) 和 
-void Print (const char (*str)[9])的区别在于后者的str的步长为9，而前者为1
-decltype(arr) *p_ch = &arr; //在这里，p_ch 的   指针步长为9   
-```
+	char arr[9];
+	void Print(const char *);
+	void Print(cosnt char arr[]);
+	void Print(const char[]);
+	void Print(const char[9]);//上面四行的效果是相同的，参数被传递过来之后都会被转化为:char *类型
+	
+	void Print(const char str[9]) 和 
+	void Print (const char (*str)[9])的区别在于后者的str的步长为9，而前者为1
+	decltype(arr) *p_ch = &arr; //在这里，p_ch 的   指针步长为9   
+
 -	注意这种类型转化：`while(cin >> string )`while中的返回值是cin ，而系统自动的将cin转化为了布尔变量，`cin>> string `执行成功则返回true，否则返回false。
 -	因为标准并没有对有符号型数据的位运算做规定，故最好只将位运算用在无符号数据上。
 -	对于左移运算，补零。对于右移运算，对于无符号型，补上值为0的二进制位，对于有符号型，要么插入符号的副本，要么插入值为0的二进制位，要视具体环境而言。
@@ -378,30 +379,30 @@ c中和c++中对const变量的定义有本质的差别：
 
 **c++中使用类似c中使用指针的方法改变const变量的行为没有定义（未定义行为），也就是更改结果与编译器实现有关。**    
 例如：
--	代码1： c++
-```
-    #include<iostream>
+代码1： c++
+
+	#include<iostream>
 	using namespace std;
-    #define pr(x) (cout<<#x##" = " <<x<<endl);      
+	#define pr(x) (cout<<#x##" = " <<x<<endl);      
 	int main()
 	{
 		volatile const  int m = 9;
 		pr(m)
 		int *pint =(int *) &m;
-
+	
 		　 *pint = 6;
 		pr(m)
 		pr(*pint)
-
+	
 		system("pause");
-
+	
 	}
-```
--	代码2： c++
-```
-    #include<iostream>
+
+代码2： c++
+
+	#include<iostream>
 	using namespace std;
-    #define pr(x) (cout<<#x##" = " <<x<<endl);  
+	#define pr(x) (cout<<#x##" = " <<x<<endl);  
 	int main()
 	{
 		const  int m = 9;
@@ -413,31 +414,31 @@ c中和c++中对const变量的定义有本质的差别：
 		*pint = 6;
 		pr(m)
 		pr(*pint)
-
+	
 		system("pause");
-
+	
 	}	
-```
--	代码3： c
-```
-    #include<stdio.h>
+
+代码3： c
+
+	#include<stdio.h>
 	using namespace std;   
-    #define  pr(x) {printf(#x);printf("=") ; printf("%d\n" , x);}
+	#define  pr(x) {printf(#x);printf("=") ; printf("%d\n" , x);}
 	int main()
 	{
 		const  int m = 9;
 		//c编译器一定为常量开辟空间
 		pr(m)
 		int *pint =(int *) &m;
-
+	
 		*pint = 6;
 		pr(m)
 		pr(*pint)
-
+	
 		system("pause");
-
+	
 	}
-```
+
 -	代码1 c++编译输出：`m = 9 m = 6 *pint = 6`           
 -	代码2 c++编译输出：`m = 9 m = 9 *pint = 6`	         
 -	代码3 c编译输出：`m = 9 m = 6 *pint = 6`               
@@ -539,13 +540,14 @@ const成员函数的声明和定义
 1. 作用域解析法，类似于std::cout  优先级最高
 2. 使用声名，类似于using std::cout例如：下面的代码中mylib1和mylib2中都有name。使用声名获得名字要比使用指令方法引入的名字“优先级”更高。优先级第二。
 3. 使用指令，类似于 using namespace std ;使用指令可以使我们直接进入整个名字空间。优先级第三
-```
+
 	#include "fun1.h"
 	using namespace std;
 	int main()
 	{
 		{//名字空间的声名只给出了名字，没有类型信息，故声名引入了这个名字的重载集合。
-		using mylib2::name;//使用声名,那么在后面使用的name都是来自mylib2中。若想使用mylib1中的name，必须完整的限定。
+		//使用声名,那么在后面使用的name都是来自mylib2中。若想使用mylib1中的name，必须完整的限定。
+		using mylib2::name;
 		using namespace mylib1;
 		name();//这是mylib2中的name()
 		mylib1::name();//完整的限定才能调用mylib1中的name。
@@ -554,7 +556,7 @@ const成员函数的声明和定义
 		salute.sayhello();
 	   // name();
 	}
-```
+
 
 类中的静态变量：
 -	类中的静态变量需要在类的定义文件中定义的一个原因在于C++的编译原理：C++是分文件进行编译的，对于全局变量而言在整个项目中有且只能有一个。类内的静态变量是共享的且与全局变量使用相同的内存空间，故类内的静态变量要在类的定义文件中进行定义。如果不这样，使用这个类的每一个编译单元中都会出现这个变量，从而出现了的重复定义的错误。
