@@ -19,12 +19,13 @@ git add -A                #将当前文件夹下的所有文件保存到暂存�
 git add -u                #将本地已经被跟踪且被修改的文件保存到暂存区。
 ```
 	2. 用命令git commit告诉Git，把文件提交到仓库： 
-```
-git commit -m "wrote a readme file"     #将文件保存到库中。存在 -m 和其后面的描述是为了标记操作，便于以后纠错。
-```
+
+	> git commit -m "wrote a readme file"   将文件保存到库中。存在 -m 和其后面的描述是为了标记操作，便于以后纠错。  git	commit	--amend 将当前的变更添加到最近那次的commit中，这样就不用添加一个新的commit
+
+
 4. git status命令可以让我们时刻掌握仓库当前的状态。
 5. 如果git status告诉你有文件被修改过，用git diff可以查看修改内容。
-6. git log命令显示从最近到最远的提交日志。如果嫌输出信息太多，可以试试加上`--pretty=oneline`参数。输出的一串数字是版本号，可以截取这串数字的一部分来代表某一个版本。
+6. git log命令显示从最近到最远的提交日志。如果嫌输出信息太多，可以试试加上`--pretty=oneline`参数。输出的一串数字是版本号，可以截取这串数字的一部分来代表某一个版本。一个常用的选项是-p	，用来显示每次提交的内容差异。	你也可以加上	-2 来仅显示最近两次提交。  
 7. 我们要把当前版本回退到上一个版本，就可以使用git reset命令：` git reset --hard HEAD^ `HEAD相当于一个指针，其指向当前的版本，HEAD^表示前一个版本，HEAD^^表示前两个版本...HEAD~100表示前第100个版本。
 8. 使用指令***git reflog***可以看见未来的版本号，如果你返回到了一个过去的版本，但现在想回到未来的版本，这个指令就可以找到未来的版本。
 10. git与其他版本库的一个不同之处就是git存在暂存区的概念，只有同时使用git add ***  和git commit -m *** 才会将更改保存到版本库中。使用git add ***将文件保存在暂存区，再使用git commit -m *** 将文件提交至版本库。 
@@ -32,13 +33,14 @@ git commit -m "wrote a readme file"     #将文件保存到库中。存在 -m �
 12. 如果想将版本库中的文件索引删除而不更改工作区间的文件，可以使用指令git rm。 
 
 ### 远程库：
--	创建ssh  key  ：ssh-keygen -t rsa -C  "email@email"。一般而言与.git相同的文件下需要有.ssh文件夹，这样可以不用每次都输入密码。你可以创建多个sshkey，但公钥都必须上传到你的github上。一般在windows下生成的key会保存在用户的根目录下。判断sshkey是否可用  ssh -T git@github.com
--	在gitgub下创建一个版本库。
+-	创建ssh  key  ：ssh-keygen -t rsa -C  "email@email"。一般而言与.git相同的文件下需要有.ssh文件夹，这样可以不用每次都输入密码。你可以创建多个ssh key，但公钥都必须上传到你的github上。一般在windows下生成的key会保存在用户的根目录下。判断sshkey是否可用  ssh -T git@github.com
+-	`git remote -v` 可以查看
 -	为远程版本库取个别名：git remote add origin git@github.com:yourgithubname/yourrepository.git在这里，origin是你远程库的别名，当然可以是其他的名字。
 -	将本地的库推送到远程：git push -u origin master ，origin是你远程版本库的别名，在推送一个全新的库时，一般要加上参数 -u 这样可以使远程的库与新库进行关联，当推送一个旧库时可以不加参数-u。
 -	从云端克隆文件：git clone git@github.com:yourgithubname/repository.git
 -	从云端更新本地库：git pull
 -	将本地文件推送到云端：git push <remote> [branch]
+-	git	fetch	[remote-name]  这个命令会访问远程仓库，从中拉取所有你还没有的数据。	执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。
 
 ### git分支
 -	分支的作用：
@@ -52,3 +54,8 @@ git commit -m "wrote a readme file"     #将文件保存到库中。存在 -m �
 ### 关于Git的其他内容
 -	使git忽略特定的文件和文件夹：编辑文件 .git/info/exculde, 按照要求在其中添加不想提交的文件类型和文件夹的名字。
 -	Git中每一个版本节点都是所有跟踪文件的一个快照，类似于当前所有文件的一个备份，只不过对于那些相对于上一版而言没有变化的文档，Git会使用一个指针直接指向上一节点中对应的文件。
+
+### Git基本概念
+Git	更像是把数据看作是对小型文件系统的一组快照。	每次你提交更新，或在	Git	中保存项目状态时，它主要对当时的全部文件制作一个快照并保存这个快照的索引。	为了高效，如果文件没有修改，Git	不再重新存储该文件，而是只保留一个链接指向之前存储的文件。	Git	对待数据更像是一个快照流。
+
+Git	中所有数据在存储前都计算校验和，然后以校验和来引用。这意味着不可能在	Git	不知情时更改任何文件内容或目录内容。这个功能建构在Git底层，是构成	Git	哲学不可或缺的部分。若你在传送过程中丢失信息或损坏文件，Git就能发现。
