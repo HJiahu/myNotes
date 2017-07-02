@@ -1,8 +1,8 @@
 caffe C++接口使用配置
-===============================================
-
-用vs2013创建caffe工程
 -----------------------------------------------
+
+含caffe源码的配置方式
+===============================================
 ### 编译windows caffe [参考][0]
 
 我选择的是 Visual Studio 2013, CPU only, Python 2.7 Caffe Debug，而且要在自己的电脑上[编译][0]成功。从网页上下载的caffe Debug包中缺少一些依赖包。
@@ -95,6 +95,55 @@ caffe中使用的gtest版本比较低，如果想在自己的系统中使用gtes
 
 可能需要重新启动电脑使环境变量生效
 
+
+不含caffe源码的配置方式（仅适用caffe的头文件）
+===============================================
+### 编译caffe （这里编译release版）
+*	修改build_win.cmd 中70行左右的内容：
+
+		::use vs2013
+	    if NOT DEFINED MSVC_VERSION set MSVC_VERSION=12 
+	    if NOT DEFINED WITH_NINJA set WITH_NINJA=1
+	    if NOT DEFINED CPU_ONLY set CPU_ONLY=1
+	    if NOT DEFINED CMAKE_CONFIG set CMAKE_CONFIG=Release
+	    if NOT DEFINED USE_NCCL set USE_NCCL=0
+	    if NOT DEFINED CMAKE_BUILD_SHARED_LIBS set CMAKE_BUILD_SHARED_LIBS=1
+	    if NOT DEFINED PYTHON_VERSION set PYTHON_VERSION=2
+        :: just use the interface of C++ ,no python and matlab support
+	    if NOT DEFINED BUILD_PYTHON set BUILD_PYTHON=0
+	    if NOT DEFINED BUILD_PYTHON_LAYER set BUILD_PYTHON_LAYER=0
+	    if NOT DEFINED BUILD_MATLAB set BUILD_MATLAB=0
+	    if NOT DEFINED PYTHON_EXE set PYTHON_EXE=python
+	    if NOT DEFINED RUN_TESTS set RUN_TESTS=0
+	    if NOT DEFINED RUN_LINT set RUN_LINT=0
+	    if NOT DEFINED RUN_INSTALL set RUN_INSTALL=1
+*	修改download\_prebuilt\_dependencies.py中的内容（方法与原因与上同）
+### 配置vs2013
+*	配置当前项目为Release x64
+*	包含目录为
+
+		G:\caffe_rel\build\libraries\include\boost-1_61
+		G:\caffe_rel\build\libraries\include
+		G:\caffe_rel\build\install\include
+*	库目录为
+
+		G:\caffe_rel\build\lib
+		G:\caffe_rel\build\libraries\lib
+		C:\CNNs\opencv_with_world\x64\vc12\lib
+*	添加两个预处理宏
+
+		USE_OPENCV
+		CPU_ONLY
+*	附加库为
+	
+		opencv_world310.lib
+		gflags.lib
+		glog.lib
+		libprotobuf.lib
+		libprotoc.lib
+		caffe.lib
+		proto.lib
+*	与上同，修改boost_thread-vc120-mt-gd-1_61.lib等文件的名称
 
 
 [0]:https://github.com/BVLC/caffe/tree/windows
