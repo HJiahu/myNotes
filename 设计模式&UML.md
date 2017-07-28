@@ -1,14 +1,20 @@
-## 读大话设计模式
+## 设计模式总结
 ### UML示例
 <img src="images/UML_sample.jpg" style="width:700px" >
   
 *	组合比聚合的关联更加强烈，组合表示产生一个新对象且子对象是必须的（例如四肢，躯干和头组合成人）；聚合表示若的关联，例如大雁群由大雁聚合而成。
+
+### *参考资料：*  
+
+*	[图说设计模式][9]    
+*	[design-patterns-for-humans][2]  
+*	[设计模式迷你手册][3]   
+*	[Java实例][7]  
+
 ### 面向对象的基本概念
 *	面向对象的三大法宝：封装、继承、多态（不同的对象对同一消息作出响应，不同的对象采取不同的行为方式。）
 *	面向对象常见的思想
 	*	代码的责任分解
-
-
 
 ### 面向对象设计基本原则【[参考][4]】
 *	单一职责原则（SRP）	
@@ -43,13 +49,10 @@
 *	稳定抽象原则（SAP）
 
 ## 常见设计模式【[参考][8]】
-设计模式一般分为3类，创建型、结构型和行为型【[参考][1]】
-
-*参考资料：*  
-[图说设计模式][9]
-[design-patterns-for-humans][2]  
-[设计模式迷你手册][3]   
-[Java实例][7]  
+*	设计模式一般分为3类，创建型、结构型和行为型【[参考][1]】
+	*	创建型：Creational patterns are focused towards how to instantiate an object or group of related objects.
+	*	结构型：Structural patterns are mostly concerned with object composition or in other words how the entities can use each other. Or yet another explanation would be, they help in answering "How to build a software component?"
+	*	行为型：It is concerned with assignment of responsibilities(algorithms) between the objects. What makes them different from structural patterns is they don't just specify the structure but also outline the patterns for message passing/communication between them. Or in other words, they assist in answering "How to run a behavior in software component?"
 
 ### 创建型
 > Creational patterns are focused towards how to instantiate an object or group of related objects.
@@ -76,24 +79,19 @@
 		}
 
 #### 工厂方法模式
-> 工厂模式根据抽象程度的不同分为三种：简单工厂模式（也叫静态工厂模式）、工厂方法模式、以及抽象工厂模式。
-
 *	定义：定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method 使一个类的实例化延迟到其子类。每添加一个新的类型都要继承并定义两个新的类，其中一个为需要添加的类型，另一个为创建这个类型的类。
 *	包含角色
 	*	Product：抽象产品
 	*	ConcreteProduct：具体产品
 	*	Factory：抽象工厂
 	*	ConcreteFactory：具体工厂
-*	优点：克服了简单工厂无法满足OCP原则的缺陷
+*	优缺点：克服了简单工厂无法满足OCP原则的缺陷，但问题是每一个类对应一个工厂类，不便于维护。
 
 		Factory * fc = new ConcreteFactory();
 		Product * prod = fc->factoryMethod();
 
-
 #### 抽象工厂模式
-> 与工厂方法模式的区别就在于，工厂方法模式针对的是一个产品等级结构；而抽象工厂模式则是针对的多个产品等级结构。    
-
-*	以数据库为例，为了简化数据库的操作我们一般对每一个表都创建一个类。为了移植，每个不同的数据库我们都要重写这些类。如果使用工厂方法模式，那么每一个表的创建都要使用一次工厂（每个表有不同的工厂），修改起来依然很麻烦。使用抽象工厂模式，表的创建只使用一个工厂就好了，修改起来也相对简单。
+*	定义：提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。抽象工厂模式又称为Kit模式，属于对象创建型模式。
 
 *	包含角色
 	*	Product：抽象产品（族）
@@ -101,9 +99,31 @@
 	*	Factory：抽象工厂
 	*	ConcreteFactory：具体工厂
 
+*	以数据库为例，为了简化数据库的操作我们一般对每一个表都创建一个类。为了移植，每个不同的数据库我们都要重写这些类。如果使用工厂方法模式，那么每一个表的创建都要使用一次工厂（每个表有不同的工厂），修改起来依然很麻烦。使用抽象工厂模式，表的创建只使用一个工厂就好了，修改起来也相对简单。
+*	示例代码
+
+		//不同的工厂可以生产不同的产品族
+		AbstractFactory * fc = new ConcreteFactory1();
+		AbstractProductA * pa =  fc->createProductA();
+		AbstractProductB * pb = fc->createProductB();
+		pa->use();
+		pb->eat();
+		
+		AbstractFactory * fc2 = new ConcreteFactory2();
+		AbstractProductA * pa2 =  fc2->createProductA();
+		AbstractProductB * pb2 = fc2->createProductB();
+		pa2->use();
+		pb2->eat();
+
 #### 建造者模式
 *	将一个复杂对象的构建与它的表示分离（把创建过程抽象出来），使得同样的构建过程可以创建不同的表示。   
 *	我们可以看到，建造者模式与工厂模式是极为相似的，总体上，**建造者模式仅仅只比工厂模式多了一个“导演类”的角色**。在建造者模式的类图中，假如把这个导演类看做是最终调用的客户端，那么图中剩余的部分就可以看作是一个简单的工厂模式了。   
+*	角色
+	*	Builder：抽象建造者
+	*	ConcreteBuilder：具体建造者
+	*	Director：指挥者
+	*	Product：产品角色
+*	示例代码
 
 		//建造者只知道“建造”，需要director给出具体的顺序（过程）
 		ConcreteBuilder * builder = new ConcreteBuilder();
@@ -112,9 +132,13 @@
 		Product * pd =  director.constuct();
 		pd->show();
 
+*	应用说明
+	> 复杂对象相当于一辆有待建造的汽车，而对象的属性相当于汽车的部件，建造产品的过程就相当于组合部件的过程。由于组合部件的过程很复杂，因此，这些部件的组合过程往往被“外部化”到一个称作建造者的对象里，建造者返还给客户端的是一个已经建造完毕的完整产品对象，而用户无须关心该对象所包含的属性以及它们的组装方式，这就是建造者模式的模式动机。
+#### 单例模式
+*	定义：保证一个类仅有一个实例，并提供一个访问它的全局访问点。
+
 #### 原型模式
-> 用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象。原型模式主要用于对象的复制。  
-> 实现一个接口（clone），重写一个方法即完成了原型模式。  
+*	用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象。原型模式主要用于对象的复制。实现一个接口（clone），重写一个方法即完成了原型模式。  
 
 
 
@@ -122,17 +146,25 @@
 > Structural patterns are mostly concerned with object composition or in other words how the entities can use each other. Or yet another explanation would be, they help in answering "How to build a software component?"
 
 #### 装饰模式
-> 动态的给一个对象添加一些额外的职责，就增加功能而言，装饰模式比生成子类更为灵活。   
-> 一般而言装饰模式不添加新的方法，只重载现有的方法并添加一些功能。   
-> *新类中包含旧类(这是聚合的原因)*，从而保存了旧类中的功能新类继承于旧类，从而实现多态。
+*	动态地给一个对象增加一些额外的职责(Responsibility)，就增加对象功能来说，装饰模式比生成子类实现更为灵活。其别名也可以称为包装器(Wrapper)，与适配器模式的别名相同，但它们适用于不同的场合。根据翻译的不同，装饰模式也有人称之为“油漆工模式”，它是一种对象结构型模式。 
+*	*新类中包含旧类(这是聚合的原因)*，从而保存了旧类中的功能新类继承于旧类，从而实现多态。
+*	角色
+	*	Component: 抽象构件
+	*	ConcreteComponent: 具体构件
+	*	Decorator: 抽象装饰类
+	*	ConcreteDecorator: 具体装饰类
+*	示例代码
 
-    Phone *iphone = new NokiaPhone("6300");  
-    Phone *dpa = new DecoratorPhoneA(iphone); //装饰，增加挂件  
-    Phone *dpb = new DecoratorPhoneB(dpa);    //装饰，屏幕贴膜  
-    dpb->ShowDecorate();  
+	    Phone *iphone = new NokiaPhone("6300");  
+	    Phone *dpa = new DecoratorPhoneA(iphone); //装饰，增加挂件  
+	    Phone *dpb = new DecoratorPhoneB(dpa);    //装饰，屏幕贴膜  
+	    dpb->ShowDecorate();  
 
 #### 外观模式（facade）
 * 　定义：提供一个简易的接口，来访问子系统中的一群接口。外观定义了一个高层接口，让子系统容易使用。
+* 　角色
+	*	Facade: 外观角色
+	*	SubSystem:子系统角色
 *	三种情况：  
 	*	系统模块与模块之间的外观  
 	*	为子系统创建一个外观模式  
@@ -152,6 +184,17 @@
 		Target * tar = new Adapter(adaptee);
 		tar->request();
 
+#### 组合模式
+*	定义：将对象组合成树形结构以表示“部分-整体”的层次结构。Composite使得用户对单个对象和组合对象的使用具有一致性。
+*	包含的角色
+	*	component：用于实现所有类共有接口的默认行为；
+	*	leaf：组合模式中没有子节点的对象，继承于component；
+		*	透明方式：leaf一般不能再添加其他元素，但componet中有add和remove，如果在leaf中重载了这两个方法，则称为透明方式；
+		*	安全方式：componet中不声明add和remove方法，在composite中添加这两个方法，这样做的结果是leaf和composite的接口不同，客户端需要做判断；
+	*	composite：可以添加子节点（包括其他composite）的对象，继承于component
+*	例子：
+	>在office word中一个字，一个句子，一个段落可以执行的操作是相同的，而句子、段落都是由字组成的，那么可以认为句子与段落是composite，由字、句子或段落组成，那么对句子的操作就是对每一个字的操作（对composite的操作将递归的发送到composite中的每一个元素）。
+*	何时应该使用组合模式：需求中体现了部分与整体层次的结构，或者你希望用户可以忽略组合对象与单个对象的不同，统一地使用组合结构中的所有对象。
 
 #### 代理模式
 *	为其他对象提供一种代理以控制对这个对象的访问。
@@ -161,10 +204,30 @@
 	*	保护代理
 	*	智能指引，例如引用计数
 
+#### 桥接模式（Bridge Pattern）
+*	定义：将抽象部分与它的实现部分分离，使它们都可以独立地变化。它是一种对象结构型模式，又称为柄体(Handle and Body)模式或接口(Interface)模式。
+*	理解桥接模式，重点需要理解如何将抽象化(Abstraction)与实现化(Implementation)脱耦，使得二者可以独立地变化。
+*	包含的角色
+	*	Abstraction：抽象类
+	*	RefinedAbstraction：扩充抽象类
+	*	Implementor：实现类接口
+	*	ConcreteImplementor：具体实现类
+*	示例代码：
+	
+		//如果pa中的operation使用pImp来画形状，那么提供pa不同的pImp就可以画出不同的线
+		//虽然可以使用继承来实现不同颜色的形状，但这样将有m*n个类(m为形状的个数，n为线的类型个数)
+		//如果使用桥接模式则只需要m+n个类，便于维护
+		Implementor * pImp = new ConcreteImplementorA();
+		Abstraction * pa = new RefinedAbstraction(pImp);
+		pa->operation();
+		
+		Abstraction * pb = new RefinedAbstraction(new ConcreteImplementorB());
+		pb->operation();
+
 ### 行为型
 > It is concerned with assignment of responsibilities(algorithms) between the objects. What makes them different from structural patterns is they don't just specify the structure but also outline the patterns for message passing/communication between them. Or in other words, they assist in answering "How to run a behavior in software component?"
 #### 策略模式（strategy）
-> Strategy pattern allows you to switch the algorithm or strategy based upon the situation.  
+*	Strategy pattern allows you to switch the algorithm or strategy based upon the situation.  
 *	策略模式可以和简单工厂模式相结合
 *	策略模式可以减少各种算法类与使用算法类之间的耦合
 
@@ -215,6 +278,41 @@
 
 <img src="images/state_pattern_tcp.jpg" style="width:700px" align=center>
 
+#### 备忘录模式（memento）
+*	定义：在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。
+*	备忘录模式有三个角色：
+	*	originator（发起人）：负责创建一个备忘录（memento）用以记录当前它自身的内部状态。创建者一般有两个方法：
+		*	`void set_memento(const memento& m)`，恢复当前对象的某个时间点的状态
+		*	`memento create_memento()`，创建当前对象当前时间点的状态
+	*	memento（备忘录）：负责保存originator对象的内部状态，并防止originator之外的其他对象访问memento。caretaker只能看见备忘录的窄接口，它只能把memento传递给其他对象。
+	*	carataker（管理者）：负责保存memento，不能对memento的内容进行检查。
+
+#### 迭代器模式
+*	定义：提供一种方法顺序访问一个聚合对象中各个元素, 而又不需暴露该对象的内部表示。
+
+#### 命令模式（Command Pattern）
+*	定义：将一个请求封装为一个对象，从而使我们可用不同的请求对客户进行参数化；对请求排队或者记录请求日志，以及支持可撤销的操作。命令模式是一种对象行为型模式，其别名为动作(Action)模式或事务(Transaction)模式。**命令模式的本质是对命令进行封装，将发出命令的责任和执行命令的责任分割开**。
+*	角色（命令执行者、发出者、命令对象三者解耦）：
+	*	Command: 抽象命令类
+	*	ConcreteCommand: 具体命令类
+	*	Invoker: 调用者
+	*	Receiver: 接收者
+	*	Client:客户类
+*	示例代码：
+
+		//创建命令的执行者（接受者）
+		Receiver * pReceiver = new Receiver();
+		//创建命令对象
+		ConcreteCommand * pCommand = new ConcreteCommand(pReceiver);
+		//命令的发出者
+		Invoker * pInvoker = new Invoker(pCommand);
+		pInvoker->call();
+
+*	适用条件
+	*	系统需要将请求调用者和请求接收者解耦，使得调用者和接收者不直接交互。
+	*	系统需要在不同的时间指定请求、将请求排队和执行请求。
+	*	系统需要支持命令的撤销(Undo)操作和恢复(Redo)操作。
+	*	系统需要将一组操作组合在一起，即支持宏命令
 
 
 [1]:http://blog.csdn.net/qq_29994609/article/details/51914046
