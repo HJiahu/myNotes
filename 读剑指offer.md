@@ -145,38 +145,8 @@
 			}
 *	面试题5 逆序打印单向链表
 	*	既然能想到用递归的算法，那么就可以使用栈。
-*	面试题6 重建二叉树 （何为堆、最大最小堆、红黑树？熟悉二叉树的3种遍历的六种实现方法）
+*	面试题6 重建二叉树 [leetcode 105][3]（何为堆、最大最小堆、红黑树？熟悉二叉树的3种遍历的六种实现方法）
 	*	会写树的几种遍历方式：先序、中序、后序、宽度优先
-	
-		/**
-		 * Definition for binary tree
-		 * struct TreeNode {
-		 *     int val;
-		 *     TreeNode *left;
-		 *     TreeNode *right;
-		 *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-		 * };
-		 */
-		class Solution {
-		public:
-		    TreeNode* reConstructBinaryTree(vector<int> pre,vector<int> vin) {
-		       if(pre.size() == 0|| vin.size() == 0)return nullptr;
-		       if(pre.size() == 1 && vin.size() == 1){
-		           TreeNode*root = new TreeNode(pre[0]);
-		           return root;
-		       }
-		       else{
-		           auto pos = find(vin.begin(),vin.end(),pre[0]);
-		           //if(pos == vin.end())
-		           auto left_subtree = vector<int>(vin.begin(),pos);
-		           auto right_subtree = vector<int>(pos+1,vin.end());
-		           TreeNode* root = new TreeNode(pre[0]);
-		           root->left = reConstructBinaryTree(vector<int>(pre.begin()+1,pre.begin()+1+left_subtree.size()),left_subtree);
-		           root->right = reConstructBinaryTree(vector<int>(pre.begin()+1+left_subtree.size(),pre.end()),right_subtree);
-		           return root;
-		       }
-		    }
-		};
 *	面试题7 使用两个栈模拟队列、使用两个队列模拟栈
 	
 	> 这类题目首先要做的是在脑子里模拟一遍流程，对于使用两个栈模拟一个队列，其中一个栈用于“入队”，一个用于“出队”。
@@ -271,3 +241,4 @@
 
 [1]:http://www.cnblogs.com/xkfz007/archive/2012/07/01/2572017.html
 [2]:http://developer.51cto.com/art/201403/430986.htm
+[3]:https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/
