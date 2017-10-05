@@ -1,41 +1,43 @@
-## 设计模式总结
+## 设计模式总结（未完待续）
 ### UML示例
 <img src="images/UML_sample.jpg" style="width:700px" >
   
-*	组合比聚合的关联更加强烈，组合表示产生一个新对象且子对象是必须的（例如四肢，躯干和头组合成人）；聚合表示若的关联，例如大雁群由大雁聚合而成。
+*	组合比聚合的关联更加强烈，组合表示产生一个新对象且子对象是必须的（例如四肢，躯干和头组合成人）；聚合表示弱的关联，例如大雁群由大雁聚合而成。
 
 ### *参考资料：*  
 
 *	[图说设计模式][9]    
 *	[design-patterns-for-humans][2]  
-*	[设计模式迷你手册][3]   
+*	[设计模式迷你手册][3]（常见设计模式的UML图）   
 *	[Java实例][7]  
 
 ### 面向对象的基本概念
-*	面向对象的三大法宝：封装、继承、多态（不同的对象对同一消息作出响应，不同的对象采取不同的行为方式。）
+*	面向对象（OO，object oriented）的三大法宝：封装（OB，object base）、继承、多态（不同的对象对同一消息作出响应，不同的对象采取不同的行为方式。）
 *	面向对象常见的思想
 	*	代码的责任分解
 
 ### 面向对象设计基本原则【[参考][4]】
-*	单一职责原则（SRP）	
-	> 不要存在多于一个导致类变更的原因。  
-	> 问题由来：类T负责两个不同的职责：职责P1，职责P2。当由于职责P1需求发生改变而需要修改类T时，有可能会导致原本运行正常的职责P2功能发生故障。
+*	①单一职责原则（SRP）	
+	*	单一职责原则是高内聚低耦合的引申。
+	*	不要存在多于一个导致类变更的原因。  
+	*	问题由来：类T负责两个不同的职责：职责P1，职责P2。当由于职责P1需求发生改变而需要修改类T时，有可能会导致原本运行正常的职责P2功能发生故障。例如在软件中要实现界面和逻辑的分离。
 	
-*	开放-封闭原则（OCP）【[参考][5]】
+*	②开放-封闭原则（OCP）【[参考][5]】
 	> 一个软件实体如类、模块和函数应该对扩展开放，对修改关闭。   
 	> 在软件的生命周期内，因为变化、升级和维护等原因需要对软件原有代码进行修改时，可能会给旧代码中引入错误，也可能会使我们不得不对整个功能进行重构，并且需要原有代码经过重新测试。   
 	> **等到变化的时候立即采取行动**
 
-*	里氏替换原则（LSP）
+*	③里氏替换原则（LSP）
 	> 所有引用基类的地方必须能透明地使用其子类的对象。  
-	> 里氏替换原则通俗的来讲就是：子类可以扩展父类的功能，但不能改变父类原有的功能。即在类B继承类A时，除添加新的方法完成新增功能外，尽量不要重写父类A的方法，也尽量不要重载父类A的方法。 违反LSP将无法实现OCP。现实生活中企鹅是一种鸟，但在编程过程中鸟不能作为一种抽象，因为企鹅是鸟但企鹅不能飞，如果把鸟作为一种抽象而且fly作为其中的方法，那么企鹅在继承鸟之后必然重写fly，这就违背了LSP。很明显在使用“鸟.fly”的地方，企鹅的行为与其他“鸟”不同，很有可能会出问题。   
+	> 里氏替换原则通俗的来讲就是：子类可以扩展父类的功能，但不能改变父类原有的功能。即在类B继承类A时，除添加新的方法完成新增功能外，尽量不要重写父类A的方法，也尽量不要重载父类A的方法。 违反LSP将无法实现OCP。现实生活中企鹅是一种鸟，但在编程过程中鸟不能作为一种抽象，因为企鹅是鸟但企鹅不能飞，如果把鸟作为一种抽象而且fly作为其中的方法，那么企鹅在继承鸟之后必然重写fly，这就违背了LSP。很明显在使用“鸟.fly”的地方，企鹅的行为与其他“鸟”不同，很有可能会出问题。 
+	>  
 	> 多态的实现可以考虑抽象类
 	
-*	依赖倒置原则（DIP）
+*	④依赖倒置原则（DIP）
 	> 高层模块不应该依赖低层模块，二者都应该依赖其抽象；抽象不应该依赖细节；细节应该依赖抽象。  
 	> 依赖倒置原则基于这样一个事实：相对于细节的多变性，抽象的东西要稳定的多。 依赖倒置原则的核心思想是**面向接口编程**
 	
-*	接口隔离原则（ISP）
+*	⑤接口隔离原则（ISP）
 	> 客户端不应该依赖它不需要的接口；一个类对另一个类的依赖应该建立在最小的接口上。
 *	迪米特法则（LoD）
 	> 一个对象应该对其他对象保持最少的了解,软件编程的总的原则：低耦合，高内聚。例如：两个类之间可以不直接通信（可以没有直接关系），那么这两个类就不应当发生直接的相互作用，如果其中一个类需要调用另一个类的某一个方法，可以通过第三者转发这个调用。    
@@ -50,23 +52,23 @@
 
 ## 常见设计模式【[参考][8]】
 *	设计模式一般分为3类，创建型、结构型和行为型【[参考][1]】
-	*	创建型：Creational patterns are focused towards how to instantiate an object or group of related objects.
-	*	结构型：Structural patterns are mostly concerned with object composition or in other words how the entities can use each other. Or yet another explanation would be, they help in answering "How to build a software component?"
-	*	行为型：It is concerned with assignment of responsibilities(algorithms) between the objects. What makes them different from structural patterns is they don't just specify the structure but also outline the patterns for message passing/communication between them. Or in other words, they assist in answering "How to run a behavior in software component?"
+	*	创建型：Creational patterns are focused towards how to instantiate an object or group of related objects.（如何实例化一个对象或一组相关的对象。）
+	*	结构型：Structural patterns are mostly concerned with object composition or in other words how the entities can use each other. Or yet another explanation would be, they help in answering "How to build a software component?"（结构型模式注重对象的结构，换种说法就是对象之间如何交互，或者说如何构建软件的组成元素）
+	*	行为型：It is concerned with assignment of responsibilities(algorithms) between the objects. What makes them different from structural patterns is they don't just specify the structure but also outline the patterns for message passing/communication between them. Or in other words, they assist in answering "How to run a behavior in software component?"（关注对象之间责任（算法）的分配，也就是一个对象或软件模块应该具有怎样的行为。）
 
 ### 创建型
 > Creational patterns are focused towards how to instantiate an object or group of related objects.
 #### 简单工厂模式
-> Simple factory simply generates an instance for client without exposing any instantiation logic to the client
+> Simple factory simply generates an instance for client without exposing any instantiation logic to the client。（创建一个对象但隐藏对象的具体创建方式。）
 
 *	包含角色
 	*	Factory：工厂角色
 	*	Product：抽象产品角色（抽象产品角色是所创建的所有对象的父类，负责描述所有实例所共有的公共接口）
 	*	ConcreteProduct：具体产品角色
 
-*	缺点很明显，无法满足OCP原则。
+*	缺点很明显，无法满足OCP原则（每添加一个新对象都要更改工厂方法）。
 
-		Product* Factory::createProduct(string proname){
+		Product* createProduct(string name){//工厂方法
 			if ( "A" == proname )
 			{
 				return new ConcreteProductA();//C++中的多态只能使用指针或引用实现
@@ -80,6 +82,7 @@
 
 #### 工厂方法模式
 *	定义：定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method 使一个类的实例化延迟到其子类。每添加一个新的类型都要继承并定义两个新的类，其中一个为需要添加的类型，另一个为创建这个类型的类。
+*	简单工厂模式仅仅对创建的对象进行了抽象，工厂方法模式对简单工厂进行了更深一层的抽象，将工厂方法进行了抽象。
 *	包含角色
 	*	Product：抽象产品
 	*	ConcreteProduct：具体产品
@@ -92,14 +95,14 @@
 
 #### 抽象工厂模式
 *	定义：提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。抽象工厂模式又称为Kit模式，属于对象创建型模式。
-
+*	工厂方法模式只能创建一种类别的对象，而抽象工厂可以同时创建多种不同类别的对象。我感觉抽象工厂是对工厂方法模式的一种封装，是对工厂方法更高一层的抽象。
 *	包含角色
 	*	Product：抽象产品（族）
 	*	ConcreteProduct：具体产品（族）
 	*	Factory：抽象工厂
 	*	ConcreteFactory：具体工厂
 
-*	以数据库为例，为了简化数据库的操作我们一般对每一个表都创建一个类。为了移植，每个不同的数据库我们都要重写这些类。如果使用工厂方法模式，那么每一个表的创建都要使用一次工厂（每个表有不同的工厂），修改起来依然很麻烦。使用抽象工厂模式，表的创建只使用一个工厂就好了，修改起来也相对简单。
+*	以数据库为例，为了简化数据库的操作我们一般对每一个表都创建一个类。为了移植，每个不同的数据库我们都要重写这些类。如果使用工厂方法模式，那么每一个表的创建都要使用一次工厂（每个表有不同的工厂），修改起来依然很麻烦（这里修改的是使用表对象的代码，新对象的创建抽象工厂和工程方法模式的复杂程度是相投的）。使用抽象工厂模式，表的创建只使用一个工厂就好了，修改起来也相对简单。
 *	示例代码
 
 		//不同的工厂可以生产不同的产品族
@@ -117,6 +120,7 @@
 
 #### 建造者模式
 *	将一个复杂对象的构建与它的表示分离（把创建过程抽象出来），使得同样的构建过程可以创建不同的表示。   
+*	个人体会：在某些应用场景下建造者模式是对工厂模式的一种更高一层的封装。如果在创建一个对象需要多个步骤，每一个步骤又会有种不同的选择（这里不同的选择可以使用工厂实现）。每生产一种新的产品必然有一种新的步骤，为了实现OCP，故将创建过程抽象出来。
 *	我们可以看到，建造者模式与工厂模式是极为相似的，总体上，**建造者模式仅仅只比工厂模式多了一个“导演类”的角色**。在建造者模式的类图中，假如把这个导演类看做是最终调用的客户端，那么图中剩余的部分就可以看作是一个简单的工厂模式了。   
 *	角色
 	*	Builder：抽象建造者
@@ -125,7 +129,7 @@
 	*	Product：产品角色
 *	示例代码
 
-		//建造者只知道“建造”，需要director给出具体的顺序（过程）
+		//建造者只知道“建造”，需要director给出具体的过程
 		ConcreteBuilder * builder = new ConcreteBuilder();
 		Director  director;
 		director.setBuilder(builder);
@@ -133,12 +137,13 @@
 		pd->show();
 
 *	应用说明
-	> 复杂对象相当于一辆有待建造的汽车，而对象的属性相当于汽车的部件，建造产品的过程就相当于组合部件的过程。由于组合部件的过程很复杂，因此，这些部件的组合过程往往被“外部化”到一个称作建造者的对象里，建造者返还给客户端的是一个已经建造完毕的完整产品对象，而用户无须关心该对象所包含的属性以及它们的组装方式，这就是建造者模式的模式动机。
+	> 举个例子：复杂对象相当于一辆有待建造的汽车，而对象的属性相当于汽车的部件，建造产品的过程就相当于组合部件的过程。很多不同种类的汽车的创建过程相同但组成不同（发动机、轮胎、玻璃等），那么创建者在这里就可以选择不同的子对象并创建。
 #### 单例模式
-*	定义：保证一个类仅有一个实例，并提供一个访问它的全局访问点。
+*	定义：保证一个类仅有一个实例，并提供一个访问它的全局访问点（方法）。
 
 #### 原型模式
-*	用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象。原型模式主要用于对象的复制。实现一个接口（clone），重写一个方法即完成了原型模式。  
+*	用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。原型模式主要用于对象的复制。实现一个接口（clone），重写一个方法即完成了原型模式。  
+*	以深拷贝和浅拷贝为例来说明：在C++中一般的STL容器的拷贝构造都是深拷贝，然而在Java中，很多对象都是浅拷贝。为了在Java中实现深拷贝，则需要写其他种类的成员方法来实现。这些方法所实现的功能就是以当前对象为原型，创建一个与当前对象完全相同的新对象。如果熟悉opencv，那么Mat中的clone方法就是一种原型模式的实现（为了效率，默认情况下opencv中Mat的拷贝构造是浅拷贝）。
 
 
 
@@ -159,9 +164,11 @@
 	    Phone *dpa = new DecoratorPhoneA(iphone); //装饰，增加挂件  
 	    Phone *dpb = new DecoratorPhoneB(dpa);    //装饰，屏幕贴膜  
 	    dpb->ShowDecorate();  
+	> DecoratorPhoneA与NokiaPhone继承于相同的父类FClass，但前者比后者最少多了一个FClass的类的成员。以上面几行代码为例，这个成员用于保存dpa将要装饰的对象iphone，dpa中与iphone对象相同的行为可以直接使用iphone对象中的行为（C++中可以使用useing指令把iphone中的方法直接引入dpa中），需要更改的行为可以在重写时在引入iphone对应的行为并添加额外的行为。
 
 #### 外观模式（facade）
 * 　定义：提供一个简易的接口，来访问子系统中的一群接口。外观定义了一个高层接口，让子系统容易使用。
+* 　外观模式其实就是对现有模块的封装，使其便于使用。
 * 　角色
 	*	Facade: 外观角色
 	*	SubSystem:子系统角色
