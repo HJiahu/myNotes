@@ -133,7 +133,7 @@
 		ConcreteBuilder * builder = new ConcreteBuilder();
 		Director  director;
 		director.setBuilder(builder);
-		Product * pd =  director.constuct();
+		Product * pd =  director.construct();
 		pd->show();
 
 *	应用说明
