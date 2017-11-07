@@ -28,3 +28,85 @@
 *	go tool，
 *	go generate
 *	godoc，
+
+### 语言基础
+*	一些规则
+	*	零值，go中的零值不是空值nil，而是默认值，对于整数与浮点数一般是`0`，字符串就是`""`
+	*	全局的且以大写开头的变量与函数是public的，即可以在包外使用如：fmt.Print()
+	*	数组（array）的定义：`var arr [n]type`
+		*	数组的长度也是数组类型的一部分，即不同长度的数组是不同的类型。数组的长度不看变
+		*	go中数组的赋值使用的是pass by value，将赋值整个数组而非指针，这点与C不同
+		*	`c := [...]int{4, 5, 6}` //由编译器自动推测长度
+		*	`b := [10]int{1, 2, 3}` //只设定一部分，其他为默认值
+		*	`easyArray := [2][4]int{{1, 2, 3, 4}, {5, 6, 7, 8}}` //多维数组
+		*	array中的切片语法与pyton相似
+	*	动态数组（slice）
+		*	声明方式：`var fslice []int` //与array相比没有指定长度
+		*	slice是引用类型，可以将其看做opencv中的Mat，拷贝时默认为浅拷贝
+		*	`slice := []byte {'a', 'b', 'c', 'd'}`
+		*	slice对象中有几个内置成员函数：len、cap(最大容量)、append、copy（类似于Mat::clone）
+	*	字典（map，与C++中的map<type>相似）
+		*	声明方式：`var varable map[keyType]valueType`
+		*	**map和其他基本型别不同，它不是thread-safe，在多个go-routine存取时，必须使用mutex lock机制**。
+		*	map也是一种引用类型。
+		*	自动推导的方式：`rating := map[string]float32{"C":5, "Go":4.5 }`
+		*	使用示例：`numbers["ten"] = 10 //赋值`
+		*	`csharpRating, ok := rating["C#"]`，map有两个返回值，第二个返回值，如果不存在key，那么ok为false，如果存在ok为true
+	*	make&new
+		*	new
+			*	new与C++中的关键字new类似，用于分配内存，但GO中没有堆栈之分，go中new也返回指针
+			*	go中的new将初始化内存
+		*	make
+			*	make只能创建內建类型（map、slice、channel）,make返回的不是指针而是初始化了的对应类型的变量。如果上面三个类型的变量没有初始化则为nil，make返回的都已经初始化。	
+	
+*	代码示例
+
+		//说明当前文档所属的包，GO中包名和文件名可以不一样
+		package main  //main包很特殊，表明当前文件是一个独立的执行入口包
+	
+		import(
+			"fmt"
+			"errors"
+		)
+	
+		func main(){ //go中的main是没有返回值与参数的
+			fmt.Println("你好！") //go默认使用utf8作为编码标准
+			
+			//变量定义，go中强制每个类型都有初始值
+			//var name type 
+			var a,b int = 1,2 //a b 都是int类型的变量，int型具体长度依赖编译器实现
+			//byte(uint8)、int、uint、int32(rune)、uint32，complex128
+			var c int64  //c 的长度固定为64位
+			//GO中各种类型之间不能进行操作与赋值，下面的操作将报错
+			//c := a + c
+			d := a  //:= 使用:=后变量的类型自动推导前面变量的类型，这种语法只能用于函数内
+			var e = b //这样也是自动推导e的变量类型
+			//可以在需要的地方使用 _ 作为占位符，但 _ 是不能作为正常变量使用的，默认float64
+			_,f := 1.0,2.0 
+			const g = "hello" //使用const关键字可自动推导类型 
+			var h bool //h默认为 false
+			var ( // 或 var ( 等
+				i int
+				pi float32
+				prefix = "go_"
+			)
+			//go中的字符串可以使用双引号("")或反引号(``)包含
+			str1,str2 := `hello`,"aworld" //使用``包含的字符串是raw字符串
+			//str[0] = 'm' //与python类似，go中的字符串默认常量，无法更改。可以改成[]byte
+			str1 = str1+str2[1:] //与python类似，go中的字符串可以进行切片操作
+			err := errors.New("this is a error")
+			if err != nil{ //go中有一个error类型，专门用于处理错误信息
+				fmt.Print(err)
+			}
+			//go中的关键字iota用于声明枚举变量时使用
+			//除非被显式设置为其它值或iota，每个const分组的第一个常量被默认设置为它的0值
+			//第二及后续的常量被默认设置为它前面那个常量的值，如果前面那个常量的值是iota，
+			//则它也被设置为iota。
+			const (
+				x = iota //x == 0，默认开始值为0
+				c = "c"
+				y = iota //y == 1
+				z  		 //z == 3
+			)
+			const w = iota //w == 0，因为iota每遇见一个const关键时都会重置为0 
+		}
