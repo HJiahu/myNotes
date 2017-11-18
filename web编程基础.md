@@ -1,15 +1,13 @@
 web编程基础
 =====================================================================
-
-有时间读一下build web application with golang的3.2~3.5节
 ### 协议介绍
 #### URL格式
 *	`scheme://host[:port#]/path/.../[?query-string][#anchor]`
 	*	scheme         指定低层使用的协议(例如：http, https, ftp)
 	*	host           HTTP服务器的IP地址或者域名
-	*	port#          HTTP服务器的默认端口是80，这种情况下端口号可以省略。如果使用了别的端口，必须指明，例
+	*	port#          HTTP服务器的默认端口是80，这种情况下端口号可以省略。如果使用了别的端口，必须指明
 	*	path           访问资源的路径
-	*	query-string   发送给http服务器的数据
+	*	query-string   发送给http服务器的数据（以?分割URL和传输数据，参数之间以&相连）
 	*	anchor         锚
 
 #### DNS工作原理

@@ -31,13 +31,12 @@
 -	使用宏区分编译器和系统：WIN32 linux \_sun (用于区分solaris) \_MSC\_VER \_GNUC\_ \_SUNPRO\_C和\_SUNPRO\_CC  
 -	C++不允许跳过变量的初始化语句转到该变量作用域的另一个位置。
 
-```
-goto Label;
-//int a;//goto合法，因为a未初始化  
-//int a = 2;//goto非法，因为goto跳过了初始化的变量，并且Label处是a的作用域
-//{int a = 2;}//goto合法，应为Lable处不是a的作用域。
-Label:;
-```
+		goto Label;
+		//int a;//goto合法，因为a未初始化  
+		//int a = 2;//goto非法，因为goto跳过了初始化的变量，并且Label处是a的作用域
+		//{int a = 2;}//goto合法，应为Lable处不是a的作用域。
+		Label:;
+
 -	初始化列表要放在定义处，默认参数放在声明处。两者都不能同时出现在定义与声明处。
 -	在`main(int argc , char *argv[]);`中argv[]所指向的最后一个元素是0（最后一个参数后还有一个元素）用于告诉系统，参数已经没有了。
 -	在C++中最简单的语句是空语句：`;`  `int a = 3; [空语句];`
@@ -45,16 +44,15 @@ Label:;
 -	头文件中不应该使用using指令。
 -	数组名在很多时候会被编译器转化为指针来使用（除了引用），但不是所有情况下，因为数组和指针是两种完全不同的类型，做数组与指针之间的转换只是运行时的需要。当auto的推导变量是数组时，编译器返回的类型是指针，因为auto在推导类型时必须进行赋值操作而便准c++中又不允许数组之间的赋值。但当decltype中的变量是数组时，声明的变量依旧是数组。当数组进行下标运算时，编译器自动将数组名转化为指针类型。
 
-
-	char arr[9];
-	void Print(const char *);
-	void Print(cosnt char arr[]);
-	void Print(const char[]);
-	void Print(const char[9]);//上面四行的效果是相同的，参数被传递过来之后都会被转化为:char *类型
-	
-	void Print(const char str[9]) 和 
-	void Print (const char (*str)[9])的区别在于后者的str的步长为9，而前者为1
-	decltype(arr) *p_ch = &arr; //在这里，p_ch 的   指针步长为9   
+		char arr[9];
+		void Print(const char *);
+		void Print(cosnt char arr[]);
+		void Print(const char[]);
+		void Print(const char[9]);//上面四行的效果是相同的，参数被传递过来之后都会被转化为:char *类型
+		
+		void Print(const char str[9]) 和 
+		void Print (const char (*str)[9])的区别在于后者的str的步长为9，而前者为1
+		decltype(arr) *p_ch = &arr; //在这里，p_ch 的   指针步长为9   
 
 -	注意这种类型转化：`while(cin >> string )`while中的返回值是cin ，而系统自动的将cin转化为了布尔变量，`cin>> string `执行成功则返回true，否则返回false。
 -	因为标准并没有对有符号型数据的位运算做规定，故最好只将位运算用在无符号数据上。
@@ -70,11 +68,10 @@ Label:;
 -	***当有符号数和无符号数混合进行计算时，编译器会将有符号型***看作***为无符号型再进行计算。***
 -	***大多数的运算符都没有规定运算对象的求值顺序，一般而言没有问题。但当同一运算符的多个子句中同时改变了同一个变量时，顺序就很重要了：***
 
-```
-*beg = toupper(*beg++);//这行语句是错误的，因为我们不知道等号的两侧哪边先进行运算，所以这行语句可以有下面两种不同的执行方式。
-*beg = toupper(*beg);  //当等号左侧先进行了计算，则上式等价于此式
-*(beg+1) = toupper(*beg); //当等号右侧的式子先进行计算，则原式与本式等价。 
-```
+		*beg = toupper(*beg++);//这行语句是错误的，因为我们不知道等号的两侧哪边先进行运算，所以这行语句可以有下面两种不同的执行方式。
+		*beg = toupper(*beg);  //当等号左侧先进行了计算，则上式等价于此式
+		*(beg+1) = toupper(*beg); //当等号右侧的式子先进行计算，则原式与本式等价。 
+
 -	有四种运算符明确规定了运算对象的求值顺序：`&&` `||` `?:` `,` 这四种运算符由左到右进行计算。
 -	在C++中运算符`<<`没有直接规定求值的顺序，故`int i = 0 ; cout << i << ++i<<endl;`的结果是与编译器的实现相关的，其输出可能是 0 1，也可能是1 1 。
 -	`cout << *p_int++<<endl;`返回p_int当前指向的内存中的内容，然后p\_int 加一，注意` p\_int++`返回的是自加之前的值，而自加运算符的优先级比解引用运算符。
@@ -111,8 +108,9 @@ Label:;
     -	顶层const：变量本身受const约束。
     -	底层const：变量所指向的对象受const约束。
 -	auto：***auto 定义的变量必须有初始值，否则编译器无法进行推导。***若auto i = 0;那么编译器会推导i为整型。***auto在推导的过程中会忽略对象的顶层const，但会留下底层const特性。***
+
 -	***decltype***：（C++11特性）返回操作数的数据类型。
-    >  decltype(f()) sum = x;那么sum的类型就是函数f()返回值的类型，在这段代码中函数f()没有被执行，编译器会推导出函数f()的返回值类型。在其他地方引用都被看作是一个别名，然而在decltype中引用并不仅仅是一个别名，他还代表着“引用”这层含义。                
+    >  decltype(f()) sum = x;那么sum的类型就是函数f()返回值的类型，在这段代码中函数f()没有被执行，编译器会推导出函数f()的返回值类型。在其他地方引用都被看作是一个别名，然而在decltype中引用并不仅仅是一个别名，他还代表着“引用”这层含义。                  
     > ```
     > const int ci = 0 , &cj = ci;
     > decltype(ci) x = 0;//ci的类型是const int 故x也是const int型

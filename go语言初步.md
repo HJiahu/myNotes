@@ -13,6 +13,7 @@
 	*	bin 编译后生成的可执行文件（为了方便，可以把此目录加入到 $PATH 变量中，如果有多个gopath，那么使用${GOPATH//://bin:}/bin添加所有的bin目录）
 
 ### 常见命令
+*	godoc，打开本地的参考文档。`godoc -http=:8000`，可以在8000端口打开网页版参考文档
 *	go install，进入对应的应用包目录编译应用
 *	go build，编译程序
 	*	如果是普通包，执行go  build之后，它不会产生任何文件。如果是main包，当你执行go  build之后，它就会在当前目录下生成一个可执行文件。
@@ -27,7 +28,7 @@
 *	go run，编译并运行Go程序
 *	go tool，
 *	go generate
-*	godoc，
+
 
 ### 语言基础
 *	一些概念
@@ -144,6 +145,17 @@
 				}
 				//如果rect是rectangle类型，调用方法：rect.area();
 				//
+	*	go中的并发
+		*	goroutine
+			*	goroutine其实就是协程，且运行在相同的地址空间，go使用`runtime.Gosched()`实现协程的切换
+			*	go 1.5前使用单线程运行协程，1.5后默认使用CPU的核数，可以使用`runtime.GOMAXPROCS(n)`设定线程数，如果n<1则不会改变当前的设置。
+		*	channel(goroutine间的内存共享与同步工具，分缓冲和非缓冲两种)
+			*	使用make创建channel：`ci := make(chan int)`
+			*	channel通过操作符<-来接收和发送数据：`ci <- v // 发送v到channel ci.`、`fmt.Println(<-ci) //从ci中提取数据`
+			*	默认情况下（非缓冲型channel），channel接收和发送数据都是阻塞的，除非另一端已经准备好
+			*	Buffered Channels：可以指定channel的缓冲大小（`ch := make(chan type, value)`）,这样在写channel时有空余的缓冲空间则不阻塞、在读时如果有有效的缓冲空间可读则不阻塞
+			*	range和close。我们可以像读数组与slice那样读缓冲型channel：`for i:= range() ci {...}`//for退出的条件是显示的对于channel调用close
+			
 *	代码示例
 
 		//说明当前文档所属的包，GO中包名和文件名可以不一样
